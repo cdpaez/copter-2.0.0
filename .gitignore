@@ -1,0 +1,20 @@
+# Node.js
+node_modules/
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Editor de texto
+.vscode/
+.idea/
+
+# Archivos de subida
+uploads/

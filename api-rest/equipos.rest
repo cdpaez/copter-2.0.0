@@ -1,0 +1,3 @@
+### Obtener todos los equipos
+GET http://localhost:3000/equipos/obtener
+Accept: application/json

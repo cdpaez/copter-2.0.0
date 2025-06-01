@@ -1,0 +1,65 @@
+.
+├── api.rest
+├── backend
+│   ├── app.js
+│   ├── config
+│   │   └── database.js
+│   ├── controllers
+│   │   ├── chart.controller.js
+│   │   ├── login.controller.js
+│   │   ├── login.controller.test.js
+│   │   ├── producto.controller.js
+│   │   ├── usuario.controller.js
+│   │   ├── venta.controller.js
+│   │   └── venta.controller.test.js
+│   ├── logs
+│   │   └── stock.log
+│   ├── middlewares
+│   │   ├── admin.middleware.js
+│   │   └── auth.middleware.js
+│   ├── models
+│   │   ├── detalleVenta.model.js
+│   │   ├── index.js
+│   │   ├── producto.model.js
+│   │   ├── usuario.model.js
+│   │   └── venta.model.js
+│   ├── nodemon.json
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── routes
+│   │   ├── chart.routes.js
+│   │   ├── index.js
+│   │   ├── login.routes.js
+│   │   ├── producto.routes.js
+│   │   ├── usuario.routes.js
+│   │   └── venta.routes.js
+│   ├── scripts
+│   ├── server.js
+│   ├── services
+│   └── uploads
+├── estructura-backend.txt
+├── frontend
+│   └── public
+│       ├── css
+│       │   ├── base
+│       │   ├── components
+│       │   ├── dashboard.css
+│       │   ├── index.css
+│       │   ├── layout
+│       │   ├── media
+│       │   └── operador.css
+│       ├── img
+│       │   ├── fotos
+│       │   └── logo
+│       ├── js
+│       │   ├── dashboard
+│       │   ├── login.js
+│       │   ├── nav.js
+│       │   └── operador
+│       ├── login.html
+│       └── pages
+│           ├── dashboard.html
+│           └── operador.html
+└── uploads
+
+25 directories, 37 files

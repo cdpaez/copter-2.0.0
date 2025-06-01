@@ -1,0 +1,41 @@
+### post de datos
+POST http://localhost:3000/actas
+Content-Type: application/json
+
+{
+  "cliente": {
+    "nombre": "Daniel Pérez",
+    "telefono": "0999999999",
+    "correo": "daniel@ejemplo.com",
+    "cedula_ruc": "1234567890",
+    "direccion": "Quito, Ecuador"
+  },
+  "equipo": {
+    "marca": "HP",
+    "modelo": "Pavilion",
+    "serie": "ABC123"
+  },
+  "inspeccion_hw": {
+    "pantalla": true,
+    "teclado": false,
+    "puertos_usb": true,
+    "bateria": true
+  },
+  "inspeccion_sw": {
+    "antivirus": true,
+    "nota": ""
+  },
+  "adicionales": {
+    "mouse": true,
+    "mouse_observacion": "",
+    "mochila": false,
+    "mochila_observacion": "",
+    "software1": false,
+    "software1_observacion": ""
+  },
+  "acta": {
+    "forma_pago": "Efectivo",
+    "precio": 125.50,
+    "usuario_id": 1
+  }
+}

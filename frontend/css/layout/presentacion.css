@@ -1,0 +1,26 @@
+
+.presentacion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 85vh;
+  gap: 2em;
+  text-align: center;
+}
+
+/* presentacion de la pagina web */
+.presentacion img {
+  width: 100%;
+  height: auto;
+  border: 3px solid #A82272;
+  border-radius: 200px 50px 200px 50px;
+}
+
+#presentacion__texto {
+  text-align: center;
+  letter-spacing: 2px;
+  line-height: 2;
+  font-family: monospace;
+  font-size: 1.5em;
+}

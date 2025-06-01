@@ -1,0 +1,11 @@
+{
+  "watch": [
+    "backend/server.js",
+    "backend/controllers",
+    "backend/routes",
+    "backend/models",
+    "backend/middlewares"
+  ],
+  "ext": "js",
+  "exec": "node backend/server.js"
+}

@@ -1,0 +1,302 @@
+
+/* para dispositvos superiores al 1024px monitores y portatiles */
+@media screen and (min-width: 1025px) {
+  .envoltorio-principal {
+      color-scheme: light;
+      display: flex;
+      flex-direction: column;
+
+  }
+
+  .header-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .LOGO {
+      font-size: 5em;
+      text-align: start;
+      margin-left: 1em;
+      
+  }
+  .LOGO.visible{
+      animation: tracking-in-contract 2s linear both
+  }
+ 
+ 
+  @keyframes tracking-in-contract {
+      0% {
+          letter-spacing: .6em;
+          opacity: 0
+      }
+
+      40% {
+          opacity: .6
+      }
+
+      100% {
+          letter-spacing: normal;
+          opacity: 1
+      }
+  }
+
+  .menu-toggle {
+      display: none;
+  }
+
+  .navbar {
+      width: 100%;
+      display: flex;
+  }
+
+  .navbar-list {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      width: 100%;
+      font-size: 1.2em;
+      font-family: monospace;
+      text-align: center;
+  }
+
+  .navbar-list li a {
+      font-size: 2em;
+  }
+
+  .navbar-list li a:hover {
+      color: #A82272;
+      text-decoration: none;
+  }
+
+  /* estilos para el contenido principal */
+  .contenido {
+      display: flex;
+      flex-direction: column;
+  }
+
+  .presentacion{
+    width: 100%;
+  }
+  .presentacion img {
+      width: 20%;
+      height: auto;
+      border: 3px solid #A82272;
+      border-radius: 0px 5px 200px 200px;
+  }
+
+  #presentacion__texto {
+      display: block;
+      font-size: 2em;
+      font-family: monospace;
+      white-space: nowrap;
+      border-right: 4px solid;
+      width: 86ch;
+
+      animation: maquina 2s steps(86), tecleo .5s infinite step-end alternate;
+      overflow: hidden;
+  }
+
+  @keyframes maquina {
+      from {
+          width: 0;
+      }
+  }
+
+  @keyframes tecleo {
+      50% {
+          border-color: transparent
+      }
+  }
+
+  /* diseno de los servicios que se ofrece */
+  .contenedor-servicios {
+    
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      width: 100%;
+  }
+  
+  #servicios h1.visible,
+  #proyectos h1.visible {
+      animation:blur-in 1s linear both
+
+  }
+  @keyframes blur-in {
+      0% {
+          filter: blur(12px);
+          opacity: 0
+      }
+
+      100% {
+          filter: blur(0);
+          opacity: 1
+      }
+  }
+
+  .items {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      width: 100%;
+    
+  }
+  /* contenedor de los proyectos realizados */
+
+  .carrusel {
+      position: relative;
+      width: 20%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .carrusel-items {
+      display: flex;
+      transition: transform 0.5s ease;
+      width: 100%;
+  }
+
+  .slide {
+      min-width: 100%;
+      text-align: center;
+      padding: 1em;
+      box-sizing: border-box;
+      font-family: monospace;
+  }
+
+  .slide a {
+      display: block;
+      margin-top: 1em;
+      color: black;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2em;
+  }
+
+  .carrusel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #A82272;
+      color: white;
+      border: none;
+      padding: 0.5em 1em;
+      font-size: 1em;
+      cursor: pointer;
+      z-index: 2;
+      border-radius: 10px;
+      opacity: 0.8;
+  }
+
+  .carrusel-btn:hover {
+      background: #DB0085;
+      opacity: 1;
+  }
+
+  .carrusel-btn.prev {
+      left: 10px;
+  }
+
+  .carrusel-btn.next {
+      right: 10px;
+  }
+
+  /* pie de pagina web */
+
+
+  footer {
+      height: 100%;
+      width: 100%;
+      border: 2px solid #33292F;
+      background-color: #33292F;
+      color: white;
+      text-align: center;
+      padding: 20px;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+  }
+
+  .sobre-nosotros {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      font-family: monospace;
+      font-size: 1em;
+      padding: 2em;
+  }
+
+  .sobre-nosotros h3 {
+      font-size: 2.5em;
+      padding: 1em;
+  }
+
+  .sobre-nosotros p {
+      font-size: 1.5em;
+      text-align: center;
+      line-height: 2;
+      padding: 1em;
+  }
+
+  .enlaces {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+  }
+
+  .enlaces ul {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-content: center;
+  }
+
+  .enlaces ul li {
+      background: #007bff;
+      padding: 1em;
+      border-radius: 5px;
+  }
+  .enlaces li:hover{
+      background-color: #A82272;
+  }
+
+
+  .enlaces ul li a {
+      font-family: monospace;
+      font-size: 2em;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      display: block;
+
+      width: 100%;
+      height: 100%;
+      margin: auto;
+  }
+
+  .contactos {
+  
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 2em;
+      font-family: monospace;
+      font-size: 2em;
+      gap: 1em;
+  }
+
+  .contactos a {
+      color: whitesmoke;
+  }
+  .contactos a:hover{
+      color: #A82272;
+  }
+}

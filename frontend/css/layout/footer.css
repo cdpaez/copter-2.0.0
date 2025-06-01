@@ -1,0 +1,60 @@
+
+.sobre-nosotros {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  font-family: monospace;
+  font-size: 1em;
+  padding: 2em;
+}
+
+.sobre-nosotros h3 {
+  font-size: 2em;
+  padding: 1em;
+}
+
+.sobre-nosotros p {
+  font-size: 1.5em;
+  text-align: center;
+  line-height: 2;
+  padding: 1em;
+}
+
+.enlaces ul {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5em;
+  list-style: none;
+  padding: 1em;
+  text-align: center;
+}
+
+.enlaces ul li {
+  background: #007bff;
+  padding: 1em;
+  border-radius: 5px;
+}
+
+
+.enlaces ul li a {
+  font-family: monospace;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  display: block;
+}
+
+.contactos {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  font-family: monospace;
+  font-size: 1em;
+  gap: 1em;
+}
+
+.contactos a {
+  color: whitesmoke;
+}

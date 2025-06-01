@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="../img/logo/inventario.png">
+  <!-- En tu HTML -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+  <link rel="stylesheet" href="../css/components/modalActa.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/components/nav-estadisticas.css">
+  <link rel="stylesheet" href="../css/components/stat-graficos.css">
+
+  <title>Inventario - Panel</title>
+
+
+</head>
+
+<body>
+  <div class="envoltorio__principal">
+
+    <header>
+      🧾 Sistema de Inventario
+      <!-- <a href="/operador.html">operador</a> -->
+    </header>
+
+    <main>
+      <nav class="panel-lateral">
+        <div class="pestanas">
+          <h2>Menú</h2>
+
+          <button onclick="mostrarSeccion('productos')">📦 Productos</button>
+          <button onclick="mostrarSeccion('actas')">🧾 Actas</button>
+          <button onclick="mostrarSeccion('estadisticas')">📊 Estadísticas</button>
+          <button onclick="mostrarSeccion('usuarios')">👤 Usuarios</button>
+          <button id="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+          <!-- <button onclick="mostrarSeccion('configuracion')">⚙️ Configuración</button> -->
+        </div>
+
+      </nav>
+
+      <section class="area-contenido">
+
+        <div id="productos" class="seccion activa">
+          <h2>📦 Productos en Stock</h2>
+          <!-- Filtros y botón agregar -->
+          <div class="barra-productos">
+            <input type="text" id="buscador-productos" placeholder="Buscar producto...">
+            <button id="abrir-modal">➕ Agregar producto</button>
+            <button id="importar-datos">📦 Importar</button>
+          </div>
+          <div class="tabla-productos">
+            <table>
+              <thead>
+                <tr>
+                  <th>Stock</th>
+                  <th>Precio</th>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Serie</th>
+                  <th>Procesador</th>
+                  <th>Tamano</th>
+                  <th>Disco</th>
+                  <th>RAM</th>
+                  <th>Tipo</th>
+                  <th>Estado</th>
+                  <th>extras</th>
+                  <th>fecha</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal para agregar/editar producto -->
+          <div class="modal" id="modal-producto">
+            <div class="modal-contenido">
+
+              <h3 id="titulo-modal-producto">Agregar nuevo producto</h3>
+
+              <div id="loader-modal" class="loader" style="display: none;"></div>
+
+              <form id="form-modal-producto" data-editando="false">
+                <input type="number" id="stock" name="stock" placeholder="stock" min="0" max="50" required>
+                <input type="number" id="precio" name="precio" placeholder="precio" step="0.01" required>
+                <input type="text" id="marca" name="marca" placeholder="marca" required>
+                <input type="text" id="modelo" name="modelo" placeholder="modelo" required>
+                <input type="text" id="serie" name="serie" placeholder="# serie" required>
+                <input type="text" id="procesador" name="procesador" placeholder="Procesador" required>
+                <input type="text" id="tamano" name="tamano" placeholder="tamano" required>
+                <input type="text" id="disco" name="disco" placeholder="disco" required>
+                <input type="text" id="ram" name="ram" placeholder="ram" required>
+                <input type="text" id="tipo" name="tipo" placeholder="tipo" required>
+                <input type="text" id="estado" name="estado" placeholder="estado" required>
+                <input type="extras" id="extras" name="extras" placeholder="extras" required>
+
+                <div class="acciones-modal">
+                  <button type="submit">Guardar</button>
+                  <button type="button" class="cerrar-modal">Cancelar</button>
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+
+          <!-- Modal de importación -->
+          <div class="modal importar" id="modal-importar">
+            <div class="modal-contenido importar">
+
+              <h3>📁 Importar productos</h3>
+              <form id="form-importar" enctype="multipart/form-data">
+                <input type="file" name="archivo" accept=".csv" required />
+                <button type="submit">📤 Subir archivo</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div id="actas" class="seccion">
+          <h2>🧾Actas</h2>
+          <div class="filtros-ventas">
+            <input type="date" id="fecha-inicio" placeholder="Desde">
+            <input type="date" id="fecha-fin" placeholder="Hasta">
+            <input type="text" id="buscador-ventas" placeholder="Buscar venta, producto o vendedor">
+            <button id="exportar-ventas">📁 Exportar</button>
+          </div>
+          <div class="tabla-actas">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Fecha</th>
+                  <th>Cliente</th>
+                  <th>Equipo</th>
+                  <th>Usuario</th>
+                  <th>Forma de Pago</th>
+                  <th>Precio</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-actas"></tbody>
+            </table>
+          </div>
+          
+          <!-- modal que muestra la informacion de cada acta -->
+          <div id="modalActa" class="modal__acta hidden">
+            <div class="modal-content">
+              <span id="cerrarModal" class="cerrar">&times;</span>
+              <h2>Detalle del Acta</h2>
+              <div id="detalleActa">
+                <!-- Aquí se llenarán los datos dinámicamente -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div id="estadisticas" class="seccion">
+          <h2>📊 Estadísticas</h2>
+
+          <nav class="panel-estadisticas">
+            <div class="pestanas-estadisticas">
+
+              <button onclick="mostrarSeccionStats('ventas-x-usuario')">👤 Usuarios</button>
+              <button onclick="mostrarSeccionStats('ventas-x-producto')">📦 Productos</button>
+              <button onclick="mostrarSeccionStats('ventas-x-total')">💰 Ingresos</button>
+
+            </div>
+          </nav>
+          <!-- Filtros -->
+          <div class="filtros-estadisticas">
+            <input type="date" id="fecha-desde" placeholder="Desde">
+            <input type="date" id="fecha-hasta" placeholder="Hasta">
+            <button id="exportar-estadisticas">📁 Exportar</button>
+          </div>
+          <!-- Contenedor de gráficos -->
+          <div class="graficas">
+            <div id="ventas-x-usuario" class="grafica-card activa">
+              <canvas id="grafica-mis-ventas"></canvas>
+            </div>
+
+            <div id="ventas-x-producto" class="grafica-card">
+              <canvas id="grafica-mis-productos"></canvas>
+            </div>
+
+            <div id="ventas-x-total" class="grafica-card">
+              <canvas id="totalGeneradoPorUsuario"></canvas>
+            </div>
+          </div>
+
+        </div>
+
+        <div id="usuarios" class="seccion">
+          <h2>👤 Gestión de Usuarios</h2>
+
+          <div class="barra-usuarios">
+            <input type="text" id="buscador-usuarios" placeholder="Buscar usuario...">
+            <select id="filtro-estado">
+              <option value="">Todos</option>
+              <option value="activo">Activos</option>
+              <option value="inactivo">Inactivos</option>
+            </select>
+            <button id="abrir-modal-usuario">➕ Nuevo Usuario</button>
+          </div>
+
+          <div class="tabla-usuarios">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Correo</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal para agregar usuario -->
+          <div class="modal" id="modal-agregar-usuario">
+            <div class="modal-contenido">
+              <h3 id="titulo-modal-usuario">Nuevo Usuario</h3>
+              <form id="form__usuario" data-editando="false">
+
+                <input id="nombre-usuario" type="text" name="nombre" placeholder="Nombre completo" required>
+                <input id="correo-usuario" type="email" name="correo" placeholder="Correo electrónico" required>
+                <input id="contrasena-usuario" type="password" name="password" placeholder="Contraseña" required>
+
+                <select id="rol-usuario" name="rol" required>
+                  <option value="">Seleccionar rol</option>
+                  <option value="admin">Admin</option>
+                  <option value="vendedor">Vendedor</option>
+                </select>
+
+                <div class="acciones-modal">
+                  <button type="submit">Guardar</button>
+                  <button type="button" class="cerrar-modal usuario">Cancelar</button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- <div id="configuracion" class="seccion">
+          <h2>⚙️ Configuración del Sistema</h2>
+
+          <form id="form-configuracion">
+            <fieldset>
+              <legend>Preferencias del usuario</legend>
+              <label>Nombre de usuario:</label>
+              <input type="text" name="nombre_usuario" placeholder="Tu nombre visible">
+
+              <label>Cambiar contraseña:</label>
+              <input type="password" name="nueva_contraseña" placeholder="Nueva contraseña">
+            </fieldset>
+
+            <fieldset>
+              <legend>Parámetros del sistema</legend>
+              <label>Moneda predeterminada:</label>
+              <select name="moneda">
+                <option value="usd">$ USD</option>
+                <option value="eur">€ EUR</option>
+                <option value="mxn">$ MXN</option>
+              </select>
+
+              <label>Stock mínimo para alertas:</label>
+              <input type="number" name="stock_min" placeholder="Ej: 10" min="1">
+            </fieldset>
+
+            <fieldset>
+              <legend>Opciones visuales</legend>
+              <label>
+                <input type="checkbox" name="tema_oscuro"> Activar modo oscuro
+              </label>
+
+              <label>
+                <input type="checkbox" name="animaciones"> Activar animaciones
+              </label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Respaldo y sistema</legend>
+              <button type="button">💾 Exportar datos</button>
+              <button type="button">🧪 Restaurar datos de prueba</button>
+              <button type="button" class="reset">🔄 Restablecer configuración</button>
+            </fieldset>
+
+            <button type="submit">💡 Guardar configuración</button>
+          </form>
+        </div> -->
+
+      </section>
+    </main>
+
+    <footer>
+      © 2025 Sistema de Inventario | Todos los derechos reservados
+    </footer>
+
+  </div>
+
+  <!-- mis scripts -->
+  <script src="../js/dashboard/actas.js"></script>
+  <script src="../js/dashboard/usuario.js"></script>
+  <script src="../js/dashboard/equipo.js"></script>
+  <script src="../js/dashboard/dashboard.js"></script>
+  <!-- <script src="../js/dashboard/chart.js"></script> -->
+  <script src="../js/nav.js"></script>
+  <!-- <script src="../js/dashboard/nav-stats.js"></script> -->
+
+
+
+  <div id="loader-modal" class="loader"></div>
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+</body>
+
+</html>
