@@ -13,7 +13,7 @@ const Acta = require('./actas.model')(sequelize, DataTypes);
 
 // -------------------- DEFINIR ASOCIACIONES --------------------
 
-// Cliente → Equipos
+// Cliente → Actas
 Cliente.hasMany(Acta, { foreignKey: 'cliente_id' });
 Acta.belongsTo(Cliente, { foreignKey: 'cliente_id' });
 
@@ -25,18 +25,15 @@ Acta.belongsTo(Usuario, { foreignKey: 'usuario_id' });
 Equipo.hasMany(Acta, { foreignKey: 'equipo_id' });
 Acta.belongsTo(Equipo, { foreignKey: 'equipo_id' });
 
-// Equipo → Inspección 
-Equipo.hasOne(InspeccionHardware, { foreignKey: 'equipo_id' });
-Equipo.hasOne(InspeccionSoftware, { foreignKey: 'equipo_id' });
-Equipo.hasOne(Adicional, { foreignKey: 'equipo_id' });
+// Acta → Inspecciones
+Acta.hasOne(InspeccionHardware, { foreignKey: 'acta_id' });
+InspeccionHardware.belongsTo(Acta, { foreignKey: 'acta_id' });
 
-InspeccionHardware.belongsTo(Equipo, { foreignKey: 'equipo_id' });
-InspeccionSoftware.belongsTo(Equipo, { foreignKey: 'equipo_id' });
-Adicional.belongsTo(Equipo, { foreignKey: 'equipo_id' });
+Acta.hasOne(InspeccionSoftware, { foreignKey: 'acta_id' });
+InspeccionSoftware.belongsTo(Acta, { foreignKey: 'acta_id' });
 
-// Equipo → Adicionales
-Equipo.hasOne(Adicional, { foreignKey: 'equipo_id' });
-Adicional.belongsTo(Equipo, { foreignKey: 'equipo_id' });
+Acta.hasOne(Adicional, { foreignKey: 'acta_id' });
+Adicional.belongsTo(Acta, { foreignKey: 'acta_id' });
 
 // -------------------- EXPORTAR MODELOS --------------------
 

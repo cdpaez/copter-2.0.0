@@ -27,6 +27,7 @@ const obtenerActasResumen = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener el resumen de actas' });
   }
 };
+
 const obtenerActaPorId = async (req, res) => {
   try {
     const acta = await Acta.findByPk(req.params.id, {
@@ -41,12 +42,16 @@ const obtenerActaPorId = async (req, res) => {
         },
         {
           model: Equipo,
-          attributes: ['marca', 'modelo', 'numero_serie'],
-          include: [
-            { model: InspeccionHardware },
-            { model: InspeccionSoftware },
-            { model: Adicional }
-          ]
+          attributes: ['marca', 'modelo', 'numero_serie']
+        },
+        {
+          model: InspeccionHardware
+        },
+        {
+          model: InspeccionSoftware
+        },
+        {
+          model: Adicional
         }
       ]
     });
@@ -54,8 +59,9 @@ const obtenerActaPorId = async (req, res) => {
     if (!acta) {
       return res.status(404).json({ error: 'Acta no encontrada' });
     }
-
+    console.log("datos antes del JSON", JSON.stringify(acta, null, 2));
     res.json(acta);
+
   } catch (error) {
     console.error('Error al obtener acta por ID:', error);
     res.status(500).json({ error: 'Error al obtener el acta' });

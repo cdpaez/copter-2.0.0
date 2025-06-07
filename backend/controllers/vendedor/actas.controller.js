@@ -9,7 +9,7 @@ const {
 } = require('../../models');
 
 exports.crearActaCompleta = async (req, res) => {
-  console.log('BODY RECIBIDO:', req.body);
+  console.log('datos para guardar en el acta:', req.body);
 
   const t = await Cliente.sequelize.transaction();
 
@@ -42,8 +42,23 @@ exports.crearActaCompleta = async (req, res) => {
       throw new Error('El equipo seleccionado no existe');
     }
 
+    // 👉 PRIMERO creamos el Acta
+    const nuevaActa = await Acta.create(
+      {
+        ...acta,
+        equipo_id: equipoExistente.id,
+        cliente_id: clienteExistente.id,
+        usuario_id: acta.usuario_id,
+        observaciones: req.body.observaciones?.trim() || null
+      },
+      { transaction: t }
+    );
+
+    const actaId = nuevaActa.id;
+
+    // 👉 Luego creamos las inspecciones y adicionales usando acta_id
     await InspeccionHardware.create({
-      equipo_id: equipoExistente.id,
+      acta_id: actaId,
 
       teclado_estado: inspeccion_hw.teclado,
       teclado_observacion: inspeccion_hw.teclado_obs?.trim() || null,
@@ -72,16 +87,21 @@ exports.crearActaCompleta = async (req, res) => {
 
     await InspeccionSoftware.create(
       {
+        acta_id: actaId,
         nota: inspeccion_sw.nota?.trim() === '' ? null : inspeccion_sw.nota,
-        ...inspeccion_sw,
-        equipo_id: equipoExistente.id
+        sistema_operativo: inspeccion_sw.sistema_operativo,
+        antivirus: inspeccion_sw.antivirus,
+        office: inspeccion_sw.office,
+        navegadores: inspeccion_sw.navegadores,
+        compresores: inspeccion_sw.compresores,
+        acceso_remoto: inspeccion_sw.acceso_remoto
       },
       { transaction: t }
     );
 
     await Adicional.create(
       {
-        equipo_id: equipoExistente.id,
+        acta_id: actaId,
 
         mouse_estado: adicionales.mouse,
         mouse_observacion: adicionales.mouse_obs?.trim() || null,
@@ -100,17 +120,6 @@ exports.crearActaCompleta = async (req, res) => {
 
         software3_estado: adicionales.software3,
         software3_observacion: adicionales.software3_obs?.trim() || null
-      },
-      { transaction: t }
-    );
-
-    const nuevaActa = await Acta.create(
-      {
-        ...acta,
-        equipo_id: equipoExistente.id,
-        cliente_id: clienteExistente.id,
-        usuario_id: acta.usuario_id,
-        observaciones: req.body.observaciones?.trim() || null
       },
       { transaction: t }
     );

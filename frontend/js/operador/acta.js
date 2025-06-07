@@ -1,3 +1,51 @@
+document.addEventListener("DOMContentLoaded", () => {
+  // Caso 1: Hardware (deshabilita y limpia si el checkbox está marcado)
+  document.querySelectorAll('.input-group-hw').forEach(group => {
+    const textInput = group.querySelector('input[type="text"]');
+    const checkbox = group.querySelector('input[type="checkbox"]');
+
+    // Inicializar estado
+    if (checkbox.checked) {
+      textInput.disabled = true;
+      textInput.value = '';
+    } else {
+      textInput.disabled = false;
+    }
+
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        textInput.disabled = true;
+        textInput.value = '';
+      } else {
+        textInput.disabled = false;
+      }
+    });
+  });
+
+  // Caso 2: Adicionales (habilita si está marcado, limpia y deshabilita si no)
+  document.querySelectorAll('.input-group-ad').forEach(group => {
+    const textInput = group.querySelector('input[type="text"]');
+    const checkbox = group.querySelector('input[type="checkbox"]');
+
+    // Inicializar estado
+    if (!checkbox.checked) {
+      textInput.disabled = true;
+      textInput.value = '';
+    } else {
+      textInput.disabled = false;
+    }
+
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        textInput.disabled = false;
+      } else {
+        textInput.disabled = true;
+        textInput.value = '';
+      }
+    });
+  });
+});
+
 document.getElementById('actaForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -97,18 +145,20 @@ buscarInput.addEventListener('input', () => {
   timeout = setTimeout(async () => {
     const termino = buscarInput.value.trim();
     if (termino.length === 0) {
-      resultados.innerHTML = '';
       return;
     }
 
-
     const res = await fetch(`/equipos/buscar?termino=${termino}`);
     const data = await res.json();
+    console.log("datos del equipo buscado:", data)
 
-    resultados.innerHTML = '';
     data.forEach(item => {
+
+      // resultado de la busqueda
       const li = document.createElement('li');
       li.textContent = `${item.marca} - ${item.numero_serie}`;
+
+      // agregando datos a los campos
       li.addEventListener('click', () => {
         // ← completar campos del formulario
         document.querySelector('[name="marca"]').value = item.marca;

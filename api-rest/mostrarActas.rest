@@ -1,0 +1,2 @@
+### fetch encargado de obtener informacion de las actas
+GET http://localhost:3000/actas/1

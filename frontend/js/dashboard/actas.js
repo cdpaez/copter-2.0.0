@@ -19,10 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('modalActa').classList.add('hidden');
     }
   });
+  let actasOriginales = [];
+
   async function cargarTablaActas() {
     try {
       const res = await fetch('/actas/resumen');
-      console.log('respuesta <-- backend', res);
 
       if (!res.ok) {
         const error = await res.json();
@@ -32,35 +33,50 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const actas = await res.json();
-      console.log('DATOS EN FORMATO JSON <----', actas);
+
       if (!Array.isArray(actas)) {
         console.error('Respuesta inválida:', actas);
         alert('❌ La respuesta del servidor no es válida');
         return;
       }
 
-      const tabla = document.getElementById('tabla-actas');
-      tabla.innerHTML = '';
-
-      actas.forEach((acta, i) => {
-        const fila = `
-        <tr>
-          <td>${i + 1}</td>
-          <td>${new Date(acta.fecha_registro).toLocaleDateString()}</td>
-          <td>${acta.Cliente?.nombre || 'Sin cliente'}</td>
-          <td>${acta.Equipo?.marca || ''} ${acta.Equipo?.modelo || ''} - ${acta.Equipo?.numero_serie || ''}</td>
-          <td>${acta.Usuario?.nombre || ''}</td>
-          <td>${acta.forma_pago}</td>
-          <td>$${Number(acta.precio).toFixed(2)}</td>
-          <td><button class="ver-acta-btn" data-id="${acta.id}">Ver</button></td>
-        </tr>
-      `;
-        tabla.innerHTML += fila;
-      });
+      actasOriginales = actas; // ✅ Guardamos para aplicar filtros después
+      renderizarTablaActas(actasOriginales);
     } catch (error) {
       console.error('❌ Error de red o procesamiento:', error);
       alert('❌ No se pudo conectar con el servidor');
     }
+  }
+
+  function renderizarTablaActas(lista) {
+    const tabla = document.getElementById('tabla-actas');
+    tabla.innerHTML = '';
+
+    if (lista.length === 0) {
+      tabla.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align:center; padding: 1rem; color: #666;">
+          🛈 No existen actas registradas en ese rango de fechas.
+        </td>
+      </tr>
+    `;
+      return;
+    }
+    lista.forEach(acta => {
+      const fila = `
+      <tr>
+        <td>${acta.id}</td>
+        <td>${new Date(acta.fecha_registro).toLocaleDateString()}</td>
+        <td>${acta.Cliente?.nombre || 'Sin cliente'}</td>
+        <td>${acta.Equipo?.marca || ''} ${acta.Equipo?.modelo || ''} - ${acta.Equipo?.numero_serie || ''}</td>
+        <td>${acta.Usuario?.nombre || ''}</td>
+        <td>${acta.forma_pago}</td>
+        <td>$${Number(acta.precio).toFixed(2)}</td>
+        <td><button class="ver-acta-btn" data-id="${acta.id}">Ver</button></td>
+      </tr>
+    `;
+      tabla.innerHTML += fila;
+    });
   }
 
   function booleanToCheckIcon(value) {
@@ -71,10 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch(`/actas/${id}`);
       const acta = await res.json();
+      console.log('datos de las actas', acta);
 
-      const hw = acta.Equipo.InspeccionHardware || {};
-      const sw = acta.Equipo.InspeccionSoftware || {};
-      const ad = acta.Equipo.Adicional || {};
+      const hw = acta.InspeccionHardware || {};
+      const sw = acta.InspeccionSoftware || {};
+      const ad = acta.Adicional || {};
 
       const detalle = `
       <p><strong>Fecha:</strong> ${new Date(acta.fecha_registro).toLocaleString()}</p>
@@ -110,12 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       <h3>Adicionales</h3>
       <ul>
-        <li>Mouse: ${booleanToCheckIcon(ad.mouse)} — ${ad.mouse_observacion || 'Ninguna'}</li>
-        <li>Mochila: ${booleanToCheckIcon(ad.mochila)} — ${ad.mochila_observacion || 'Ninguna'}</li>
-        <li>Estuche: ${booleanToCheckIcon(ad.estuche)} — ${ad.estuche_observacion || 'Ninguna'}</li>
-        <li>Software 1: ${booleanToCheckIcon(ad.software1)} — ${ad.software1_observacion || 'Ninguna'}</li>
-        <li>Software 2: ${booleanToCheckIcon(ad.software2)} — ${ad.software2_observacion || 'Ninguna'}</li>
-        <li>Software 3: ${booleanToCheckIcon(ad.software3)} — ${ad.software3_observacion || 'Ninguna'}</li>
+        <li>Mouse: ${booleanToCheckIcon(ad.mouse_estado)} — ${ad.mouse_observacion || 'Ninguna'}</li>
+        <li>Mochila: ${booleanToCheckIcon(ad.mochila_estado)} — ${ad.mochila_observacion || 'Ninguna'}</li>
+        <li>Estuche: ${booleanToCheckIcon(ad.estuche_estado)} — ${ad.estuche_observacion || 'Ninguna'}</li>
+        <li>Software 1: ${booleanToCheckIcon(ad.software1_estado)} — ${ad.software1_observacion || 'Ninguna'}</li>
+        <li>Software 2: ${booleanToCheckIcon(ad.software2_estado)} — ${ad.software2_observacion || 'Ninguna'}</li>
+        <li>Software 3: ${booleanToCheckIcon(ad.software3_estado)} — ${ad.software3_observacion || 'Ninguna'}</li>
       </ul>
     `;
       const pintar = document.getElementById('detalleActa')
@@ -127,6 +144,47 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('No se pudo cargar el acta');
     }
   }
+
+
+
+  document.getElementById('fecha-inicio').addEventListener('change', aplicarFiltros);
+  document.getElementById('fecha-fin').addEventListener('change', aplicarFiltros);
+  document.getElementById('buscador-ventas').addEventListener('input', aplicarFiltros);
+
+  function aplicarFiltros() {
+    const desde = document.getElementById('fecha-inicio').value;
+    const hasta = document.getElementById('fecha-fin').value;
+    const busqueda = document.getElementById('buscador-ventas').value.trim().toLowerCase();
+
+    const desdeDate = desde ? new Date(desde) : null;
+    const hastaDate = hasta ? new Date(hasta + 'T23:59:59') : null;
+
+    const filtradas = actasOriginales.filter((acta) => {
+      const fechaActa = new Date(acta.fecha_registro);
+
+      // Filtro por fechas
+      if (desdeDate && fechaActa < desdeDate) return false;
+      if (hastaDate && fechaActa > hastaDate) return false;
+
+      // Filtro por texto (cliente, vendedor, producto)
+      const cliente = acta.Cliente?.nombre?.toLowerCase() || '';
+      const vendedor = acta.Usuario?.nombre?.toLowerCase() || '';
+      const producto = `${acta.Equipo?.marca || ''} ${acta.Equipo?.modelo || ''} ${acta.Equipo?.numero_serie || ''}`.toLowerCase();
+
+      if (
+        !cliente.includes(busqueda) &&
+        !vendedor.includes(busqueda) &&
+        !producto.includes(busqueda)
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+
+    renderizarTablaActas(filtradas);
+  }
+
 
   cargarTablaActas();
 

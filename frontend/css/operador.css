@@ -280,6 +280,26 @@ main {
   background-color: #2980b9;
 }
 
+/* botones del formulario acta */
+.grupo-botones {
+  width: 100%;
+  border: 2px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.grupo-botones legend {
+  font-weight: bold;
+  padding: 0 10px;
+  color: #555;
+}
+.grupo-botones button {
+  width: 100%;
+}
+
 /* area mis estadisticas */
 /* --- FILTROS --- */
 .filtros-estadisticas {

@@ -12,13 +12,16 @@
 
   text-align: center;
 }
+
 .actas {
   display: flex;
   flex-direction: column;
 }
-.actas > h2 {
+
+.actas>h2 {
   padding: 2rem;
 }
+
 /* seccion para los clientes */
 .actas__cliente {
   display: grid;
@@ -44,6 +47,26 @@
 }
 
 /* seccion para los equipos */
+.fieldset-container {
+  position: relative;
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-top: 2rem;
+  background-color: #fafafa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.legend-container {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  padding: 0 0.5rem;
+  margin-left: 0.5rem;
+  background-color: #fafafa;
+}
+
 .actas__equipos {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -84,14 +107,14 @@
   color: #333;
 }
 
-.input-group {
+.input-group-hw {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.3rem;
 }
 
-.input-group input[type="text"] {
+.input-group-hw input[type="text"] {
   flex: 1;
   padding: 0.4rem;
   border: 1px solid #ccc;
@@ -99,7 +122,7 @@
   font-size: 0.9rem;
 }
 
-.input-group input[type="checkbox"] {
+.input-group-hw input[type="checkbox"] {
   transform: scale(1.2);
   cursor: pointer;
 }
@@ -135,9 +158,11 @@
   font-size: 0.9rem;
   width: 80%;
 }
+
 .notas {
   grid-column: 1 / -1;
 }
+
 /* seccion para adicionales */
 .actas__adicionales {
   display: grid;
@@ -155,14 +180,14 @@
   color: #333;
 }
 
-.input-group {
+.input-group-ad {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.3rem;
 }
 
-.input-group input[type="text"] {
+.input-group-ad input[type="text"] {
   flex: 1;
   padding: 0.4rem;
   border: 1px solid #ccc;
@@ -170,7 +195,7 @@
   font-size: 0.9rem;
 }
 
-.input-group input[type="checkbox"] {
+.input-group-ad input[type="checkbox"] {
   transform: scale(1.2);
   cursor: pointer;
 }
@@ -181,12 +206,14 @@
   flex-direction: column;
   padding: 2rem;
 }
+
 .formaPago {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
 }
+
 .formaPago button {
   width: 30%;
   padding: 1.25rem;

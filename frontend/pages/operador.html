@@ -46,21 +46,27 @@
               <!-- Formulario para cliente nuevo (nuevo) -->
               <form id="actaForm">
 
-                <h2>Datos del Cliente</h2>
-                <div class="actas__cliente">
-                  <label>Nombre: <input type="text" name="nombre_cliente" required></label>
-                  <label>Cédula/RUC: <input type="text" name="cedula_ruc" required></label>
-                  <label>Teléfono: <input type="text" name="telefono" required></label>
-                  <label>Correo: <input type="email" name="correo" required></label>
-                  <label>Dirección: <input type="text" name="direccion" required></label>
-                </div>
+                <fieldset class="fieldset-container">
+                  <legend class="legends-container">Datos del Cliente</legend>
+                  <div class="actas__cliente">
+                    <label>Nombre: <input type="text" name="nombre_cliente" required></label>
+                    <label>Cédula/RUC: <input type="text" name="cedula_ruc" required></label>
+                    <label>Teléfono: <input type="text" name="telefono" required></label>
+                    <label>Correo: <input type="email" name="correo" required></label>
+                    <label>Dirección: <input type="text" name="direccion" required></label>
+                  </div>
+                </fieldset>
 
-                <fieldset>
-                  <legend>Datos del Equipo:</legend>
+
+
+                <fieldset class="fieldset-container">
+                  <legend class="legend-container">Datos del Equipo:</legend>
                   <label>
                     Buscar Equipo:
                     <input type="text" id="buscar-equipo" autocomplete="off">
-                    <ul id="resultados" class="menu-contextual"></ul>
+                    <ul id="resultados" class="menu-contextual">
+                      <!-- TODO: se van llenando con informacion de la base de datos -->
+                    </ul>
                   </label>
                   <div class="actas__equipos">
                     <input type="hidden" name="equipo_id" id="equipo_id">
@@ -77,145 +83,152 @@
                   </div>
                 </fieldset>
 
-                <h2>Inspección del Equipo (Hardware)</h2>
-                <div class="actas__hardware">
-                  <label>
-                    Teclado:
-                    <div class="input-group">
-                      <input type="text" name="hw_teclado">
-                      <input type="checkbox" name="hw_teclado_check">
-                    </div>
-                  </label>
-                  <label>
-                    Mouse:
-                    <div class="input-group">
-                      <input type="text" name="hw_mouse">
-                      <input type="checkbox" name="hw_mouse_check">
-                    </div>
-                  </label>
-                  <label>
-                    Cámara:
-                    <div class="input-group">
-                      <input type="text" name="hw_camara">
-                      <input type="checkbox" name="hw_camara_check">
-                    </div>
-                  </label>
-                  <label>
-                    Pantalla:
-                    <div class="input-group">
-                      <input type="text" name="hw_pantalla">
-                      <input type="checkbox" name="hw_pantalla_check">
-                    </div>
-                  </label>
-                  <label>
-                    Parlantes:
-                    <div class="input-group">
-                      <input type="text" name="hw_parlantes">
-                      <input type="checkbox" name="hw_parlantes_check">
-                    </div>
-                  </label>
-                  <label>
-                    Batería:
-                    <div class="input-group">
-                      <input type="text" name="hw_bateria">
-                      <input type="checkbox" name="hw_bateria_check">
-                    </div>
-                  </label>
-                  <label>
-                    Carcasa:
-                    <div class="input-group">
-                      <input type="text" name="hw_carcasa">
-                      <input type="checkbox" name="hw_carcasa_check">
-                    </div>
-                  </label>
-                  <label>
-                    Cargador:
-                    <div class="input-group">
-                      <input type="text" name="hw_cargador">
-                      <input type="checkbox" name="hw_cargador_check">
-                    </div>
-                  </label>
-                </div>
+                <fieldset class="fieldset-container">
+                  <legend class="legend-container">Inspección del Equipo (Hardware)</legend>
+                  <div class="actas__hardware">
+                    <label>
+                      Teclado:
+                      <div class="input-group-hw">
+                        <input type="text" name="hw_teclado">
+                        <input type="checkbox" name="hw_teclado_check">
+                      </div>
+                    </label>
+                    <label>
+                      Mouse:
+                      <div class="input-group-hw">
+                        <input type="text" name="hw_mouse">
+                        <input type="checkbox" name="hw_mouse_check">
+                      </div>
+                    </label>
+                    <label>
+                      Cámara:
+                      <div class="input-group-hw">
+                        <input type="text" name="hw_camara">
+                        <input type="checkbox" name="hw_camara_check">
+                      </div>
+                    </label>
+                    <label>
+                      Pantalla:
+                      <div class="input-group-hw">
+                        <input type="text" name="hw_pantalla">
+                        <input type="checkbox" name="hw_pantalla_check">
+                      </div>
+                    </label>
+                    <label>
+                      Parlantes:
+                      <div class="input-group-hw">
+                        <input type="text" name="hw_parlantes">
+                        <input type="checkbox" name="hw_parlantes_check">
+                      </div>
+                    </label>
+                    <label>
+                      Batería:
+                      <div class="input-group-hw">
+                        <input type="text" name="hw_bateria">
+                        <input type="checkbox" name="hw_bateria_check">
+                      </div>
+                    </label>
+                    <label>
+                      Carcasa:
+                      <div class="input-group-hw">
+                        <input type="text" name="hw_carcasa">
+                        <input type="checkbox" name="hw_carcasa_check">
+                      </div>
+                    </label>
+                    <label>
+                      Cargador:
+                      <div class="input-group-hw">
+                        <input type="text" name="hw_cargador">
+                        <input type="checkbox" name="hw_cargador_check">
+                      </div>
+                    </label>
+                  </div>
+                </fieldset>
 
+                <fieldset class="fieldset-container">
+                  <legend class="legend-container">Inspección del Equipo (Software)</legend>
 
-                <h2>Inspección del Equipo (Software)</h2>
-                <div class="actas__software">
-                  <label>
-                    <input type="checkbox" name="sw_sistema_operativo">
-                    Sistema Operativo
-                  </label>
-                  <label>
-                    <input type="checkbox" name="sw_antivirus">
-                    Antivirus
-                  </label>
-                  <label>
-                    <input type="checkbox" name="sw_office">
-                    Office
-                  </label>
-                  <label>
-                    <input type="checkbox" name="sw_navegadores">
-                    Navegadores
-                  </label>
-                  <label>
-                    <input type="checkbox" name="sw_compresores">
-                    Compresores
-                  </label>
-                  <label>
-                    <input type="checkbox" name="sw_acceso_remoto">
-                    Acceso remoto
-                  </label>
-                  <label class="notas">
-                    Notas:
-                    <input type="text" name="sw_nota">
-                  </label>
-                </div>
+                  <div class="actas__software">
+                    <label>
+                      <input type="checkbox" name="sw_sistema_operativo">
+                      Sistema Operativo
+                    </label>
+                    <label>
+                      <input type="checkbox" name="sw_antivirus">
+                      Antivirus
+                    </label>
+                    <label>
+                      <input type="checkbox" name="sw_office">
+                      Office
+                    </label>
+                    <label>
+                      <input type="checkbox" name="sw_navegadores">
+                      Navegadores
+                    </label>
+                    <label>
+                      <input type="checkbox" name="sw_compresores">
+                      Compresores
+                    </label>
+                    <label>
+                      <input type="checkbox" name="sw_acceso_remoto">
+                      Acceso remoto
+                    </label>
+                    <label class="notas">
+                      Notas:
+                      <input type="text" name="sw_nota">
+                    </label>
+                  </div>
+                </fieldset>
 
+                <fieldset class="fieldset-container">
+                  <legend class="legend-container">Adicionales</legend>
 
-                <h2>Adicionales</h2>
-                <div class="actas__adicionales">
-                  <label>
-                    Mouse:
-                    <div class="input-group">
-                      <input type="text" name="ad_mouse">
-                      <input type="checkbox" name="ad_mouse_check">
-                    </div>
-                  </label>
-                  <label>
-                    Mochila:
-                    <div class="input-group">
-                      <input type="text" name="ad_mochila">
-                      <input type="checkbox" name="ad_mochila_check">
-                    </div>
-                  </label>
-                  <label>
-                    Estuche:
-                    <div class="input-group">
-                      <input type="text" name="ad_estuche">
-                      <input type="checkbox" name="ad_estuche_check">
-                    </div>
-                  </label>
-                  <label>
-                    Software 1:
-                    <div class="input-group">
-                      <input type="text" name="ad_software1">
-                      <input type="checkbox" name="ad_software1_check">
-                    </div>
-                  </label>
-                  <label>
-                    Software 2:
-                    <div class="input-group">
-                      <input type="text" name="ad_software2">
-                      <input type="checkbox" name="ad_software2_check">
-                    </div>
-                  </label>
-                  <label>
-                    Software 3:
-                    <div class="input-group">
-                      <input type="text" name="ad_software3">
-                      <input type="checkbox" name="ad_software3_check">
-                    </div>
-                  </label>
-                </div>
+                  <div class="actas__adicionales">
+                    <label>
+                      Mouse:
+                      <div class="input-group-ad">
+                        <input type="text" name="ad_mouse">
+                        <input type="checkbox" name="ad_mouse_check">
+                      </div>
+                    </label>
+                    <label>
+                      Mochila:
+                      <div class="input-group-ad">
+                        <input type="text" name="ad_mochila">
+                        <input type="checkbox" name="ad_mochila_check">
+                      </div>
+                    </label>
+                    <label>
+                      Estuche:
+                      <div class="input-group-ad">
+                        <input type="text" name="ad_estuche">
+                        <input type="checkbox" name="ad_estuche_check">
+                      </div>
+                    </label>
+                    <label>
+                      Software 1:
+                      <div class="input-group-ad">
+                        <input type="text" name="ad_software1">
+                        <input type="checkbox" name="ad_software1_check">
+                      </div>
+                    </label>
+                    <label>
+                      Software 2:
+                      <div class="input-group-ad">
+                        <input type="text" name="ad_software2">
+                        <input type="checkbox" name="ad_software2_check">
+                      </div>
+                    </label>
+                    <label>
+                      Software 3:
+                      <div class="input-group-ad">
+                        <input type="text" name="ad_software3">
+                        <input type="checkbox" name="ad_software3_check">
+                      </div>
+                    </label>
+                  </div>
+                </fieldset>
+
                 <div class="observaciones">
                   <h2>Observaciones Adicionales</h2>
                   <textarea name="observaciones"></textarea>
@@ -234,7 +247,11 @@
                   <label>Precio ($): <input type="number" step="0.01" min="0" name="precio" required></label>
                   <!-- <label>Vendedor: <input type="text" name="vendedor" required></label> -->
 
-                  <button type="submit">Guardar Acta</button>
+                  <fieldset class="grupo-botones">
+                    <legend>Acciones</legend>
+                    <button type="submit">Guardar Acta</button>
+                    <button>Imprimir</button>
+                  </fieldset>
                 </div>
               </form>
             </div>

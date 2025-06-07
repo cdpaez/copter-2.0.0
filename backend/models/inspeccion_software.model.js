@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const InspeccionSoftware = sequelize.define('InspeccionSoftware', {
-    equipo_id: {
+    acta_id: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
