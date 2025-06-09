@@ -67,6 +67,18 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
       direccion: form.direccion.value
     },
     equipo: parseInt(form.equipo_id.value),
+    equipo_detalle: { // ← solo para generar el PDF
+      marca: form.marca.value,
+      modelo: form.modelo.value,
+      numero_serie: form.numero_serie.value,
+      procesador: form.procesador.value,
+      tamano: form.tamano.value,
+      disco: form.disco.value,
+      memoria_ram: form.memoria_ram.value,
+      tipo_equipo: form.tipo_equipo.value,
+      estado: form.estado.value,
+      extras: form.extras.value
+    },
     inspeccion_hw: {
       teclado: form.hw_teclado_check.checked,
       teclado_obs: form.hw_teclado.value,
@@ -115,20 +127,34 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
     },
     observaciones: form.observaciones.value
   };
+
   console.log('datos:', datos);
+
   try {
+
     const res = await fetch('/actas', {
+
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(datos)
+
     });
+
+    if (!res.ok) {
+
+      const error = await res.json();
+      throw new Error(error.error || 'Error desconocido al registrar el acta');
+    }
 
     const resultado = await res.json();
     console.log('Respuesta:', resultado);
     alert('✅ Acta registrada con éxito');
+
   } catch (error) {
+
     console.error('❌ Error al enviar:', error);
     alert('❌ Error al registrar acta');
+
   }
 });
 
