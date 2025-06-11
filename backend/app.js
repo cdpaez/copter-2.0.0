@@ -13,6 +13,7 @@ app.use(cors());
 // Archivos estáticos
 app.use(express.static(path.join(__dirname, '../')))
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Rutas básicas
 app.get('/factura', (req, res) => {

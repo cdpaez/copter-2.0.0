@@ -5,11 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="../img/logo/inventario.png">
+  
   <!-- En tu HTML -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
+  <!-- estilos para iconos con fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- estilos generales  -->
   <link rel="stylesheet" href="../css/components/modalActa.css">
   <link rel="stylesheet" href="../css/dashboard.css">
   <link rel="stylesheet" href="../css/components/nav-estadisticas.css">
@@ -27,7 +32,7 @@
       🧾 Sistema de Inventario
       <!-- <a href="/operador.html">operador</a> -->
     </header>
-
+    
     <main>
       <nav class="panel-lateral">
         <div class="pestanas">
@@ -130,7 +135,7 @@
             <input type="date" id="fecha-inicio" placeholder="Desde">
             <input type="date" id="fecha-fin" placeholder="Hasta">
             <input type="text" id="buscador-ventas" placeholder="Buscar cliente, producto o vendedor">
-            <button id="exportar-ventas">📁 Exportar</button>
+            <!-- <button id="exportar-ventas">📁 Exportar</button> -->
           </div>
           <div class="tabla-actas">
             <table>
@@ -149,7 +154,7 @@
               <tbody id="tabla-actas"></tbody>
             </table>
           </div>
-          
+
           <!-- modal que muestra la informacion de cada acta -->
           <div id="modalActa" class="modal__acta hidden">
             <div class="modal-content">

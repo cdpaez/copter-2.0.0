@@ -11,19 +11,20 @@
 
   <link rel="stylesheet" href="../css/components/menuContextual.css">
   <link rel="stylesheet" href="../css/components/registrarActa.css">
-  <link rel="stylesheet" href="../css/components/comentarios.css">
   <link rel="stylesheet" href="../css/operador.css">
   <title>Panel del Operador</title>
 </head>
 
 <body>
   <div class="envoltorio__principal">
+
     <header>
       🛒 Panel del Operador
       <!-- <a href="/dashboard.html">dashboard</a> -->
     </header>
 
     <main>
+
       <nav class="panel-lateral">
         <h2>Menú</h2>
         <button onclick="mostrarSeccion('ventas')">🧾 Registrar Acta</button>
@@ -32,7 +33,6 @@
         <button onclick="cerrarSesion()">Cerrar sesión</button>
 
       </nav>
-
 
       <section class="area-contenido">
 
@@ -47,7 +47,7 @@
               <form id="actaForm">
 
                 <fieldset class="fieldset-container">
-                  <legend class="legends-container">Datos del Cliente</legend>
+                  <legend class="legend-container">Datos del Cliente</legend>
                   <div class="actas__cliente">
                     <label>Nombre: <input type="text" name="nombre_cliente" required></label>
                     <label>Cédula/RUC: <input type="text" name="cedula_ruc" required></label>
@@ -56,7 +56,6 @@
                     <label>Dirección: <input type="text" name="direccion" required></label>
                   </div>
                 </fieldset>
-
 
 
                 <fieldset class="fieldset-container">
@@ -173,9 +172,12 @@
                       <input type="checkbox" name="sw_acceso_remoto">
                       Acceso remoto
                     </label>
+
                     <label class="notas">
-                      Notas:
-                      <input type="text" name="sw_nota">
+                      Nota (máx. 100 caracteres):
+                      <input id="sw_nota" type="text" name="sw_nota" maxlength="100"
+                        placeholder="Escribe una nota breve...">
+                      <small id="contador_nota" class="contador">0 / 100</small>
                     </label>
                   </div>
                 </fieldset>
@@ -230,9 +232,11 @@
                 </fieldset>
 
                 <div class="observaciones">
-                  <h2>Observaciones Adicionales</h2>
-                  <textarea name="observaciones"></textarea>
+                  <label for="observaciones">Observaciones:</label>
+                  <textarea id="observaciones" name="observaciones" maxlength="162"></textarea>
+                  <span id="contadorobs">0 / 162</span>
                 </div>
+
 
                 <div class="formaPago">
                   <h2>Forma de Pago</h2>
@@ -256,20 +260,16 @@
             </div>
         </div>
 
-      </section>
-
-
-
-      <!-- <div id="mis-estadisticas" class="seccion">
+        <!-- <div id="mis-estadisticas" class="seccion">
           <h2>📈 Mis Estadísticas</h2> -->
 
-      <!-- <div class="filtros-estadisticas">
+        <!-- <div class="filtros-estadisticas">
             <input type="date" id="mi-fecha-inicio">
             <input type="date" id="mi-fecha-fin">
             <button id="filtrar-estadisticas">🔍 Filtrar</button>
           </div> -->
 
-      <!-- <div class="graficas">
+        <!-- <div class="graficas">
             <div class="grafica-card">
               <canvas id="grafica-mis-ventas"></canvas>
             </div>
@@ -284,7 +284,7 @@
           </div>
         </div> -->
 
-      <!-- <div id="perfil" class="seccion">
+        <!-- <div id="perfil" class="seccion">
           <h2>👤 Mi Perfil</h2>
 
           <form id="form-perfil">
@@ -327,16 +327,21 @@
         </div> -->
 
       </section>
+
+      <!-- Toast Notification Container -->
+      <div id="toast-container" class="toast-container"></div>
     </main>
 
     <footer>
       © 2025 Sistema de Inventario | Operador
     </footer>
+
   </div>
 
   <script src="../js/nav.js"></script>
   <script src="../js/operador/operador.js"></script>
   <script src="../js/operador/acta.js"></script>
+
 </body>
 
 </html>

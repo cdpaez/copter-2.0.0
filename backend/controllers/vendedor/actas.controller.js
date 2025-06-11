@@ -43,6 +43,24 @@ const crearActaCompleta = async (req, res) => {
       throw new Error('El equipo seleccionado no existe');
     }
 
+    // ✅ Validación de stock antes de continuar
+    if (equipoExistente.stock == 0) {
+      await t.rollback(); // Revertimos cualquier cambio
+      return res.status(400).json({
+        error: `No hay stock disponible para el equipo "${equipoExistente.marca} - ${equipoExistente.numero_serie}".`
+      });
+    }
+
+    // Descontar stock
+    equipoExistente.stock -= 1;
+    await equipoExistente.save({ transaction: t });
+
+    // Si el stock está bajo, enviamos una advertencia (no se interrumpe)
+    let advertenciaStock = null;
+    if (equipoExistente.stock <= 5) {
+      advertenciaStock = `Solo quedan ${equipoExistente.stock} unidades del equipo ${equipoExistente.marca} - ${equipoExistente.numero_serie}.`;
+    }
+
     // 👉 PRIMERO creamos el Acta
     const nuevaActa = await Acta.create(
       {
@@ -125,13 +143,27 @@ const crearActaCompleta = async (req, res) => {
       { transaction: t }
     );
 
-    await generarPDFDesdeFormulario(req.body, `acta_${cliente.nombre}.pdf`);
+    // await generarPDFDesdeFormulario(req.body, `acta_${cliente.nombre}.pdf`);
+    // normalizacion de nombres
+    const nombreCliente = cliente.nombre
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // elimina tildes
+      .replace(/\s+/g, '_') // reemplaza espacios por guiones bajos
+      .replace(/[^a-zA-Z0-9_]/g, ''); // elimina caracteres especiales
+
+    // Generar el PDF y obtener la ruta absoluta
+    const rutaCompletaPDF = await generarPDFDesdeFormulario(req.body, `acta_${nombreCliente}_${nuevaActa.id}.pdf`);
+    // Convertirla a ruta relativa (por ejemplo, eliminar el path absoluto del sistema)
+    const rutaRelativaPDF = `uploads/actas/acta_${nombreCliente}_${nuevaActa.id}.pdf`;
+    // Actualizar el campo ruta_pdf en el acta recién creada
+    await nuevaActa.update({ path_pdf: rutaRelativaPDF }, { transaction: t });
 
     await t.commit();
 
     res.status(201).json({
       mensaje: 'Acta registrada con éxito',
-      acta: nuevaActa
+      acta: nuevaActa,
+      path_pdf: rutaRelativaPDF,
+      advertenciaStock // puede ser null si no aplica
     });
 
   } catch (error) {
@@ -141,6 +173,7 @@ const crearActaCompleta = async (req, res) => {
   }
 };
 
+// seccion encargada de la creacion del acta fisica
 const fs = require('fs');
 const path = require('path');
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
@@ -329,20 +362,88 @@ const generarPDFDesdeFormulario = async (datos, nombreArchivo) => {
             italic: true // aunque pdf-lib no tiene flag directo para cursiva, si luego usas una fuente personalizada sí se puede
           });
         }
+
+        // const observaciones = datos.observaciones || '';
+        // const fontSize_obs = 10;
+        // const x_obs = 35;
+        // const y_obs = 268; // Ajusta según tu diseño
+
+        // if (observaciones.trim()) {
+        //   page.drawText(`Observaciones: ${observaciones.trim()}`, {
+        //     x: x_obs,
+        //     y: y_obs,
+        //     size: fontSize_obs,
+        //     font
+        //   });
+        // }
+
+        // Si check = true y texto está vacío → no mostrar nada
+
+
+        // const observaciones = datos.observaciones || '';
+        // const fontSize_obs = 10;
+        // const x_obs = 35;
+        // const y_start = 268; // posición inicial Y
+        // const lineHeight = 14; // separación entre líneas (ajusta según tu fuente/tamaño)
+
+        // if (observaciones.trim()) {
+        //   const texto = `Observaciones: ${observaciones.trim()}`;
+        //   const maxChars = 150; // máximo por línea (ajusta si necesitas más precisión)
+
+        //   // Romper el texto en líneas de máximo `maxChars` caracteres
+        //   const lineas = [];
+        //   for (let i = 0; i < texto.length; i += maxChars) {
+        //     lineas.push(texto.slice(i, i + maxChars));
+        //   }
+
+        //   // Dibujar cada línea ajustando el Y
+        //   lineas.forEach((linea, index) => {
+        //     page.drawText(linea, {
+        //       x: x_obs,
+        //       y: y_start - index * lineHeight,
+        //       size: fontSize_obs,
+        //       font
+        //     });
+        //   });
+        // }
         const observaciones = datos.observaciones || '';
         const fontSize_obs = 10;
         const x_obs = 35;
-        const y_obs = 268; // Ajusta según tu diseño
+        const y_start = 268; // posición Y inicial
+        const lineHeight = 14; // espacio entre líneas
+        const maxLineWidth = 90; // Ancho máximo en mm o puntos, depende del PDF
 
         if (observaciones.trim()) {
-          page.drawText(`Observaciones: ${observaciones.trim()}`, {
-            x: x_obs,
-            y: y_obs,
-            size: fontSize_obs,
-            font
+          const texto = `Observaciones: ${observaciones.trim()}`;
+
+          // Romper el texto en palabras
+          const palabras = texto.split(' ');
+          const lineas = [];
+          let lineaActual = '';
+
+          for (const palabra of palabras) {
+            const testLinea = lineaActual.length ? `${lineaActual} ${palabra}` : palabra;
+
+            // Si se pasa de longitud deseada, guardar la línea y empezar otra
+            if (testLinea.length > 100) {  // Ajusta este número según el ancho de tu página y fuente
+              lineas.push(lineaActual);
+              lineaActual = palabra;
+            } else {
+              lineaActual = testLinea;
+            }
+          }
+          if (lineaActual) lineas.push(lineaActual); // última línea
+
+          // Dibujar líneas en el PDF
+          lineas.forEach((linea, index) => {
+            page.drawText(linea, {
+              x: x_obs,
+              y: y_start - index * lineHeight,
+              size: fontSize_obs,
+              font
+            });
           });
         }
-        // Si check = true y texto está vacío → no mostrar nada
       }
 
       // formas de pago
@@ -410,20 +511,13 @@ const generarPDFDesdeFormulario = async (datos, nombreArchivo) => {
 
     }
 
-
-    // page.drawText(datos.cliente.nombre, { x: 80, y: 730, size: 12, font, color: rgb(0, 0, 0) });
-    // page.drawText(datos.cliente.cedula_ruc, { x: 80, y: 710, size: 12, font });
-    // page.drawText(datos.acta.forma_pago, { x: 80, y: 690, size: 12, font });
-
-
-
-
     const outputPath = path.resolve(`./uploads/actas/${nombreArchivo}`);
     const pdfFinal = await pdfDoc.save();
     fs.writeFileSync(outputPath, pdfFinal);
 
     console.log('PDF generado exitosamente en:', outputPath);
     return outputPath;
+
   } catch (error) {
     console.error('Error al generar el PDF:', error);
     throw error;

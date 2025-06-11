@@ -44,6 +44,37 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  // validacion para el input nota
+  const inputNota = document.getElementById('sw_nota');
+  const contador = document.getElementById('contador_nota');
+
+  inputNota.addEventListener('input', () => {
+    const longitud = inputNota.value.length;
+    contador.textContent = `${longitud} / 100`;
+
+    // Limpiar clases previas
+    inputNota.classList.remove('valid', 'warn', 'critical');
+    contador.classList.remove('warn', 'critical');
+
+    // Aplicar estilos según longitud
+    if (longitud > 61) {
+      inputNota.classList.add('critical');
+      contador.classList.add('critical');
+    } else if (longitud > 41) {
+      inputNota.classList.add('warn');
+      contador.classList.add('warn');
+    } else if (longitud > 0) {
+      inputNota.classList.add('valid');
+    }
+  });
+  // validacion para el input observaciones
+  const textarea = document.getElementById('observaciones');
+  const contadorobs = document.getElementById('contadorobs');
+
+  textarea.addEventListener('input', () => {
+    contadorobs.textContent = `${textarea.value.length} / 162`;
+  });
 });
 
 document.getElementById('actaForm').addEventListener('submit', async (e) => {
@@ -140,20 +171,38 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
 
     });
 
+    // retroalimentacion hacia el usuario
     if (!res.ok) {
 
       const error = await res.json();
-      throw new Error(error.error || 'Error desconocido al registrar el acta');
+      mostrarToast(error.error || '❌ Error al guardar el acta', 'error');
+      return;
     }
 
     const resultado = await res.json();
     console.log('Respuesta:', resultado);
-    alert('✅ Acta registrada con éxito');
+    mostrarToast('✅ Acta registrada con éxito', 'success');
 
+    // Mostrar advertencia si aplica
+    if (resultado.advertenciaStock) {
+      mostrarToast(resultado.advertenciaStock, 'warning');
+    }
+
+    // Descargar automáticamente el PDF
+    if (resultado.path_pdf) {
+      const nombreArchivo = resultado.path_pdf.split('/').pop(); // acta_nombre.pdf
+      const enlace = document.createElement('a');
+      enlace.href = `/actas/descargar/${encodeURIComponent(nombreArchivo)}`;
+      enlace.download = nombreArchivo;
+      document.body.appendChild(enlace);
+      enlace.click();
+      document.body.removeChild(enlace);
+    }
   } catch (error) {
 
     console.error('❌ Error al enviar:', error);
-    alert('❌ Error al registrar acta');
+    mostrarToast('❌ Error al guardar el acta', 'error');
+
 
   }
 });
@@ -209,3 +258,19 @@ buscarInput.addEventListener('input', () => {
     });
   }, 500);
 });
+
+// funcion para notificaciones
+function mostrarToast(mensaje, tipo = 'success') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+
+  toast.className = `toast ${tipo}`;
+  toast.textContent = mensaje;
+
+  container.appendChild(toast);
+
+  // Eliminar el toast después de la animación
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}

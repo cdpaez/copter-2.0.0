@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const sw = acta.InspeccionSoftware || {};
       const ad = acta.Adicional || {};
 
-      const detalle = `
+      let detalle = `
       <p><strong>Fecha:</strong> ${new Date(acta.fecha_registro).toLocaleString()}</p>
       <p><strong>Cliente:</strong> ${acta.Cliente.nombre} - ${acta.Cliente.cedula_ruc}</p>
       <p><strong>Equipo:</strong> ${acta.Equipo.marca} ${acta.Equipo.modelo} - Serie: ${acta.Equipo.numero_serie}</p>
@@ -136,6 +136,21 @@ document.addEventListener('DOMContentLoaded', () => {
       </ul>
     `;
       const pintar = document.getElementById('detalleActa')
+
+      if (acta.path_pdf) {
+        const rutaPDF = `/${acta.path_pdf}`;
+        const enlacePDF = `
+        <div style="margin-top: 1rem;">
+          <a href="${rutaPDF}" download style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #e74c3c; font-weight: bold;">
+            <i class="fas fa-file-pdf"></i> Descargar PDF del Acta
+          </a>
+          <a href="${rutaPDF}" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #3498db; font-weight: bold;">
+            <i class="fas fa-eye"></i> Ver PDF del Acta
+          </a>
+        </div>
+        `;
+        detalle += enlacePDF;
+      }
       pintar.innerHTML = detalle;
       document.getElementById('modalActa').classList.remove('hidden');
 

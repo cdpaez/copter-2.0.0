@@ -13,6 +13,16 @@
   text-align: center;
 }
 
+.actas input:focus {
+  outline: none;
+  border: 1px solid #3498db;
+  box-shadow: 0 0 4px rgba(52, 152, 219, 0.4);
+}
+.actas textarea:focus {
+  outline: none;
+  border: 1px solid #3498db;
+  box-shadow: 0 0 4px rgba(52, 152, 219, 0.4);
+}
 .actas {
   display: flex;
   flex-direction: column;
@@ -156,11 +166,43 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 0.9rem;
-  width: 80%;
+  width: 100%;
 }
 
 .notas {
   grid-column: 1 / -1;
+}
+
+/* Contador en gris (por defecto) */
+.contador {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #666;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Estados según longitud */
+.contador.warn {
+  color: #f39c12;
+}
+
+.contador.critical {
+  color: #e74c3c;
+}
+
+/* Bordes del input */
+#sw_nota.valid {
+  border: 3px solid #2ecc71;
+}
+
+#sw_nota.warn {
+  border: 3px solid #f39c12;
+}
+
+#sw_nota.critical {
+  border: 3px solid #e74c3c;
+  background-color: #fff5f5;
 }
 
 /* seccion para adicionales */

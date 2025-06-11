@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
     await sequelize.authenticate();
     console.log('✅ Conexión a la base de datos exitosa');
 
-    await sequelize.sync();
+    await sequelize.sync({alter:true});
     console.log('📦 Tablas sincronizadas');
 
     app.listen(PORT, () => {
