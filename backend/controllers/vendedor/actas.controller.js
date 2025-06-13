@@ -61,6 +61,13 @@ const crearActaCompleta = async (req, res) => {
       advertenciaStock = `Solo quedan ${equipoExistente.stock} unidades del equipo ${equipoExistente.marca} - ${equipoExistente.numero_serie}.`;
     }
 
+    // 👇 Buscar el usuario antes de crear el acta
+    const usuario = await Usuario.findByPk(acta.usuario_id, { transaction: t });
+
+    if (!usuario) {
+      throw new Error('El usuario (vendedor) no existe');
+    }
+
     // 👉 PRIMERO creamos el Acta
     const nuevaActa = await Acta.create(
       {
@@ -68,6 +75,7 @@ const crearActaCompleta = async (req, res) => {
         equipo_id: equipoExistente.id,
         cliente_id: clienteExistente.id,
         usuario_id: acta.usuario_id,
+        vendedor_nombre: usuario.nombre, // nuevo campo
         observaciones: req.body.observaciones?.trim() || null
       },
       { transaction: t }
@@ -149,7 +157,8 @@ const crearActaCompleta = async (req, res) => {
       .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // elimina tildes
       .replace(/\s+/g, '_') // reemplaza espacios por guiones bajos
       .replace(/[^a-zA-Z0-9_]/g, ''); // elimina caracteres especiales
-
+      
+    req.body.acta.vendedor_nombre = usuario.nombre;
     // Generar el PDF y obtener la ruta absoluta
     const rutaCompletaPDF = await generarPDFDesdeFormulario(req.body, `acta_${nombreCliente}_${nuevaActa.id}.pdf`);
     // Convertirla a ruta relativa (por ejemplo, eliminar el path absoluto del sistema)
@@ -194,7 +203,7 @@ const generarPDFDesdeFormulario = async (datos, nombreArchivo) => {
     });
     // Ejemplo de escritura de campos en posiciones estimadas
     page.drawText(`precio: $${parseFloat(datos.acta.precio).toFixed(2)}`, { x: 400, y: 785, size: 12, font });
-    page.drawText(`Vendedor ID: ${datos.acta.usuario_id}`, { x: 400, y: 770, size: 12, font });
+    page.drawText(`Vendedor: ${datos.acta.vendedor_nombre || '---'}`, { x: 400, y: 770, size: 12, font });
 
     // datos del cliente
 

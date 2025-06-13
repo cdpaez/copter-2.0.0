@@ -25,6 +25,7 @@ app.use('/login', require('./routes/login.routes'));
 app.use('/actas', require('./routes/actas.routes'));
 app.use('/equipos', require('./routes/equipos.routes'));
 app.use('/usuarios', require('./routes/usuario.routes'));
+app.use('/chart', require('./routes/chart.routes.test'))
 
 // Exportar solo la app
 module.exports = app;

@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    vendedor_nombre: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     observaciones: DataTypes.TEXT,
     forma_pago: DataTypes.STRING,
     precio: DataTypes.DECIMAL(10, 2),
@@ -22,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     path_pdf: DataTypes.STRING
   }, {
     tableName: 'actas',
-    timestamps: false
+    createdAt: true,
+    updatedAt: false
   });
 
   return Acta;
