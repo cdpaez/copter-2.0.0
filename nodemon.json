@@ -7,5 +7,5 @@
     "backend/middlewares"
   ],
   "ext": "js",
-  "exec": "node backend/server.js"
+  "exec": "node src/server.js"
 }
