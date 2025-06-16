@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="../img/logo/inventario.png">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
   <link rel="stylesheet" href="../css/components/menuContextual.css">
   <link rel="stylesheet" href="../css/components/registrarActa.css">
   <link rel="stylesheet" href="../css/operador.css">
+  <link rel="stylesheet" href="../css/media/movil.css">
   <title>Panel del Operador</title>
 </head>
 
@@ -24,13 +24,20 @@
     </header>
 
     <main>
-
+      <button class="hamburger-btn" aria-label="Menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <nav class="panel-lateral">
-        <h2>Menú</h2>
-        <button onclick="mostrarSeccion('ventas')">🧾 Registrar Acta</button>
-        <!-- <button onclick="mostrarSeccion('mis-estadisticas')">📈 Mis Estadísticas</button> -->
-        <!-- <button onclick="mostrarSeccion('perfil')">👤 Perfil</button> -->
-        <button onclick="cerrarSesion()">Cerrar sesión</button>
+
+        <div class="pestanas">
+          <h2>Menú</h2>
+          <button onclick="mostrarSeccion('ventas')">🧾 Registrar Acta</button>
+          <!-- <button onclick="mostrarSeccion('mis-estadisticas')">📈 Mis Estadísticas</button> -->
+          <!-- <button onclick="mostrarSeccion('perfil')">👤 Perfil</button> -->
+          <button onclick="cerrarSesion()">Cerrar sesión</button>
+        </div>
 
       </nav>
 
@@ -174,7 +181,7 @@
                     </label>
 
                     <label class="notas">
-                      Nota (máx. 100 caracteres):
+                      Nota
                       <input id="sw_nota" type="text" name="sw_nota" maxlength="100"
                         placeholder="Escribe una nota breve...">
                       <small id="contador_nota" class="contador">0 / 100</small>
@@ -341,6 +348,10 @@
   <script src="../js/nav.js"></script>
   <script src="../js/operador/operador.js"></script>
   <script src="../js/operador/acta.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- En tu dashboard.html -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 </body>
 

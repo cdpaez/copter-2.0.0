@@ -1,33 +1,44 @@
 const { Usuario } = require('../models');
 const jwt = require('jsonwebtoken')
 const { mapperUserLogin } = require('../mappers/usuario.mapper');
+const bcrypt = require('bcrypt');
 
 const login = async (req, res) => {
   const { correo, password } = req.body;
+
+  if (!correo || !password) { // ✅ Valida que existan los campos
+    return res.status(400).json({ mensaje: 'Faltan correo o contraseña' });
+  }
 
   try {
     const usuario = await Usuario.findOne(
       {
         where: { correo }
       });
-    
+
     if (!usuario) {
       return res.status(404).json(
-        { 
-          mensaje: 'No encontramos tu cuenta' 
+        {
+          mensaje: 'No encontramos tu cuenta'
         });
     }
 
     console.log(usuario.get({ plain: true }));
 
-    // Comparamos la contraseña (esta parte la hacemos simple por ahora)
-    if (usuario.password !== password) {
-
-      return res.status(401).json(
-        { 
-          mensaje: 'Contraseña incorrecta' 
-        });
+    // Compara la contraseña ingresada con el hash almacenado
+    const match = await bcrypt.compare(password, usuario.password);
+    if (!match) {
+      return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
     }
+
+    // Comparamos la contraseña (esta parte la hacemos simple por ahora)
+    // if (usuario.password !== password) {
+
+    //   return res.status(401).json(
+    //     {
+    //       mensaje: 'Contraseña incorrecta'
+    //     });
+    // }
     // si pasa esas dos validaciones quiere decir que el usuario existe y que la contrasena es correcta
     // aqui es cuando se mapea el como se obtiene los datos de la peticion GET
 
@@ -39,9 +50,9 @@ const login = async (req, res) => {
         id: userMapped.id,
         rol: userMapped.rol
       },
-      'secreto',// Clave secreta (cámbiala por algo más seguro)
+      process.env.JWT_SECRET, // Clave desde entorno
       {
-        expiresIn: '1h'// El token expirará en 1 hora 
+        expiresIn: process.env.JWT_EXPIRES_IN // '1h' desde entorno
       }
     );
 

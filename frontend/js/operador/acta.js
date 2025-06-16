@@ -187,17 +187,37 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
     if (resultado.advertenciaStock) {
       mostrarToast(resultado.advertenciaStock, 'warning');
     }
+    // Esperar brevemente para que el DOM se estabilice si hay mensajes toasts
+    setTimeout(() => {
+      const actaElement = document.getElementById('actaForm');
 
-    // Descargar automáticamente el PDF
-    if (resultado.path_pdf) {
-      const nombreArchivo = resultado.path_pdf.split('/').pop(); // acta_nombre.pdf
-      const enlace = document.createElement('a');
-      enlace.href = `/actas/descargar/${encodeURIComponent(nombreArchivo)}`;
-      enlace.download = nombreArchivo;
-      document.body.appendChild(enlace);
-      enlace.click();
-      document.body.removeChild(enlace);
-    }
+      if (actaElement) {
+        html2pdf()
+          .set({
+            margin: 10,
+            filename: `acta_${datos.cliente.nombre.replace(/\s+/g, '_')}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          })
+          .from(actaElement)
+          .save();
+      } else {
+        console.warn('No se encontró el contenedor #acta-preview para imprimir.');
+      }
+    }, 800); // Esperar 800ms para asegurar que se muestre correctamente
+
+    // // Descargar automáticamente el PDF
+    // if (resultado.path_pdf) {
+    //   const nombreArchivo = resultado.path_pdf.split('/').pop(); // acta_nombre.pdf
+    //   const enlace = document.createElement('a');
+    //   enlace.href = `/actas/descargar/${encodeURIComponent(nombreArchivo)}`;
+    //   enlace.download = nombreArchivo;
+    //   document.body.appendChild(enlace);
+    //   enlace.click();
+    //   document.body.removeChild(enlace);
+    // }
+
   } catch (error) {
 
     console.error('❌ Error al enviar:', error);

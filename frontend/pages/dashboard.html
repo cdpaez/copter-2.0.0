@@ -5,9 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="../img/logo/inventario.png">
-  
+
   <!-- En tu HTML -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
@@ -16,9 +15,10 @@
 
   <!-- estilos generales  -->
   <link rel="stylesheet" href="../css/components/modalActa.css">
-  <link rel="stylesheet" href="../css/dashboard.css">
   <link rel="stylesheet" href="../css/components/nav-estadisticas.css">
   <link rel="stylesheet" href="../css/components/stat-graficos.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/media/movil.css">
 
   <title>Inventario - Panel</title>
 
@@ -32,8 +32,13 @@
       🧾 Sistema de Inventario
       <!-- <a href="/operador.html">operador</a> -->
     </header>
-    
+
     <main>
+      <button class="hamburger-btn" aria-label="Menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <nav class="panel-lateral">
         <div class="pestanas">
           <h2>Menú</h2>
@@ -328,7 +333,9 @@
   <script src="../js/dashboard/nav-stats.js"></script>
 
 
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- En tu dashboard.html -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <div id="loader-modal" class="loader"></div>
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>

@@ -1,4 +1,3 @@
-
 const {
   Cliente,
   Equipo,
@@ -158,20 +157,20 @@ const crearActaCompleta = async (req, res) => {
       .replace(/\s+/g, '_') // reemplaza espacios por guiones bajos
       .replace(/[^a-zA-Z0-9_]/g, ''); // elimina caracteres especiales
       
-    req.body.acta.vendedor_nombre = usuario.nombre;
-    // Generar el PDF y obtener la ruta absoluta
-    const rutaCompletaPDF = await generarPDFDesdeFormulario(req.body, `acta_${nombreCliente}_${nuevaActa.id}.pdf`);
-    // Convertirla a ruta relativa (por ejemplo, eliminar el path absoluto del sistema)
-    const rutaRelativaPDF = `uploads/actas/acta_${nombreCliente}_${nuevaActa.id}.pdf`;
-    // Actualizar el campo ruta_pdf en el acta recién creada
-    await nuevaActa.update({ path_pdf: rutaRelativaPDF }, { transaction: t });
+    // req.body.acta.vendedor_nombre = usuario.nombre;
+    // // Generar el PDF y obtener la ruta absoluta
+    // const rutaCompletaPDF = await generarPDFDesdeFormulario(req.body, `acta_${nombreCliente}_${nuevaActa.id}.pdf`);
+    // // Convertirla a ruta relativa (por ejemplo, eliminar el path absoluto del sistema)
+    // const rutaRelativaPDF = `uploads/actas/acta_${nombreCliente}_${nuevaActa.id}.pdf`;
+    // // Actualizar el campo ruta_pdf en el acta recién creada
+    // await nuevaActa.update({ path_pdf: rutaRelativaPDF }, { transaction: t });
 
     await t.commit();
 
     res.status(201).json({
       mensaje: 'Acta registrada con éxito',
       acta: nuevaActa,
-      path_pdf: rutaRelativaPDF,
+      // path_pdf: rutaRelativaPDF,
       advertenciaStock // puede ser null si no aplica
     });
 
@@ -372,49 +371,6 @@ const generarPDFDesdeFormulario = async (datos, nombreArchivo) => {
           });
         }
 
-        // const observaciones = datos.observaciones || '';
-        // const fontSize_obs = 10;
-        // const x_obs = 35;
-        // const y_obs = 268; // Ajusta según tu diseño
-
-        // if (observaciones.trim()) {
-        //   page.drawText(`Observaciones: ${observaciones.trim()}`, {
-        //     x: x_obs,
-        //     y: y_obs,
-        //     size: fontSize_obs,
-        //     font
-        //   });
-        // }
-
-        // Si check = true y texto está vacío → no mostrar nada
-
-
-        // const observaciones = datos.observaciones || '';
-        // const fontSize_obs = 10;
-        // const x_obs = 35;
-        // const y_start = 268; // posición inicial Y
-        // const lineHeight = 14; // separación entre líneas (ajusta según tu fuente/tamaño)
-
-        // if (observaciones.trim()) {
-        //   const texto = `Observaciones: ${observaciones.trim()}`;
-        //   const maxChars = 150; // máximo por línea (ajusta si necesitas más precisión)
-
-        //   // Romper el texto en líneas de máximo `maxChars` caracteres
-        //   const lineas = [];
-        //   for (let i = 0; i < texto.length; i += maxChars) {
-        //     lineas.push(texto.slice(i, i + maxChars));
-        //   }
-
-        //   // Dibujar cada línea ajustando el Y
-        //   lineas.forEach((linea, index) => {
-        //     page.drawText(linea, {
-        //       x: x_obs,
-        //       y: y_start - index * lineHeight,
-        //       size: fontSize_obs,
-        //       font
-        //     });
-        //   });
-        // }
         const observaciones = datos.observaciones || '';
         const fontSize_obs = 10;
         const x_obs = 35;
@@ -532,11 +488,6 @@ const generarPDFDesdeFormulario = async (datos, nombreArchivo) => {
     throw error;
   }
 }
-
-// TODO: funciona para asegurar que no reciba datos indefinidos
-// function safeText(value) {
-//   return typeof value === 'string' ? value : value?.toString() || '';
-// }
 
 module.exports = {
   crearActaCompleta

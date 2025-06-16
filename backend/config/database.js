@@ -1,7 +1,5 @@
 // 1️⃣ Importas Sequelize (clase principal del ORM)
 const { Sequelize } = require('sequelize')
-const dotenv = require('dotenv');
-dotenv.config()
 
 // 2️⃣ Configuras los datos de conexión
 let sequelize;

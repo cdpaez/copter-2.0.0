@@ -1,20 +1,15 @@
-const dotenv = require('dotenv');
-dotenv.config()
+// middleware/auth.js
 const jwt = require('jsonwebtoken');
-const secret = process.env.JWT_SECRET; // debe estar en .env
 
-const verificarToken = (req, res, next) => {
-  const token = req.headers['authorization'];
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1]; // Bearer <token>
+  if (!token) return res.status(401).json({ mensaje: 'Token no proporcionado' });
 
-  if (!token) return res.status(401).json({ error: 'Token requerido' });
-
-  try {
-    const decoded = jwt.verify(token, secret);
-    req.user = decoded;
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(401).json({ mensaje: 'Token inválido' });
+    req.user = decoded; // Guarda datos del token en la request
     next();
-  } catch (error) {
-    return res.status(401).json({ error: 'Token inválido' });
-  }
+  });
 };
 
-module.exports = verificarToken;
+module.exports = { verifyToken };

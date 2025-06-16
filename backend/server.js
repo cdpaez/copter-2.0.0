@@ -1,4 +1,5 @@
 // server.js
+require('dotenv').config();
 const app = require('./app');
 const sequelize = require('./config/database');
 const PORT = process.env.PORT || 3000;
@@ -8,7 +9,7 @@ const PORT = process.env.PORT || 3000;
     await sequelize.authenticate();
     console.log('✅ Conexión a la base de datos exitosa');
 
-    await sequelize.sync({alter:true});
+    await sequelize.sync({force:false});
     console.log('📦 Tablas sincronizadas');
 
     app.listen(PORT, () => {

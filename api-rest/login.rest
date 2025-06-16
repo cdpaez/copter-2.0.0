@@ -1,0 +1,22 @@
+### peticion de acceso sin token
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{ "correo": "test@test.com", "password": "123" }
+
+### peticion de acceso con token valido
+POST http://localhost:3000/login
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiYWRtaW4iLCJpYXQiOjE3NTAwODQ4NTYsImV4cCI6MTc1MDA4ODQ1Nn0.ycV7Xyl3tAthApbxEc0A0yoArXKEIqa1ROxazpOGEt0
+
+{ "correo": "vendedor@ejemplo.com", "password": "123" }
+
+### peticion de acceso con token invalido
+POST http://localhost:3000/login
+Authorization: Bearer token_falso
+
+### validacion bcrypt
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{ "correo": "test@correo.com", "password": "12345678" }

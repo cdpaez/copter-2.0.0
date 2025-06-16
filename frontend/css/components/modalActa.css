@@ -10,6 +10,7 @@
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  overflow-y: auto;
 }
 
 /* Ocultar el modal por defecto */

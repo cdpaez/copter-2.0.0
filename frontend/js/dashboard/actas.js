@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('modalActa').classList.add('hidden');
     }
   });
+
   let actasOriginales = [];
 
   async function cargarTablaActas() {
@@ -42,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       actasOriginales = actas; // ✅ Guardamos para aplicar filtros después
       renderizarTablaActas(actasOriginales);
+
     } catch (error) {
       console.error('❌ Error de red o procesamiento:', error);
       alert('❌ No se pudo conectar con el servidor');
@@ -49,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderizarTablaActas(lista) {
+
     const tabla = document.getElementById('tabla-actas');
     tabla.innerHTML = '';
 
@@ -62,7 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
       return;
     }
+
     lista.forEach(acta => {
+
       const fila = `
       <tr>
         <td>${acta.id}</td>
@@ -134,23 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <li>Software 2: ${booleanToCheckIcon(ad.software2_estado)} — ${ad.software2_observacion || 'Ninguna'}</li>
         <li>Software 3: ${booleanToCheckIcon(ad.software3_estado)} — ${ad.software3_observacion || 'Ninguna'}</li>
       </ul>
-    `;
-      const pintar = document.getElementById('detalleActa')
+      <button id="descargarActaPDF" style="margin-top: 1rem;">Descargar PDF generado</button>
+      `;
 
-      if (acta.path_pdf) {
-        const rutaPDF = `/${acta.path_pdf}`;
-        const enlacePDF = `
-        <div style="margin-top: 1rem;">
-          <a href="${rutaPDF}" download style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #e74c3c; font-weight: bold;">
-            <i class="fas fa-file-pdf"></i> Descargar PDF del Acta
-          </a>
-          <a href="${rutaPDF}" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #3498db; font-weight: bold;">
-            <i class="fas fa-eye"></i> Ver PDF del Acta
-          </a>
-        </div>
-        `;
-        detalle += enlacePDF;
-      }
+      const pintar = document.getElementById('detalleActa');
       pintar.innerHTML = detalle;
       document.getElementById('modalActa').classList.remove('hidden');
 
@@ -159,8 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('No se pudo cargar el acta');
     }
   }
-
-
 
   document.getElementById('fecha-inicio').addEventListener('change', aplicarFiltros);
   document.getElementById('fecha-fin').addEventListener('change', aplicarFiltros);
@@ -200,6 +190,21 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarTablaActas(filtradas);
   }
 
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'descargarActaPDF') {
+      const contenido = document.getElementById('detalleActa');
+
+      const opciones = {
+        margin: 10,
+        filename: `acta`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opciones).from(contenido).save();
+    }
+  });
 
   cargarTablaActas();
 

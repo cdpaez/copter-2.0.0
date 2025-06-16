@@ -1,7 +1,8 @@
 // backend/controllers/producto.controller.js
 const fs = require('fs');
-const csv = require('csv-parser'); 
-const xlsx = require('xlsx'); 
+const csv = require('csv-parser');
+const ExcelJS = require('exceljs');
+const path = require('path');
 
 const { Equipo } = require('../../models');
 
@@ -11,15 +12,15 @@ const anadirEquipos = async (req, res) => {
     console.log(req.body)
     const nuevoProducto = await Equipo.create(req.body);
     res.status(201).json(
-      { 
+      {
         mensaje: 'Producto creado exitosamente',
-        producto: nuevoProducto 
+        producto: nuevoProducto
       });
   } catch (error) {
     res.status(500).json(
-      { 
-        mensaje: 'Error al crear el producto', 
-        error: error.message 
+      {
+        mensaje: 'Error al crear el producto',
+        error: error.message
       });
   }
 };
@@ -46,19 +47,19 @@ const obtenerEquipos = async (req, res) => {
 const obtenerEquiposPorId = async (req, res) => {
   try {
     const producto = await Equipo.findByPk(req.params.id); // Usa tu modelo directamente
-    console.log('se encontro algo?',producto)
+    console.log('se encontro algo?', producto)
     if (!producto) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        mensaje: 'Producto no encontrado' 
+        mensaje: 'Producto no encontrado'
       });
     }
-    
+
     res.status(200).json({
       success: true,
       data: producto // Devuelve todos los campos del producto
     });
-    
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -71,12 +72,12 @@ const obtenerEquiposPorId = async (req, res) => {
 const actualizarEquipos = async (req, res) => {
   try {
     const { id } = req.params;
-    const [actualizado] = await Equipo.update(req.body, 
-      { 
-        where: 
-        { 
+    const [actualizado] = await Equipo.update(req.body,
+      {
+        where:
+        {
           id
-        } 
+        }
       });
 
     if (actualizado) {
@@ -89,6 +90,7 @@ const actualizarEquipos = async (req, res) => {
   }
 };
 
+
 // Eliminar un producto
 const eliminarEquipos = async (req, res) => {
 
@@ -96,82 +98,100 @@ const eliminarEquipos = async (req, res) => {
 
     const { id } = req.params;
     const eliminado = await Equipo.destroy(
-      { 
-        where: { id } 
+      {
+        where: { id }
       });
 
     if (eliminado) {
       res.status(200).json(
-        { 
-          mensaje: 'Producto eliminado correctamente' 
+        {
+          mensaje: 'Producto eliminado correctamente'
         });
     } else {
       res.status(404).json(
-        { 
-          mensaje: 'Producto no encontrado' 
+        {
+          mensaje: 'Producto no encontrado'
         });
     }
   } catch (error) {
     res.status(500).json(
-      { 
-        mensaje: 'Error al eliminar el producto', error: error.message 
+      {
+        mensaje: 'Error al eliminar el producto', error: error.message
       });
   }
 };
 
+// TODO: arreglar la funcion encargada de importar datos desde algun excel
 const importarEquipos = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No se subió ningún archivo' });
-    }
+    if (!req.file) return res.status(400).json({ error: 'No se subió ningún archivo' });
 
     const productos = [];
+    const ext = path.extname(req.file.originalname).toLowerCase();
     const filePath = req.file.path;
 
-    // Procesar CSV
-    if (req.file.mimetype === 'text/csv' || req.file.originalname.endsWith('.csv')) {
+    // CSV
+    if (ext === '.csv') {
       await new Promise((resolve, reject) => {
         fs.createReadStream(filePath)
           .pipe(csv())
-          .on('data', (row) => productos.push(row))
+          .on('data', row => productos.push(row))
           .on('end', resolve)
           .on('error', reject);
       });
-    } 
-    // Procesar Excel
-    else if (
-      req.file.mimetype.includes('spreadsheet') || 
-      req.file.originalname.endsWith('.xlsx')
-    ) {
-      const workbook = xlsx.readFile(filePath);
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      productos.push(...xlsx.utils.sheet_to_json(worksheet));
-    } else {
-      throw new Error('Formato de archivo no soportado');
     }
 
-    // Validar y guardar productos
-    const productosCreados = await Equipo.bulkCreate(productos, {
-      validate: true, // Valida cada registro
-      ignoreDuplicates: true // Ignora registros duplicados
+    // XLSX / XLS
+    else if (ext === '.xlsx' || ext === '.xls') {
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.readFile(filePath);
+      const worksheet = workbook.worksheets[0];
+
+      const headers = [];
+      worksheet.getRow(1).eachCell(cell => headers.push(cell.value));
+
+      worksheet.eachRow((row, rowNumber) => {
+        if (rowNumber > 1) {
+          const producto = {};
+          row.eachCell((cell, colNumber) => {
+            producto[headers[colNumber - 1]] = cell.value;
+          });
+          productos.push(producto);
+        }
+      });
+    }
+
+    // ODS
+    else if (ext === '.ods') {
+      const workbook = XLSX.readFile(filePath, { type: 'file' });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(sheet);
+      productos.push(...data);
+    }
+
+    else {
+      throw new Error('Formato no soportado. Usa .csv, .xlsx o .ods');
+    }
+
+    // Insertar en base de datos
+    const creados = await Equipo.bulkCreate(productos, {
+      validate: true,
+      ignoreDuplicates: true
     });
 
-    // Eliminar archivo temporal
-    fs.unlinkSync(filePath);
+    fs.unlinkSync(filePath); // Eliminar archivo temporal
 
     res.json({
       success: true,
       total: productos.length,
-      importados: productosCreados.length,
-      duplicados: productos.length - productosCreados.length
+      importados: creados.length,
+      duplicados: productos.length - creados.length
     });
 
   } catch (error) {
-    res.status(500).json({ 
-      success: false,
-      error: error.message 
-    });
+    if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+    res.status(500).json({ success: false, error: error.message });
   }
 };
 module.exports = {

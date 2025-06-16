@@ -13,10 +13,13 @@
 }
 
 header {
-  background-color: #3498db;
+  background: linear-gradient(to bottom right, #2563eb, #3730a3);
   color: white;
   padding: 1rem 2rem;
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 1.8vw, 3rem);
+  height: 60px;
+  flex-shrink: 0;
+  font-family: sans-serif;
 }
 
 main {
@@ -26,9 +29,17 @@ main {
   min-height: 0;
 }
 
+footer {
+  background: linear-gradient(to bottom right, #2563eb, #3730a3);
+  color: #f4f6f8;
+  text-align: center;
+  padding: 0.8rem;
+  font-size: clamp(.7rem, 1.2vw, 3rem);
+}
+
 .panel-lateral {
   width: 240px;
-  background-color: #2c3e50;
+  background: linear-gradient(to bottom, #4F46E5 0%, #7C3AED 100%);
   color: white;
   padding: 1rem;
   display: flex;
@@ -297,6 +308,7 @@ main {
   padding: 0 10px;
   color: #555;
 }
+
 .grupo-botones button {
   width: 100%;
 }
@@ -443,13 +455,6 @@ main {
   background-color: #c0392b;
 }
 
-footer {
-  background-color: #ecf0f1;
-  text-align: center;
-  padding: 0.8rem;
-  font-size: 0.9rem;
-}
-
 /* estilos para las notificaciones del operador */
 #toast-container {
   position: fixed;
@@ -482,15 +487,18 @@ footer {
 
 /* Tipos de notificación */
 .toast.success {
-  background-color: #2ecc71; /* verde esmeralda */
+  background-color: #2ecc71;
+  /* verde esmeralda */
 }
 
 .toast.error {
-  background-color: #e74c3c; /* rojo fuerte */
+  background-color: #e74c3c;
+  /* rojo fuerte */
 }
 
 .toast.warning {
-  background-color: #f39c12; /* naranja vibrante */
+  background-color: #f39c12;
+  /* naranja vibrante */
 }
 
 .toast.error::before {
@@ -507,6 +515,7 @@ footer {
     opacity: 0;
     transform: translateX(100%);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
