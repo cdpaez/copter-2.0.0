@@ -9,18 +9,23 @@ module.exports = {
     "dialect": globalConstants.DB_DIALECT,
     "logging": false
   },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
-  },
+  // "test": {
+  //   "username": "root",
+  //   "password": null,
+  //   "database": "database_test",
+  //   "host": "127.0.0.1",
+  //   "dialect": "postgres"
+  // },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "use_env_variable": "DATABASE_URL", // ✅ Render provee esta variable automáticamente
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": { // Obligatorio en Render
+        "require": true,
+        "rejectUnauthorized": false // Solo para entornos cloud
+      }
+    },
+    "logging": false // Desactiva logs en producción
   }
 }
+

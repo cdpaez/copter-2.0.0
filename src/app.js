@@ -11,9 +11,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Archivos estáticos
-app.use(express.static(path.join(__dirname, '../')))
+
+// Servir archivos estáticos desde la carpeta /frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Página principal (al acceder a "/")
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
 
 // Rutas básicas
 app.get('/factura', (req, res) => {
