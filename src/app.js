@@ -21,11 +21,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// Rutas básicas
-app.get('/factura', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'frontend', 'factura.html'));
-});
-
 // Rutas API
 app.use('/login', require('./routes/login.routes'));
 app.use('/actas', require('./routes/actas.routes'));
