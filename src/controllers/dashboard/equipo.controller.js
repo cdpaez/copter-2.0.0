@@ -4,7 +4,7 @@ const csv = require('csv-parser');
 const ExcelJS = require('exceljs');
 const path = require('path');
 
-const { Equipo } = require('../../models');
+const { Equipo } = require('../../database/models');
 
 // Crear un nuevo producto
 const anadirEquipos = async (req, res) => {

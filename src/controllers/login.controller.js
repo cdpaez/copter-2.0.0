@@ -1,4 +1,4 @@
-const { Usuario } = require('../models');
+const { Usuario } = require('../database/models');
 const jwt = require('jsonwebtoken')
 const { mapperUserLogin } = require('../mappers/usuario.mapper');
 const bcrypt = require('bcrypt');

@@ -6,7 +6,7 @@ const {
   Adicional,
   Acta,
   Usuario
-} = require('../../models');
+} = require('../../database/models');
 
 const crearActaCompleta = async (req, res) => {
   console.log('datos para guardar en el acta:', req.body);

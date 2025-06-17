@@ -1,4 +1,4 @@
-const { Usuario } = require('../../models');
+const { Usuario } = require('../../database/models');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const crearUsuario = async (req, res) => {

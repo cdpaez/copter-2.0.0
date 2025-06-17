@@ -1,4 +1,4 @@
-const { Acta, Usuario, Cliente, Equipo, InspeccionHardware, InspeccionSoftware, Adicional } = require('../../models')
+const { Acta, Usuario, Cliente, Equipo, InspeccionHardware, InspeccionSoftware, Adicional } = require('../../database/models');
 
 const obtenerActasResumen = async (req, res) => {
   try {

@@ -1,4 +1,4 @@
-const { Acta } = require('../../models');
+const { Acta } = require('../../database/models');
 const { Op, fn, col, literal } = require('sequelize');
 
 exports.ventasPorMes = async (req, res) => {

@@ -1,8 +1,8 @@
+const globalConstants = require('./const/globalConstants')
 // server.js
-require('dotenv').config();
 const app = require('./app');
-const sequelize = require('./config/database');
-const PORT = process.env.PORT || 3000;
+const { sequelize } = require('./database/models');
+const PORT = globalConstants.PORT || 3000;
 
 (async () => {
   try {

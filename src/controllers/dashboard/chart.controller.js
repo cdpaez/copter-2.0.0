@@ -1,4 +1,4 @@
-const { Venta, Usuario, DetalleVenta, Producto, sequelize } = require('../../models');
+const { Venta, Usuario, DetalleVenta, Producto, sequelize } = require('../../database/models');
 
 // 1. Total de ventas realizadas por cada usuario vendedor
 const obtenerVentasPorUsuario = async (req, res) => {

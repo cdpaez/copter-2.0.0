@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Equipo } = require('../../models');
+const { Equipo } = require('../../database/models');
 
 const buscarEquipos = async (req, res) => {
   const { termino } = req.query;
