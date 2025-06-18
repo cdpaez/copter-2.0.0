@@ -1,76 +1,187 @@
-const { Venta, Usuario, DetalleVenta, Producto, sequelize } = require('../../database/models');
+const { Acta, Usuario, Equipo, sequelize } = require('../../database/models');
+const { Op } = require('sequelize');
 
-// 1. Total de ventas realizadas por cada usuario vendedor
-const obtenerVentasPorUsuario = async (req, res) => {
+const obtenerActasPorUsuarioConFechas = async (req, res) => {
   try {
-    const resultados = await Venta.findAll({
+    const { fecha_desde, fecha_hasta } = req.query;
+
+    const where = {};
+    if (fecha_desde && fecha_hasta) {
+      const desde = new Date(`${fecha_desde}T00:00:00`);
+      const hasta = new Date(`${fecha_hasta}T23:59:59`);
+
+      console.log('Filtrando entre:', desde.toISOString(), 'y', hasta.toISOString());
+
+      where.fecha_registro = {
+        [Op.between]: [desde, hasta]
+      };
+    }
+
+
+    const resultados = await Acta.findAll({
       attributes: [
-        'usuarioId',
-        [sequelize.fn('COUNT', sequelize.col('Venta.id')), 'totalVentas']
+        'usuario_id',
+        [sequelize.fn('COUNT', sequelize.col('Acta.id')), 'totalActas']
       ],
       include: {
         model: Usuario,
         attributes: ['nombre']
       },
-      group: ['usuarioId', 'Usuario.id'],
-      order: [[sequelize.fn('COUNT', sequelize.col('Venta.id')), 'DESC']]
+      where,
+      group: ['usuario_id', 'Usuario.id'],
+      order: [[sequelize.fn('COUNT', sequelize.col('Acta.id')), 'DESC']]
     });
 
-    res.json(resultados);
+    const datos = resultados.map(r => {
+      const row = r.get({ plain: true });
+      return {
+        usuario: row.Usuario.nombre,
+        total: parseInt(row.totalActas)
+      };
+    });
+
+    res.json({ ok: true, datos });
+
   } catch (error) {
-    console.error('Error al obtener ventas por usuario:', error);
-    res.status(500).json({ mensaje: 'Error interno del servidor' });
+    console.error('Error al obtener actas filtradas:', error);
+    res.status(500).json({ ok: false, error: 'Error interno del servidor' });
   }
 };
 
-// 2. Productos más vendidos
-const obtenerProductosMasVendidos = async (req, res) => {
+const obtenerEquiposEntregadosPorMes = async (req, res) => {
   try {
-    const resultados = await DetalleVenta.findAll({
-      attributes: [
-        'productoId',
-        [sequelize.fn('SUM', sequelize.col('cantidad')), 'cantidadTotal']
-      ],
+    const { fecha_desde, fecha_hasta } = req.query;
+
+    const where = {};
+    if (fecha_desde && fecha_hasta) {
+      const desde = new Date(`${fecha_desde}T00:00:00`);
+      const hasta = new Date(`${fecha_hasta}T23:59:59`);
+      where.fecha_registro = {
+        [Op.between]: [desde, hasta]
+      };
+    }
+
+    const resultados = await Acta.findAll({
+      where,
       include: {
-        model: Producto,
-        attributes: ['nombre']
+        model: Equipo,
+        attributes: []
       },
-      group: ['productoId', 'Producto.id'],
-      order: [[sequelize.fn('SUM', sequelize.col('cantidad')), 'DESC']]
+      attributes: [
+        [sequelize.literal(`DATE_TRUNC('month', fecha_registro AT TIME ZONE 'UTC' AT TIME ZONE 'America/Guayaquil')`), 'mes'],
+        [sequelize.literal(`CONCAT("Equipo"."marca", ' ', "Equipo"."modelo")`), 'equipo'],
+        [sequelize.fn('COUNT', sequelize.col('Equipo.id')), 'cantidad']
+      ],
+      group: ['mes', 'equipo'],
+      order: [['mes', 'ASC'], ['equipo', 'ASC']]
     });
 
-    res.json(resultados);
+    const datos = resultados.map(r => {
+      const row = r.get({ plain: true });
+      return {
+        mes: row.mes,
+        equipo: row.equipo,
+        cantidad: parseInt(row.cantidad)
+      };
+    });
+
+    res.json({ ok: true, datos });
+
   } catch (error) {
-    console.error('Error al obtener productos más vendidos:', error);
-    res.status(500).json({ mensaje: 'Error interno del servidor' });
+    console.error('Error al obtener equipos por mes:', error);
+    res.status(500).json({ ok: false, error: 'Error interno del servidor' });
   }
 };
 
-// 3. Total de dinero generado por cada usuario
-const obtenerTotalPorUsuario = async (req, res) => {
+const obtenerTotalGeneradoPorMes = async (req, res) => {
   try {
-    const resultados = await Venta.findAll({
+    const { fecha_desde, fecha_hasta } = req.query;
+
+    const where = {};
+    if (fecha_desde && fecha_hasta) {
+      const desde = new Date(`${fecha_desde}T00:00:00`);
+      const hasta = new Date(`${fecha_hasta}T23:59:59`);
+      where.fecha_registro = {
+        [Op.between]: [desde, hasta]
+      };
+    }
+
+    const resultados = await Acta.findAll({
+      where,
       attributes: [
-        'usuarioId',
-        [sequelize.fn('SUM', sequelize.col('total')), 'totalGenerado']
+        [sequelize.literal(`DATE_TRUNC('month', fecha_registro AT TIME ZONE 'UTC' AT TIME ZONE 'America/Guayaquil')`), 'mes'],
+        [sequelize.fn('SUM', sequelize.col('precio')), 'total']
       ],
-      include: {
-        model: Usuario,
-        attributes: ['nombre']
-      },
-      group: ['usuarioId', 'Usuario.id'],
-      order: [[sequelize.fn('SUM', sequelize.col('total')), 'DESC']]
+      group: ['mes'],
+      order: [[sequelize.literal('mes'), 'ASC']]
     });
 
-    res.json(resultados);
+    const datos = resultados.map(r => {
+      const row = r.get({ plain: true });
+      return {
+        mes: row.mes,
+        total: parseFloat(row.total)
+      };
+    });
+
+    res.json({ ok: true, datos });
+
   } catch (error) {
-    console.error('Error al obtener total generado por usuario:', error);
-    res.status(500).json({ mensaje: 'Error interno del servidor' });
+    console.error('Error al obtener total generado por mes:', error);
+    res.status(500).json({ ok: false, error: 'Error interno del servidor' });
   }
 };
 
 module.exports = {
-  obtenerVentasPorUsuario,
-  obtenerProductosMasVendidos,
-  obtenerTotalPorUsuario
+  obtenerActasPorUsuarioConFechas,
+  obtenerEquiposEntregadosPorMes,
+  obtenerTotalGeneradoPorMes
 };
+
+
+
+// // 2. Productos más vendidos
+// const obtenerProductosMasVendidos = async (req, res) => {
+//   try {
+//     const resultados = await DetalleVenta.findAll({
+//       attributes: [
+//         'productoId',
+//         [sequelize.fn('SUM', sequelize.col('cantidad')), 'cantidadTotal']
+//       ],
+//       include: {
+//         model: Producto,
+//         attributes: ['nombre']
+//       },
+//       group: ['productoId', 'Producto.id'],
+//       order: [[sequelize.fn('SUM', sequelize.col('cantidad')), 'DESC']]
+//     });
+
+//     res.json(resultados);
+//   } catch (error) {
+//     console.error('Error al obtener productos más vendidos:', error);
+//     res.status(500).json({ mensaje: 'Error interno del servidor' });
+//   }
+// };
+
+// // 3. Total de dinero generado por cada usuario
+// const obtenerTotalPorUsuario = async (req, res) => {
+//   try {
+//     const resultados = await Venta.findAll({
+//       attributes: [
+//         'usuarioId',
+//         [sequelize.fn('SUM', sequelize.col('total')), 'totalGenerado']
+//       ],
+//       include: {
+//         model: Usuario,
+//         attributes: ['nombre']
+//       },
+//       group: ['usuarioId', 'Usuario.id'],
+//       order: [[sequelize.fn('SUM', sequelize.col('total')), 'DESC']]
+//     });
+
+//     res.json(resultados);
+//   } catch (error) {
+//     console.error('Error al obtener total generado por usuario:', error);
+//     res.status(500).json({ mensaje: 'Error interno del servidor' });
+//   }
+// };

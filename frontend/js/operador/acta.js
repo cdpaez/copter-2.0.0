@@ -76,10 +76,70 @@ document.addEventListener("DOMContentLoaded", () => {
     contadorobs.textContent = `${textarea.value.length} / 162`;
   });
 });
+// bloque con funciones utilitarias
+function obtenerInspeccionHW(form) {
+  return {
+    teclado_estado: form.hw_teclado_check.checked,
+    teclado_observacion: form.hw_teclado.value,
+
+    mouse_estado: form.hw_mouse_check.checked,
+    mouse_observacion: form.hw_mouse.value,
+
+    camara_estado: form.hw_camara_check.checked,
+    camara_observacion: form.hw_camara.value,
+
+    pantalla_estado: form.hw_pantalla_check.checked,
+    pantalla_observacion: form.hw_pantalla.value,
+
+    parlantes_estado: form.hw_parlantes_check.checked,
+    parlantes_observacion: form.hw_parlantes.value,
+
+    bateria_estado: form.hw_bateria_check.checked,
+    bateria_observacion: form.hw_bateria.value,
+
+    carcasa_estado: form.hw_carcasa_check.checked,
+    carcasa_observacion: form.hw_carcasa.value,
+
+    cargador_estado: form.hw_cargador_check.checked,
+    cargador_observacion: form.hw_cargador.value
+  };
+}
+function obtenerInspeccionSW(form) {
+  return {
+    sistema_operativo: form.sw_sistema_operativo.checked,
+    antivirus: form.sw_antivirus.checked,
+    office: form.sw_office.checked,
+    navegadores: form.sw_navegadores.checked,
+    compresores: form.sw_compresores.checked,
+    acceso_remoto: form.sw_acceso_remoto.checked,
+    nota: form.sw_nota.value
+  };
+}
+function obtenerAdicionales(form) {
+  return {
+    mouse_estado: form.ad_mouse_check.checked,
+    mouse_observacion: form.ad_mouse.value,
+
+    mochila_estado: form.ad_mochila_check.checked,
+    mochila_observacion: form.ad_mochila.value,
+
+    estuche_estado: form.ad_estuche_check.checked,
+    estuche_observacion: form.ad_estuche.value,
+
+    software1_estado: form.ad_software1_check.checked,
+    software1_observacion: form.ad_software1.value,
+
+    software2_estado: form.ad_software2_check.checked,
+    software2_observacion: form.ad_software2.value,
+
+    software3_estado: form.ad_software3_check.checked,
+    software3_observacion: form.ad_software3.value
+  };
+}
 
 document.getElementById('actaForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
 
+  e.preventDefault();
   const form = e.target;
 
   const usuarioId = parseInt(sessionStorage.getItem('usuarioId'));
@@ -88,7 +148,7 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
     alert('❌ No se pudo obtener el ID del usuario logueado.');
     return;
   }
-
+  // estructurado objeto con los datos del acta
   const datos = {
     cliente: {
       nombre: form.nombre_cliente.value,
@@ -110,47 +170,9 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
       estado: form.estado.value,
       extras: form.extras.value
     },
-    inspeccion_hw: {
-      teclado: form.hw_teclado_check.checked,
-      teclado_obs: form.hw_teclado.value,
-      mouse: form.hw_mouse_check.checked,
-      mouse_obs: form.hw_mouse.value,
-      camara: form.hw_camara_check.checked,
-      camara_obs: form.hw_camara.value,
-      pantalla: form.hw_pantalla_check.checked,
-      pantalla_obs: form.hw_pantalla.value,
-      parlantes: form.hw_parlantes_check.checked,
-      parlantes_obs: form.hw_parlantes.value,
-      bateria: form.hw_bateria_check.checked,
-      bateria_obs: form.hw_bateria.value,
-      carcasa: form.hw_carcasa_check.checked,
-      carcasa_obs: form.hw_carcasa.value,
-      cargador: form.hw_cargador_check.checked,
-      cargador_obs: form.hw_cargador.value
-    },
-    inspeccion_sw: {
-      sistema_operativo: form.sw_sistema_operativo.checked,
-      antivirus: form.sw_antivirus.checked,
-      office: form.sw_office.checked,
-      navegadores: form.sw_navegadores.checked,
-      compresores: form.sw_compresores.checked,
-      acceso_remoto: form.sw_acceso_remoto.checked,
-      nota: form.sw_nota.value
-    },
-    adicionales: {
-      mouse: form.ad_mouse_check.checked,
-      mouse_obs: form.ad_mouse.value,
-      mochila: form.ad_mochila_check.checked,
-      mochila_obs: form.ad_mochila.value,
-      estuche: form.ad_estuche_check.checked,
-      estuche_obs: form.ad_estuche.value,
-      software1: form.ad_software1_check.checked,
-      software1_obs: form.ad_software1.value,
-      software2: form.ad_software2_check.checked,
-      software2_obs: form.ad_software2.value,
-      software3: form.ad_software3_check.checked,
-      software3_obs: form.ad_software3.value
-    },
+    inspeccion_hw: obtenerInspeccionHW(form),
+    inspeccion_sw: obtenerInspeccionSW(form),
+    adicionales: obtenerAdicionales(form),
     acta: {
       forma_pago: form.forma_pago.value,
       precio: parseFloat(form.precio.value),
@@ -163,6 +185,7 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
 
   try {
 
+    // realizamos y guardamos la peticion http en una constante para insertar los datos en sus respectivas tablas
     const res = await fetch('/actas', {
 
       method: 'POST',
@@ -172,51 +195,29 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
     });
 
     // retroalimentacion hacia el usuario
-    if (!res.ok) {
 
+    // si algo falla al momento de intentar guardar el acta
+    if (!res.ok) {
       const error = await res.json();
       mostrarToast(error.error || '❌ Error al guardar el acta', 'error');
       return;
     }
 
+    //validacion para observar que datos se estan guardando
     const resultado = await res.json();
     console.log('Respuesta:', resultado);
     mostrarToast('✅ Acta registrada con éxito', 'success');
 
-    // Mostrar advertencia si aplica
+    // advertencia cuando los productos esten bajos
     if (resultado.advertenciaStock) {
       mostrarToast(resultado.advertenciaStock, 'warning');
     }
-    // Esperar brevemente para que el DOM se estabilice si hay mensajes toasts
-    setTimeout(() => {
-      const actaElement = document.getElementById('actaForm');
 
-      if (actaElement) {
-        html2pdf()
-          .set({
-            margin: 10,
-            filename: `acta_${datos.cliente.nombre.replace(/\s+/g, '_')}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-          })
-          .from(actaElement)
-          .save();
-      } else {
-        console.warn('No se encontró el contenedor #acta-preview para imprimir.');
-      }
-    }, 800); // Esperar 800ms para asegurar que se muestre correctamente
+    // Abrir el PDF generado en una nueva pestaña (se descarga automáticamente)
+    if (resultado.acta_id) {
+      window.open(`/actas/${resultado.acta_id}/pdf`, '_self');
+    }
 
-    // // Descargar automáticamente el PDF
-    // if (resultado.path_pdf) {
-    //   const nombreArchivo = resultado.path_pdf.split('/').pop(); // acta_nombre.pdf
-    //   const enlace = document.createElement('a');
-    //   enlace.href = `/actas/descargar/${encodeURIComponent(nombreArchivo)}`;
-    //   enlace.download = nombreArchivo;
-    //   document.body.appendChild(enlace);
-    //   enlace.click();
-    //   document.body.removeChild(enlace);
-    // }
 
   } catch (error) {
 
@@ -294,3 +295,4 @@ function mostrarToast(mensaje, tipo = 'success') {
     toast.remove();
   }, 3000);
 }
+

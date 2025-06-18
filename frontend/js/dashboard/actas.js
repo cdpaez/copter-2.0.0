@@ -141,9 +141,11 @@ document.addEventListener('DOMContentLoaded', () => {
       </ul>
       <button id="descargarActaPDF" style="margin-top: 1rem;">Descargar PDF generado</button>
       `;
-
       const pintar = document.getElementById('detalleActa');
       pintar.innerHTML = detalle;
+      document.querySelectorAll('#detalleActa ul').forEach(ul => {
+        ul.classList.add('dos-columnas');
+      });
       document.getElementById('modalActa').classList.remove('hidden');
 
     } catch (error) {

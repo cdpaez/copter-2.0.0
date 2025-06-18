@@ -189,7 +189,17 @@
           <div class="filtros-estadisticas">
             <input type="date" id="fecha-desde" placeholder="Desde">
             <input type="date" id="fecha-hasta" placeholder="Hasta">
-            <button id="exportar-estadisticas">📁 Exportar</button>
+            <button id="resetear-filtro">🔄 Resetear Filtro</button>
+            <div id="mensaje-vacio-actas" class="mensaje-alerta" style="display: none;">
+              ⚠️ No se encontraron actas registradas en este rango de fechas.
+            </div>
+            <div id="mensaje-vacio-equipos" class="mensaje-alerta" style="display: none;">
+              ⚠️ No se encontraron equipos entregados en este período.
+            </div>
+            <div id="mensaje-vacio-totales" class="mensaje-alerta" style="display: none;">
+              ⚠️ No se registraron ingresos en este período.
+            </div>
+            <!-- <button id="exportar-estadisticas">📁 Exportar</button> -->
           </div>
           <!-- Contenedor de gráficos -->
           <div class="graficas">

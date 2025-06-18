@@ -107,6 +107,13 @@
   left: 0;
   color: #888;
 }
+/* Listas en dos columnas */
+#detalleActa ul.dos-columnas {
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+  column-gap: 2rem;
+}
 
 @media (max-width: 600px) {
   #detalleActa {
@@ -119,6 +126,9 @@
 
   #detalleActa p, #detalleActa li {
     font-size: 0.9rem;
+  }
+  #detalleActa ul.dos-columnas {
+    columns: 1; /* En móviles, una sola columna */
   }
 }
 

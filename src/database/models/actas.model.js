@@ -22,8 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     fecha_registro: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
-    },
-    path_pdf: DataTypes.STRING
+    }
   }, {
     tableName: 'actas',
     createdAt: true,

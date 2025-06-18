@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const {
-  obtenerVentasPorUsuario,
-  obtenerProductosMasVendidos,
-  obtenerTotalPorUsuario
+  obtenerActasPorUsuarioConFechas,
+  obtenerEquiposEntregadosPorMes,obtenerTotalGeneradoPorMes
 } = require('../controllers/dashboard/chart.controller');
 
 // Rutas estadísticas
-router.get('/ventas-por-usuario', obtenerVentasPorUsuario);
-router.get('/productos-mas-vendidos', obtenerProductosMasVendidos);
-router.get('/total-por-usuario', obtenerTotalPorUsuario);
+router.get('/actas-por-usuario', obtenerActasPorUsuarioConFechas);
+router.get('/equipos-mas-vendidos', obtenerEquiposEntregadosPorMes);
+router.get('/total-por-usuario', obtenerTotalGeneradoPorMes);
 
 module.exports = router;
