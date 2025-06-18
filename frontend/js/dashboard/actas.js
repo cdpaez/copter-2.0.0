@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const actas = await res.json();
-
+      console.log('actas backend ---> frontend', actas);
       if (!Array.isArray(actas)) {
         console.error('Respuesta inválida:', actas);
         alert('❌ La respuesta del servidor no es válida');
@@ -163,12 +163,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const hasta = document.getElementById('fecha-fin').value;
     const busqueda = document.getElementById('buscador-ventas').value.trim().toLowerCase();
 
-    const desdeDate = desde ? new Date(desde) : null;
-    const hastaDate = hasta ? new Date(hasta + 'T23:59:59') : null;
+    const desdeDate = desde ? new Date(desde + 'T00:00:00') : null;
+    const hastaDate = hasta ? new Date(hasta + 'T23:59:59.999') : null;
 
     const filtradas = actasOriginales.filter((acta) => {
-      const fechaActa = new Date(acta.fecha_registro);
+      const fechaUTC = new Date(acta.fecha_registro);
 
+      // Convertir a fecha local (evita errores por desfase horario)
+      const fechaActa = new Date(
+        fechaUTC.getFullYear(),
+        fechaUTC.getMonth(),
+        fechaUTC.getDate(),
+        fechaUTC.getHours(),
+        fechaUTC.getMinutes(),
+        fechaUTC.getSeconds(),
+        fechaUTC.getMilliseconds()
+      );
+      
       // Filtro por fechas
       if (desdeDate && fechaActa < desdeDate) return false;
       if (hastaDate && fechaActa > hastaDate) return false;
