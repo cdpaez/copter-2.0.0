@@ -283,18 +283,18 @@ const generarPDFDesdeFormulario = async (datos) => {
       const bancos = [
         {
           nombre: 'Banco Pichincha',
-          cuenta: 'Cuenta de Ahorros 1234567890',
-          titular: 'Juan Pérez',
-          cedula: '0102030405',
-          correo: 'juan.perez@pichincha.com',
+          cuenta: 'Cuenta de Ahorros 2210222034',
+          titular: 'Adrian Abarca',
+          cedula: '1728601566',
+          correo: 'jddigistoreuio@gmail.com',
           x: 35,
         },
         {
-          nombre: 'Banco Guayaquil',
-          cuenta: 'Cuenta de Ahorros 9876543210',
-          titular: 'Ana Gómez',
-          cedula: '1122334455',
-          correo: 'ana.gomez@guayaquil.fin',
+          nombre: 'Banco Produbanco',
+          cuenta: 'Cuenta de Ahorros 20000991943',
+          titular: 'Gabriel Adrian Abarca',
+          cedula: '1728601566',
+          correo: 'adrian.abarca0908@gmail.com',
           x: 300,
         }
       ];
