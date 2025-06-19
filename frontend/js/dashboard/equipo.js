@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Filtrar productos
     const resultados = todosLosProductos.filter(producto =>
+      producto.codigo_prd.toLowerCase().includes(termino) ||
       producto.marca.toLowerCase().includes(termino) ||
       producto.modelo.toLowerCase().includes(termino) ||
       producto.precio.toString().includes(termino)
@@ -69,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     productos.forEach(producto => {
       const fila = document.createElement('tr');
       fila.innerHTML = `
+      <td>${producto.codigo_prd}</td>
       <td>${producto.stock}</td>
       <td>${producto.precio}</td>
       <td>${producto.marca}</td>
@@ -197,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const producto = result.data;
 
       // 2. Poblar el formulario del modal
+      document.getElementById('codigo_prd').value = producto.codigo_prd || 0;
       document.getElementById('stock').value = producto.stock || 0;
       document.getElementById('precio').value = producto.precio || 0;
       document.getElementById('marca').value = producto.marca || '';
@@ -245,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Preparar datos
       const datos = {
+        codigo_prd: form.codigo_prd.value,
         stock: parseInt(form.stock.value),
         precio: parseFloat(form.precio.value),
         marca: form.marca.value.trim(),

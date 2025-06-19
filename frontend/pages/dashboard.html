@@ -67,6 +67,7 @@
             <table>
               <thead>
                 <tr>
+                  <th>codigo</th>
                   <th>Stock</th>
                   <th>Precio</th>
                   <th>Marca</th>
@@ -97,6 +98,7 @@
               <div id="loader-modal" class="loader" style="display: none;"></div>
 
               <form id="form-modal-producto" data-editando="false">
+                <input type="text" id="codigo_prd" name="codigo_prd" placeholder="codigo" min="0" max="50" required>
                 <input type="number" id="stock" name="stock" placeholder="stock" min="0" max="50" required>
                 <input type="number" id="precio" name="precio" placeholder="precio" step="0.01" required>
                 <input type="text" id="marca" name="marca" placeholder="marca" required>

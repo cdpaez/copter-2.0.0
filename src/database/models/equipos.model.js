@@ -5,6 +5,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
+    codigo_prd: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'SIN-CODIGO'
+    },
     marca: DataTypes.STRING,
     modelo: DataTypes.STRING,
     numero_serie: DataTypes.STRING,

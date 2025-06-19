@@ -40,13 +40,22 @@ Object.keys(db).forEach(modelName => {
 });
 
 // Asociaciones específicas
-db.Cliente.hasMany(db.Acta, { foreignKey: 'cliente_id' });
+db.Cliente.hasMany(db.Acta, {
+  foreignKey: 'cliente_id',
+  onDelete: 'RESTRICT'  // Impide borrar si hay actas asociadas
+});
 db.Acta.belongsTo(db.Cliente, { foreignKey: 'cliente_id' });
 
-db.Usuario.hasMany(db.Acta, { foreignKey: 'usuario_id' });
+db.Usuario.hasMany(db.Acta, {
+  foreignKey: 'usuario_id',
+  onDelete: 'RESTRICT'
+});
 db.Acta.belongsTo(db.Usuario, { foreignKey: 'usuario_id' });
 
-db.Equipo.hasMany(db.Acta, { foreignKey: 'equipo_id' });
+db.Equipo.hasMany(db.Acta, {
+  foreignKey: 'equipo_id',
+  onDelete: 'RESTRICT'
+});
 db.Acta.belongsTo(db.Equipo, { foreignKey: 'equipo_id' });
 
 db.Acta.hasOne(db.InspeccionHardware, { foreignKey: 'acta_id' });

@@ -213,7 +213,7 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
       mostrarToast(resultado.advertenciaStock, 'warning');
     }
 
-    // Abrir el PDF generado en una nueva pestaña (se descarga automáticamente)
+    // Abrir el PDF generado para descargar
     if (resultado.acta_id) {
       window.open(`/actas/${resultado.acta_id}/pdf`, '_self');
     }
@@ -229,7 +229,6 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
 });
 
 
-// bloque encargado de autocompletar los campos luego de buscar un equipo por marca y modelo
 const buscarInput = document.getElementById('buscar-equipo');
 const resultados = document.getElementById('resultados');
 const inputEquipoId = document.getElementById('equipo_id');
@@ -238,48 +237,65 @@ let timeout;
 
 buscarInput.addEventListener('input', () => {
   clearTimeout(timeout);
+
   timeout = setTimeout(async () => {
     const termino = buscarInput.value.trim();
-    if (termino.length === 0) {
-      return;
-    }
 
-    const res = await fetch(`/equipos/buscar?termino=${termino}`);
-    const data = await res.json();
-    console.log("datos del equipo buscado:", data)
+    // 🔁 SIEMPRE limpiar resultados ANTES de cualquier cosa
+    resultados.innerHTML = '';
 
-    data.forEach(item => {
+    if (termino.length === 0) return;
 
-      // resultado de la busqueda
-      const li = document.createElement('li');
-      li.textContent = `${item.marca} - ${item.numero_serie}`;
+    try {
+      const res = await fetch(`/equipos/buscar?termino=${termino}`);
+      const data = await res.json();
 
-      // agregando datos a los campos
-      li.addEventListener('click', () => {
-        // ← completar campos del formulario
-        document.querySelector('[name="marca"]').value = item.marca;
-        document.querySelector('[name="modelo"]').value = item.modelo;
-        document.querySelector('[name="numero_serie"]').value = item.numero_serie;
-        document.querySelector('[name="procesador"]').value = item.procesador;
-        document.querySelector('[name="tamano"]').value = item.tamano;
-        document.querySelector('[name="disco"]').value = item.disco;
-        document.querySelector('[name="memoria_ram"]').value = item.memoria_ram;
-        document.querySelector('[name="tipo_equipo"]').value = item.tipo_equipo;
-        document.querySelector('[name="estado"]').value = item.estado;
-        document.querySelector('[name="extras"]').value = item.extras;
+      if (data.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = `No se encontró el producto "${termino}"`;
+        li.style.color = 'gray';
+        li.style.pointerEvents = 'none';
+        resultados.appendChild(li);
+        return;
+      }
 
-        // ← guardar ID del equipo
-        inputEquipoId.value = item.id;
+      data.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.marca} - ${item.codigo_prd}`;
 
-        // ← limpiar resultados
-        resultados.innerHTML = '';
-        buscarInput.value = `${item.marca} - ${item.numero_serie}`;
+        li.addEventListener('click', () => {
+          document.querySelector('[name="marca"]').value = item.marca;
+          document.querySelector('[name="modelo"]').value = item.modelo;
+          document.querySelector('[name="numero_serie"]').value = item.numero_serie;
+          document.querySelector('[name="procesador"]').value = item.procesador;
+          document.querySelector('[name="tamano"]').value = item.tamano;
+          document.querySelector('[name="disco"]').value = item.disco;
+          document.querySelector('[name="memoria_ram"]').value = item.memoria_ram;
+          document.querySelector('[name="tipo_equipo"]').value = item.tipo_equipo;
+          document.querySelector('[name="estado"]').value = item.estado;
+          document.querySelector('[name="extras"]').value = item.extras;
+
+          inputEquipoId.value = item.id;
+
+          resultados.innerHTML = '';
+          buscarInput.value = `${item.marca} - ${item.codigo_prd}`;
+        });
+
+        resultados.appendChild(li);
       });
-      resultados.appendChild(li);
-    });
-  }, 500);
+    } catch (error) {
+      console.error('Error al buscar equipos:', error);
+      resultados.innerHTML = '';
+    }
+  }, 300); // menor retardo para respuesta más rápida
 });
 
+// ✅ limpia resultados si se pierde el foco
+buscarInput.addEventListener('blur', () => {
+  setTimeout(() => {
+    resultados.innerHTML = '';
+  }, 200);
+});
 // funcion para notificaciones
 function mostrarToast(mensaje, tipo = 'success') {
   const container = document.getElementById('toast-container');

@@ -67,13 +67,13 @@
 
                 <fieldset class="fieldset-container">
                   <legend class="legend-container">Datos del Equipo:</legend>
-                  <label>
-                    Buscar Equipo:
-                    <input type="text" id="buscar-equipo" autocomplete="off">
-                    <ul id="resultados" class="menu-contextual">
-                      <!-- TODO: se van llenando con informacion de la base de datos -->
-                    </ul>
-                  </label>
+                  <div class="buscador-equipo-wrapper">
+                    <label class="busqueda-label">
+                      Buscar Equipo:
+                      <input type="text" id="buscar-equipo" class="busqueda-input" autocomplete="off">
+                      <ul id="resultados" class="menu-contextual"></ul>
+                    </label>
+                  </div>
                   <div class="actas__equipos">
                     <input type="hidden" name="equipo_id" id="equipo_id">
                     <label>Marca: <input type="text" name="marca" required></label>
@@ -238,35 +238,39 @@
                   </div>
                 </fieldset>
 
-                <div class="observaciones">
-                  <label for="observaciones">Observaciones:</label>
-                  <textarea id="observaciones" name="observaciones" maxlength="162"></textarea>
-                  <span id="contadorobs">0 / 162</span>
+                <div class="observaciones-wrapper">
+                  <label for="observaciones" class="observaciones-label">Observaciones:</label>
+                  <textarea id="observaciones" name="observaciones" class="observaciones-textarea"
+                    maxlength="162"></textarea>
+                  <span id="contadorobs" class="observaciones-contador">0 / 162</span>
                 </div>
 
 
-                <div class="formaPago">
-                  <h2>Forma de Pago</h2>
+                <div class="forma-pago-wrapper">
+                  <h2 class="forma-pago-titulo">Forma de Pago</h2>
 
-                  <select name="forma_pago" required>
+                  <select name="forma_pago" class="forma-pago-select" required>
                     <option value="efectivo">Efectivo</option>
                     <option value="deposito">Depósito</option>
                     <option value="transferencia">Transferencia</option>
                     <option value="tarjeta">Tarjeta</option>
                   </select>
 
-                  <label>Precio ($): <input type="number" step="0.01" min="0" name="precio" required></label>
-                  <!-- <label>Vendedor: <input type="text" name="vendedor" required></label> -->
+                  <label class="forma-pago-label">
+                    Precio ($):
+                    <input type="number" step="0.01" min="0" name="precio" class="forma-pago-input" required>
+                  </label>
 
                   <fieldset class="grupo-botones">
-                    <legend>Acciones</legend>
-                    <button type="submit">Guardar Acta</button>
+                    <legend class="grupo-botones-legend">Acciones</legend>
+                    <button type="submit" class="boton-guardar">Guardar Acta</button>
                   </fieldset>
                 </div>
+
               </form>
             </div>
         </div>
-        
+
         <!-- area para dibujar el acta en pdf -->
         <!-- <div id="plantilla-acta">
           <h2 style="text-align: center;">ACTA DE ENTREGA DE EQUIPO</h2>
