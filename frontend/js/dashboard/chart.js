@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(url);
       const data = await res.json();
 
+      // debug
+      console.log('chart1 backend ---> frontend',data);
+
       if (!data.ok) throw new Error(data.error || 'No se pudo cargar la información');
 
       if (data.datos.length === 0) {
@@ -50,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mensajeVacioActas.style.display = 'none';
       }
 
-      const labels = data.datos.map(i => i.usuario);
+      const labels = data.datos.map(i => i.vendedor);
       const valores = data.datos.map(i => i.total);
       const colores = generarColores(valores.length);
       const coloresBorde = colores.map(c => c.replace('0.7', '1'));

@@ -1,4 +1,4 @@
-const { Acta, Usuario, Equipo, sequelize } = require('../../database/models');
+const { ActaHistorico , sequelize } = require('../../database/models');
 const { Op } = require('sequelize');
 
 const obtenerActasPorUsuarioConFechas = async (req, res) => {
@@ -18,24 +18,19 @@ const obtenerActasPorUsuarioConFechas = async (req, res) => {
     }
 
 
-    const resultados = await Acta.findAll({
-      attributes: ['usuario_id',
-        [sequelize.fn('COUNT', sequelize.col('Acta.id')), 'totalActas']
+    const resultados = await ActaHistorico.findAll({
+      attributes: ['vendedor_nombre',
+        [sequelize.fn('COUNT', sequelize.col('id')), 'totalActas']
       ],
-      include: {
-        model: Usuario,
-        attributes: ['nombre'],
-        paranoid: false
-      },
       where,
-      group: ['usuario_id', 'Usuario.id'],
-      order: [[sequelize.fn('COUNT', sequelize.col('Acta.id')), 'DESC']]
+      group: ['vendedor_nombre'],
+      order: [[sequelize.fn('COUNT', sequelize.col('id')), 'DESC']]
     });
 
     const datos = resultados.map(r => {
       const row = r.get({ plain: true });
       return {
-        usuario: row.Usuario.nombre,
+        vendedor: row.vendedor_nombre,
         total: parseInt(row.totalActas)
       };
     });
@@ -43,7 +38,7 @@ const obtenerActasPorUsuarioConFechas = async (req, res) => {
     res.json({ ok: true, datos });
 
   } catch (error) {
-    console.error('Error al obtener actas filtradas:', error);
+    console.error('Error al obtener actas historicas filtradas:', error);
     res.status(500).json({ ok: false, error: 'Error interno del servidor' });
   }
 };
@@ -61,17 +56,12 @@ const obtenerEquiposEntregadosPorMes = async (req, res) => {
       };
     }
 
-    const resultados = await Acta.findAll({
+    const resultados = await ActaHistorico.findAll({
       where,
-      include: {
-        model: Equipo,
-        paranoid: false,
-        attributes: []
-      },
       attributes: [
         [sequelize.literal(`DATE_TRUNC('month', fecha_registro AT TIME ZONE 'UTC' AT TIME ZONE 'America/Guayaquil')`), 'mes'],
-        [sequelize.literal(`CONCAT("Equipo"."marca", ' ', "Equipo"."modelo")`), 'equipo'],
-        [sequelize.fn('COUNT', sequelize.col('Equipo.id')), 'cantidad']
+        [sequelize.literal(`CONCAT("equipo_marca", ' ', "equipo_modelo")`), 'equipo'],
+        [sequelize.fn('COUNT', sequelize.col('id')), 'cantidad']
       ],
       group: ['mes', 'equipo'],
       order: [['mes', 'ASC'], ['equipo', 'ASC']]
@@ -107,7 +97,7 @@ const obtenerTotalGeneradoPorMes = async (req, res) => {
       };
     }
 
-    const resultados = await Acta.findAll({
+    const resultados = await ActaHistorico.findAll({
       where,
       attributes: [
         [sequelize.literal(`DATE_TRUNC('month', fecha_registro AT TIME ZONE 'UTC' AT TIME ZONE 'America/Guayaquil')`), 'mes'],
@@ -137,4 +127,4 @@ module.exports = {
   obtenerActasPorUsuarioConFechas,
   obtenerEquiposEntregadosPorMes,
   obtenerTotalGeneradoPorMes
-};
+}
