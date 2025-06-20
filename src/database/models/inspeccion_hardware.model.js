@@ -1,5 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const InspeccionHardware = sequelize.define('InspeccionHardware', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     acta_id: {
       type: DataTypes.INTEGER,
       allowNull: false

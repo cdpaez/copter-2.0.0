@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW
     }
   }, {
+    paranoid: true,
     tableName: 'equipos',
     timestamps: false
   });

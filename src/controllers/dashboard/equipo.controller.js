@@ -114,9 +114,10 @@ const eliminarEquipos = async (req, res) => {
         });
     }
   } catch (error) {
+    console.log(`sucedio el siguiente error al intentar eliminar un usuario: ${error.message}`)
     res.status(500).json(
       {
-        mensaje: 'Error al eliminar el producto', error: error.message
+        mensaje: 'Error al eliminar el producto'
       });
   }
 };

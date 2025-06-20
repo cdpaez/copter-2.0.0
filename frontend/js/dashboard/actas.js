@@ -72,9 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
       <tr>
         <td>${acta.id}</td>
         <td>${new Date(acta.fecha_registro).toLocaleDateString()}</td>
-        <td>${acta.Cliente?.nombre || 'Sin cliente'}</td>
-        <td>${acta.Equipo?.marca || ''} ${acta.Equipo?.modelo || ''} - ${acta.Equipo?.numero_serie || ''}</td>
-        <td>${acta.Usuario?.nombre || ''}</td>
+        <td>${acta.cliente_nombre || 'Sin cliente'}</td>
+        <td>${acta.equipo_marca || ''} ${acta.equipo_modelo || ''} - ${acta.equipo_numero_serie || ''}</td>
+        <td>${acta.vendedor_nombre || ''}</td>
         <td>${acta.forma_pago}</td>
         <td>$${Number(acta.precio).toFixed(2)}</td>
         <td><button class="ver-acta-btn" data-id="${acta.id}">Ver</button></td>
@@ -94,15 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const acta = await res.json();
       console.log('datos de las actas', acta);
 
-      const hw = acta.InspeccionHardware || {};
-      const sw = acta.InspeccionSoftware || {};
-      const ad = acta.Adicional || {};
+      const hw = acta.inspeccion_hw || {};
+      const sw = acta.inspeccion_sw || {};
+      const ad = acta.adicionales || {};
 
       let detalle = `
       <p><strong>Fecha:</strong> ${new Date(acta.fecha_registro).toLocaleString()}</p>
-      <p><strong>Cliente:</strong> ${acta.Cliente.nombre} - ${acta.Cliente.cedula_ruc}</p>
-      <p><strong>Equipo:</strong> ${acta.Equipo.marca} ${acta.Equipo.modelo} - Serie: ${acta.Equipo.numero_serie}</p>
-      <p><strong>Vendedor:</strong> ${acta.Usuario.nombre}</p>
+      <p><strong>Cliente:</strong> ${acta.cliente_nombre} - ${acta.cliente_cedula_ruc}</p>
+      <p><strong>Equipo:</strong> ${acta.equipo_marca} ${acta.equipo_modelo} - Serie: ${acta.equipo_numero_serie}</p>
+      <p><strong>Vendedor:</strong> ${acta.vendedor_nombre}</p>
       <p><strong>Forma de pago:</strong> ${acta.forma_pago}</p>
       <p><strong>Precio:</strong> $${Number(acta.precio).toFixed(2)}</p>
       <p><strong>Observaciones:</strong> ${acta.observaciones || 'Ninguna'}</p>

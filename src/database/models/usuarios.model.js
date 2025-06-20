@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
+    paranoid: true,
     tableName: 'usuarios',
     timestamps: false
   });

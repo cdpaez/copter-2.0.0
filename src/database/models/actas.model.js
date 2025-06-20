@@ -1,16 +1,21 @@
 module.exports = (sequelize, DataTypes) => {
   const Acta = sequelize.define('Acta', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     usuario_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     cliente_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     equipo_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     vendedor_nombre: {
       type: DataTypes.STRING,

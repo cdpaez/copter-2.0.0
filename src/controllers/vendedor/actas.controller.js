@@ -1,4 +1,5 @@
-const { Cliente, Equipo, InspeccionHardware, InspeccionSoftware, Adicional, Acta, Usuario } = require('../../database/models');
+const { Cliente, Equipo, InspeccionHardware, InspeccionSoftware, Adicional, Acta, ActaHistorico, Usuario } = require('../../database/models');
+const actasHistorico = require('../../database/models/actasHistorico');
 const { generarPDFDesdeFormulario } = require('./pdf.controller')
 // funcion encargada de obtener los datos de la peticion http y enviar las respectivas respuestas
 const crearActaCompleta = async (req, res) => {
@@ -20,6 +21,7 @@ const crearActaCompleta = async (req, res) => {
       throw new Error('ID de equipo inválido o no proporcionado');
     }
 
+    // bloque encargado de validar si ya existe un cliente o de crearlo en que caso de que no exista
     let clienteExistente = await Cliente.findOne({
       where: { cedula_ruc: cliente.cedula_ruc },
       transaction: t
@@ -35,6 +37,7 @@ const crearActaCompleta = async (req, res) => {
       }, { transaction: t });
     }
 
+    // bloque encargado de validar si existe el equipo en la tabla equipos y tenga stock disponible
     const equipoExistente = await Equipo.findByPk(equipo, { transaction: t });
 
     if (!equipoExistente) {
@@ -55,13 +58,14 @@ const crearActaCompleta = async (req, res) => {
     if (equipoExistente.stock <= 5) {
       advertenciaStock = `Solo quedan ${equipoExistente.stock} unidades del equipo ${equipoExistente.marca} - ${equipoExistente.numero_serie}.`;
     }
-
+    // bloque encargado de agregar el usuario operador a la transaccion
     const usuario = await Usuario.findByPk(acta.usuario_id, { transaction: t });
 
     if (!usuario) {
       throw new Error('El usuario (vendedor) no existe');
     }
 
+    // bloque encargado de crear la acta con los datos necesarios
     const nuevaActa = await Acta.create({
       forma_pago: acta.forma_pago,
       precio: acta.precio,
@@ -119,6 +123,43 @@ const crearActaCompleta = async (req, res) => {
       software2_observacion: adicionales.software2_observacion,
       software3_estado: adicionales.software3_estado,
       software3_observacion: adicionales.software3_observacion
+    }, { transaction: t });
+
+    // bloque encargado de guardar un historico de las actasHistorico
+    await ActaHistorico.create({
+      // Cliente
+      cliente_nombre: clienteExistente.nombre,
+      cliente_cedula: clienteExistente.cedula_ruc,
+      cliente_telefono: clienteExistente.telefono,
+      cliente_direccion: clienteExistente.direccion,
+
+      // Equipo
+      equipo_marca: equipoExistente.marca,
+      equipo_modelo: equipoExistente.modelo,
+      equipo_numero_serie: equipoExistente.numero_serie,
+      equipo_procesador: equipoExistente.procesador,
+      equipo_tamano: equipoExistente.tamano,
+      equipo_disco: equipoExistente.disco,
+      equipo_memoria_ram: equipoExistente.memoria_ram,
+      equipo_tipo: equipoExistente.tipo_equipo,
+      equipo_estado: equipoExistente.estado,
+      equipo_extras: equipoExistente.extras,
+
+      // Inspección hardware
+      inspeccion_hw,
+
+      // Inspección software
+      inspeccion_sw,
+
+      // Adicionales
+      adicionales,
+
+      // Otros
+      observaciones,
+      forma_pago: acta.forma_pago,
+      precio: acta.precio,
+      vendedor_nombre: usuario.nombre,
+      fecha_registro: new Date()
     }, { transaction: t });
 
     await t.commit();

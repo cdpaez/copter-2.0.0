@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const coincideNombre = usuario.nombre.toLowerCase().includes(busqueda);
       const coincideCorreo = usuario.correo.toLowerCase().includes(busqueda);
       const coincideEstado = estado ? usuario.estado === estado : true;
-      
+
       return (coincideNombre || coincideCorreo) && coincideEstado;
     });
 
@@ -291,9 +291,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Eliminar usuario
   const eliminarUsuario = async (id) => {
-    if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
-    setLoading(true);
+    const confirmarEliminacion = () => {
+      return new Promise((resolve) => {
+        const toastConfirmacion = document.createElement('div');
+        toastConfirmacion.className = 'toast-confirm';
+        toastConfirmacion.innerHTML = `
+          <div class="toast-confirm-content">
+            <p>¿Eliminar este producto?</p>
+            <div class="toast-confirm-buttons">
+              <button id="toast-confirmar">Sí, eliminar</button>
+              <button id="toast-cancelar">Cancelar</button>
+            </div>
+          </div>
+        `;
 
+        document.body.appendChild(toastConfirmacion);
+
+        document.getElementById('toast-confirmar').addEventListener('click', () => {
+          toastConfirmacion.remove();
+          resolve(true);
+        });
+
+        document.getElementById('toast-cancelar').addEventListener('click', () => {
+          toastConfirmacion.remove();
+          resolve(false);
+        });
+      });
+    };
+    // Verificar confirmación
+    const usuarioConfirmo = await confirmarEliminacion();
+    if (!usuarioConfirmo) return;
     try {
       const token = sessionStorage.getItem('token');
       const res = await fetch(`/usuarios/eliminar/${id}`, {

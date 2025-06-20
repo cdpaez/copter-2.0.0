@@ -1,74 +1,48 @@
-const { Acta, Usuario, Cliente, Equipo, InspeccionHardware, InspeccionSoftware, Adicional } = require('../../database/models');
+const { ActaHistorico } = require('../../database/models');
 
+// Obtener resumen de actas desde actas_historicos
 const obtenerActasResumen = async (req, res) => {
   try {
-    const actas = await Acta.findAll({
-      attributes: ['id', 'fecha_registro', 'forma_pago', 'precio'],
-      include: [
-        {
-          model: Usuario,
-          attributes: ['nombre']
-        },
-        {
-          model: Cliente,
-          attributes: ['nombre']
-        },
-        {
-          model: Equipo,
-          attributes: ['marca', 'modelo', 'numero_serie']
-        }
+    const actas = await ActaHistorico.findAll({
+      attributes: [
+        'id',
+        'fecha_registro',
+        'forma_pago',
+        'precio',
+        'vendedor_nombre',
+        'cliente_nombre',
+        'equipo_marca',
+        'equipo_modelo',
+        'equipo_numero_serie'
       ],
       order: [['fecha_registro', 'DESC']]
     });
 
     res.json(actas);
   } catch (error) {
-    console.error('Error al obtener actas:', error);
-    res.status(500).json({ error: 'Error al obtener el resumen de actas' });
+    console.error('❌ Error al obtener actas históricas:', error);
+    res.status(500).json({ error: 'Error al obtener el resumen de actas históricas' });
   }
 };
 
+// Obtener una acta histórica por ID
 const obtenerActaPorId = async (req, res) => {
   try {
-    const acta = await Acta.findByPk(req.params.id, {
-      include: [
-        {
-          model: Usuario,
-          attributes: ['nombre']
-        },
-        {
-          model: Cliente,
-          attributes: ['nombre', 'cedula_ruc']
-        },
-        {
-          model: Equipo,
-          attributes: ['marca', 'modelo', 'numero_serie']
-        },
-        {
-          model: InspeccionHardware
-        },
-        {
-          model: InspeccionSoftware
-        },
-        {
-          model: Adicional
-        }
-      ]
-    });
+    const acta = await ActaHistorico.findByPk(req.params.id);
 
     if (!acta) {
-      return res.status(404).json({ error: 'Acta no encontrada' });
+      return res.status(404).json({ error: 'Acta histórica no encontrada' });
     }
-    console.log("datos antes del JSON", JSON.stringify(acta, null, 2));
-    res.json(acta);
 
+    console.log("📄 Acta histórica cargada:", JSON.stringify(acta, null, 2));
+    res.json(acta);
   } catch (error) {
-    console.error('Error al obtener acta por ID:', error);
-    res.status(500).json({ error: 'Error al obtener el acta' });
+    console.error('❌ Error al obtener acta histórica por ID:', error);
+    res.status(500).json({ error: 'Error al obtener el acta histórica' });
   }
 };
 
 module.exports = {
-  obtenerActaPorId,
-  obtenerActasResumen
-}
+  obtenerActasResumen,
+  obtenerActaPorId
+};

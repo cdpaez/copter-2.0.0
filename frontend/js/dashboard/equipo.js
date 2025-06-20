@@ -159,15 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (!respuesta.ok) {
-        const text = await respuesta.text();
-        let errorData;
-
-        try {
-          errorData = JSON.parse(text);
-        } catch (e) {
-          throw new Error('Error inesperado del servidor: ' + text); // 🔥 te ayuda a debuguear
-        }
-        throw new Error(errorData.error || 'Error al eliminar');
+        throw new Error('Error al eliminar el producto');    
       }
 
       mostrarToast('✅ Producto eliminado correctamente', 'success');

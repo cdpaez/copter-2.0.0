@@ -12,15 +12,6 @@ const crearUsuario = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al crear usuario', error });
   }
 };
-// const crearUsuario = async (req, res) => {
-//   try {
-//     const nuevoUsuario = await Usuario.create(req.body);
-//     res.status(201).json(nuevoUsuario);
-//   } catch (error) {
-//     console.error('Error al crear usuario:', error);
-//     res.status(500).json({ mensaje: 'Error al crear usuario', error });
-//   }
-// };
 
 const obtenerUsuarios = async (req, res) => {
   try {
@@ -62,18 +53,6 @@ const actualizarUsuario = async (req, res) => {
   }
 };
 
-// const actualizarUsuario = async (req, res) => {
-//   try {
-//     const usuario = await Usuario.findByPk(req.params.id);
-//     if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
-
-//     await usuario.update(req.body);
-//     res.status(200).json(usuario);
-//   } catch (error) {
-//     console.error('Error al actualizar usuario:', error);
-//     res.status(500).json({ mensaje: 'Error al actualizar usuario', error });
-//   }
-// };
 // Controlador para cambiar estado
 const cambiarEstado = async (req, res) => {
   try {

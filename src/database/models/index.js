@@ -39,33 +39,56 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-// Asociaciones específicas
+// 🔗 Asociaciones principales (usuario, cliente, equipo) → si se eliminan, la acta también se borra
 db.Cliente.hasMany(db.Acta, {
   foreignKey: 'cliente_id',
-  onDelete: 'RESTRICT'  // Impide borrar si hay actas asociadas
+  onDelete: 'CASCADE'
 });
-db.Acta.belongsTo(db.Cliente, { foreignKey: 'cliente_id' });
+db.Acta.belongsTo(db.Cliente, {
+  foreignKey: 'cliente_id'
+});
 
 db.Usuario.hasMany(db.Acta, {
   foreignKey: 'usuario_id',
-  onDelete: 'RESTRICT'
+  onDelete: 'CASCADE'
 });
-db.Acta.belongsTo(db.Usuario, { foreignKey: 'usuario_id' });
+db.Acta.belongsTo(db.Usuario, {
+  foreignKey: 'usuario_id'
+});
 
 db.Equipo.hasMany(db.Acta, {
   foreignKey: 'equipo_id',
-  onDelete: 'RESTRICT'
+  onDelete: 'CASCADE'
 });
-db.Acta.belongsTo(db.Equipo, { foreignKey: 'equipo_id' });
+db.Acta.belongsTo(db.Equipo, {
+  foreignKey: 'equipo_id'
+});
 
-db.Acta.hasOne(db.InspeccionHardware, { foreignKey: 'acta_id' });
-db.InspeccionHardware.belongsTo(db.Acta, { foreignKey: 'acta_id' });
+// 🧩 Asociaciones dependientes (inspecciones y adicionales) → se borran si se borra la acta
+db.Acta.hasOne(db.InspeccionHardware, {
+  foreignKey: 'acta_id',
+  onDelete: 'CASCADE'
+});
+db.InspeccionHardware.belongsTo(db.Acta, {
+  foreignKey: 'acta_id'
+});
 
-db.Acta.hasOne(db.InspeccionSoftware, { foreignKey: 'acta_id' });
-db.InspeccionSoftware.belongsTo(db.Acta, { foreignKey: 'acta_id' });
+db.Acta.hasOne(db.InspeccionSoftware, {
+  foreignKey: 'acta_id',
+  onDelete: 'CASCADE'
+});
+db.InspeccionSoftware.belongsTo(db.Acta, {
+  foreignKey: 'acta_id'
+});
 
-db.Acta.hasOne(db.Adicional, { foreignKey: 'acta_id' });
-db.Adicional.belongsTo(db.Acta, { foreignKey: 'acta_id' });
+db.Acta.hasOne(db.Adicional, {
+  foreignKey: 'acta_id',
+  onDelete: 'CASCADE'
+});
+db.Adicional.belongsTo(db.Acta, {
+  foreignKey: 'acta_id'
+});
+
 
 // Exportar
 db.sequelize = sequelize;
