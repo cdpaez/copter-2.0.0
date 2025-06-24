@@ -23,6 +23,11 @@ const login = async (req, res) => {
         });
     }
 
+    // Agrega esta validación:
+    if (usuario.estado === 'inactivo') {
+      return res.status(403).json({ mensaje: 'Tu cuenta está desactivada.' });
+    }
+    
     console.log(usuario.get({ plain: true }));
 
     // Compara la contraseña ingresada con el hash almacenado

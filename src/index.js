@@ -2,19 +2,26 @@ const globalConstants = require('./const/globalConstants')
 // server.js
 const app = require('./app');
 const { sequelize } = require('./database/models');
-const PORT = globalConstants.PORT || 3000;
+const PORT = globalConstants.PORT;
+const { setupWebSocket } = require('./services/websocket');
+
+
 
 (async () => {
   try {
     await sequelize.authenticate();
     console.log('✅ Conexión a la base de datos exitosa');
 
-    await sequelize.sync({force:false});
+    await sequelize.sync({ force: false });
     console.log('📦 Tablas sincronizadas');
 
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     });
+
+    setupWebSocket(server); // Integra WS con tu servidor HTTP
+
+    
   } catch (error) {
     console.error('❌ Error al conectar a la base de datos:', error);
   }

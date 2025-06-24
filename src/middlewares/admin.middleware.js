@@ -37,4 +37,4 @@ const verificarAdmin = (req, res, next) => {
   }
 };
 
-module.exports = verificarAdmin;
+module.exports = { verificarAdmin };
