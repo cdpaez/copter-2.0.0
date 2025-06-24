@@ -1,13 +1,13 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.getElementById("login-form");
-  
-  loginForm.addEventListener("submit", async function(e) {
+
+  loginForm.addEventListener("submit", async function (e) {
     e.preventDefault(); // Evitar el comportamiento por defecto del formulario
-    
+
     // Recoger los valores de los campos de correo y contraseña
     const correo = document.getElementById("correo").value;
     const password = document.getElementById("password").value;
-    
+
     // Crear el objeto de datos a enviar al backend
     const loginData = { correo, password };
 
@@ -41,7 +41,31 @@ document.addEventListener("DOMContentLoaded", function() {
       alert("Hubo un problema al hacer la petición. Intenta de nuevo.");
     }
   });
+
+  const reason = localStorage.getItem('logout_reason');
+
+  if (reason === 'disabled') {
+    const errorDiv = document.getElementById('error-message');
+    if (errorDiv) {
+      errorDiv.textContent = '⚠️ Tu sesión fue cerrada porque tu cuenta fue desactivada.';
+      errorDiv.style.color = 'red';
+      errorDiv.style.textAlign = 'center';
+
+      const form = document.querySelector('.login-form');
+      if (form) {
+        form.addEventListener('input', () => {
+          errorDiv.textContent = '';
+        }, { once: true });
+      }
+    }
+
+    // Limpiar el motivo una vez mostrado
+    localStorage.removeItem('logout_reason');
+  }
 });
+
+
+
 
 function mostrarError(mensaje) {
   const errorDiv = document.getElementById('error-message');

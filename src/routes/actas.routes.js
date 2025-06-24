@@ -8,8 +8,8 @@ const { verifyToken } = require('../middlewares/auth.middleware');
 const { verificarAdmin } = require('../middlewares/admin.middleware')
 
 // Ruta para registrar una acta completa con cliente, equipo, inspecciones, adicionales y acta
-router.post('/', verifyToken, crearActaCompleta);
-router.get('/:id/pdf', verifyToken, getPDFActaPorId);
+router.post('/', crearActaCompleta);
+router.get('/:id/pdf', getPDFActaPorId);
 
 // ruta para visualizar las actas registradas en el dashboard
 router.get('/resumen', verificarAdmin, obtenerActasResumen);

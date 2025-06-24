@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-const jwt = require('jsonwebtoken'); // Asumiendo que usas JWT
+const jwt = require('jsonwebtoken');
 
 // Mapa para almacenar conexiones: { userId: Set<WebSocket> }
 const activeConnections = new Map();
@@ -8,21 +8,22 @@ function setupWebSocket(server) {
   const wss = new WebSocket.Server({ server, path: '/ws' });
 
   wss.on('connection', (ws, req) => {
-    // 1. Extraer token de la URL (ej: /ws?token=xxx)
     const token = new URL(req.url, `ws://${req.headers.host}`).searchParams.get('token');
 
     try {
-      // 2. Verificar token y extraer userId
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const userId = decoded.id;
 
-      // 3. Almacenar conexión
+      // Guardar conexión
       if (!activeConnections.has(userId)) {
         activeConnections.set(userId, new Set());
       }
       activeConnections.get(userId).add(ws);
 
-      // 4. Limpiar al cerrar conexión
+      // Confirmar conexión
+      ws.send(JSON.stringify({ type: 'connection_established' }));
+
+      // Limpiar al cerrar
       ws.on('close', () => {
         activeConnections.get(userId)?.delete(ws);
         if (activeConnections.get(userId)?.size === 0) {
@@ -30,12 +31,9 @@ function setupWebSocket(server) {
         }
       });
 
-      // 5. Opcional: Confirmar conexión exitosa
-      ws.send(JSON.stringify({ type: 'connection_established' }));
-
     } catch (error) {
       console.error('Conexión WS no autorizada:', error);
-      ws.close(4001, 'Autenticación fallida'); // Código 4001 = Unauthorized
+      ws.close(4001, 'Autenticación fallida');
     }
   });
 }
@@ -43,8 +41,17 @@ function setupWebSocket(server) {
 function forceDisconnect(userId) {
   if (activeConnections.has(userId)) {
     activeConnections.get(userId).forEach(ws => {
-      ws.close(4003, 'Usuario desactivado'); // Código 4003 = Forced disconnect
+      try {
+        // Enviar mensaje explícito antes de cerrar
+        ws.send(JSON.stringify({ type: 'forced_logout' }));
+      } catch (err) {
+        console.warn(`Error al enviar mensaje de logout al usuario ${userId}`, err);
+      }
+
+      // Luego cerrar conexión
+      ws.close(4003, 'Usuario desactivado');
     });
+
     activeConnections.delete(userId);
   }
 }

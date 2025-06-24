@@ -1,7 +1,6 @@
 const token = sessionStorage.getItem('token'); // o localStorage
 
 if (token) {
-    // Detecta si estás en local o producción y usa la URL correcta
     const wsBaseURL = window.location.hostname === 'localhost'
         ? 'ws://localhost:3000'
         : 'wss://copter-2-0-0.onrender.com';
@@ -15,10 +14,28 @@ if (token) {
     socket.onmessage = (event) => {
         try {
             const data = JSON.parse(event.data);
+
             if (data.type === 'connection_established') {
                 console.log('✅ Conexión WebSocket establecida');
             }
-            // Aquí podrías manejar otros tipos de mensajes si luego lo necesitas
+
+            if (data.type === 'forced_logout') {
+                console.warn('⛔ Usuario deshabilitado (mensaje explícito)');
+
+                // Guardamos el motivo para mostrar en el login
+                sessionStorage.setItem('logout_reason', 'disabled');
+
+                // Limpiamos la sesión
+                sessionStorage.removeItem('token');
+                sessionStorage.clear();
+
+                // Redireccionamos al login
+                window.location.href = '/index.html';
+
+                // Cerramos el socket manualmente
+                socket.close();
+            }
+
         } catch (err) {
             console.error('Error al parsear mensaje WebSocket:', err);
         }
@@ -27,13 +44,15 @@ if (token) {
     socket.onclose = (event) => {
         console.warn('🔴 WebSocket cerrado:', event.code, event.reason);
 
+        // En caso de que sí funcione el código de cierre
         if (event.code === 4003) {
-            // alert('Has sido desconectado porque tu cuenta fue desactivada.');
-
-            localStorage.removeItem('token');
+            sessionStorage.setItem('logout_reason', 'disabled');
+            sessionStorage.removeItem('token');
             sessionStorage.clear();
-
-            window.location.href = '/index.html';
+            // Esperar unos milisegundos antes de redirigir
+            setTimeout(() => {
+                window.location.href = '/index.html';
+            }, 100); // 100ms es suficiente
         }
     };
 
