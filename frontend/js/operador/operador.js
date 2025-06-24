@@ -33,7 +33,7 @@ document.addEventListener('click', function (e) {
   }
 });
 
-// Verificar si el usuario está logueado
+// Verificar si el usuario está logeado
 const token = sessionStorage.getItem('token');
 const rol = sessionStorage.getItem('rol');
 
@@ -79,4 +79,5 @@ const comentariosModal = document.getElementById('comentariosModal');
 const cerrarModal = document.getElementById('cerrarModal');
 
 // Aquí puedes seguir escribiendo el JS de tu página de operador
+
 console.log('Bienvenido Vendedor');

@@ -170,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
   };
+
   // --------------------- FUNCIÓN PARA CAMBIAR ESTADO ---------------------
   const cambiarEstadoUsuario = async (id, nuevoEstado) => {
     try {
@@ -186,7 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) throw new Error('Error al cambiar estado');
 
       const data = await res.json();
-      mostrarToast(`Estado cambiado a ${nuevoEstado}`, 'success');
+      
+      if(nuevoEstado == 'activo'){
+        mostrarToast(`Estado cambiado a ${nuevoEstado}`, 'success');
+      } else {
+        mostrarToast(`Estado cambiado a ${nuevoEstado}`, 'warning');
+      }
+      
       return data.usuario;
 
     } catch (error) {

@@ -24,7 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarTablaActas() {
     try {
-      const res = await fetch('/actas/resumen');
+      const token = sessionStorage.getItem('token');
+      const res = await fetch('/actas/resumen', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
       if (!res.ok) {
         const error = await res.json();
@@ -90,7 +95,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function verActa(id) {
     try {
-      const res = await fetch(`/actas/${id}`);
+      const token = sessionStorage.getItem('token'); // Obtener token
+      const res = await fetch(`/actas/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       const acta = await res.json();
       console.log('datos de las actas', acta);
 
@@ -179,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fechaUTC.getSeconds(),
         fechaUTC.getMilliseconds()
       );
-      
+
       // Filtro por fechas
       if (desdeDate && fechaActa < desdeDate) return false;
       if (hastaDate && fechaActa > hastaDate) return false;

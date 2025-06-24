@@ -89,11 +89,14 @@ body {
 .login-form p {
   color: #4b5563;
 }
-
+.header-div {
+  margin: 0 0 2rem 0;
+}
 .login-form__datos {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  border: none;
 }
 
 .login-form__datos label {
