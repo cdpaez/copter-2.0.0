@@ -28,7 +28,7 @@ if (token) {
         console.warn('🔴 WebSocket cerrado:', event.code, event.reason);
 
         if (event.code === 4003) {
-            alert('Has sido desconectado porque tu cuenta fue desactivada.');
+            // alert('Has sido desconectado porque tu cuenta fue desactivada.');
 
             localStorage.removeItem('token');
             sessionStorage.clear();
