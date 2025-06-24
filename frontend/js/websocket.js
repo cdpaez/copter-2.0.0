@@ -1,8 +1,12 @@
-// Asegúrate de tener el token válido antes de conectar
-const token = sessionStorage.getItem('token'); // o como manejes tu auth
+const token = sessionStorage.getItem('token'); // o localStorage
 
 if (token) {
-    const socket = new WebSocket(`ws://localhost:3000/ws?token=${token}`);
+    // Detecta si estás en local o producción y usa la URL correcta
+    const wsBaseURL = window.location.hostname === 'localhost'
+        ? 'ws://localhost:3000'
+        : 'wss://copter-2-0-0.onrender.com';
+
+    const socket = new WebSocket(`${wsBaseURL}/ws?token=${token}`);
 
     socket.onopen = () => {
         console.log('🟢 WebSocket conectado');
@@ -26,11 +30,9 @@ if (token) {
         if (event.code === 4003) {
             alert('Has sido desconectado porque tu cuenta fue desactivada.');
 
-            // Limpia la sesión (adaptar según cómo guardes tokens)
             localStorage.removeItem('token');
-            sessionStorage.clear(); // si usas sessionStorage también
+            sessionStorage.clear();
 
-            // Redirige al login (ajusta ruta si usas React Router)
             window.location.href = '/index.html';
         }
     };
