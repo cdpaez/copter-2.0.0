@@ -3,7 +3,7 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const ExcelJS = require('exceljs');
 const path = require('path');
-
+const { UniqueConstraintError, ValidationError } = require('sequelize');
 const { Equipo } = require('../../database/models');
 
 // Crear un nuevo producto
@@ -17,6 +17,15 @@ const anadirEquipos = async (req, res) => {
         producto: nuevoProducto
       });
   } catch (error) {
+    console.error('❌ Error al crear el equipo:', error);
+    if (error instanceof UniqueConstraintError) {
+      // Extraemos el campo o los campos que causaron el error
+      const campos = error.errors.map(e => e.path).join(', ');
+
+      return res.status(400).json({
+        mensaje: `Ya existe un producto con el mismo valor en: ${campos}`
+      });
+    }
     res.status(500).json(
       {
         mensaje: 'Error al crear el producto',
@@ -61,6 +70,7 @@ const obtenerEquiposPorId = async (req, res) => {
     });
 
   } catch (error) {
+    console.error('cual fue el error?', error);
     res.status(500).json({
       success: false,
       mensaje: 'Error al obtener el producto',
@@ -81,12 +91,32 @@ const actualizarEquipos = async (req, res) => {
       });
 
     if (actualizado) {
-      res.status(200).json({ mensaje: 'Producto actualizado correctamente' });
+      res.status(200).json(
+        {
+          mensaje: 'Producto actualizado correctamente'
+        }
+      );
     } else {
-      res.status(404).json({ mensaje: 'Producto no encontrado' });
+      res.status(404).json(
+        {
+          mensaje: 'Producto no encontrado'
+        }
+      );
     }
   } catch (error) {
-    res.status(500).json({ mensaje: 'Error al actualizar el producto', error: error.message });
+    if (error instanceof UniqueConstraintError) {
+      // Extraemos el campo o los campos que causaron el error
+      const campos = error.errors.map(e => e.path).join(', ');
+
+      return res.status(400).json({
+        mensaje: `Ya existe un producto con el mismo valor en: ${campos}`
+      });
+    }
+    res.status(500).json(
+      {
+        mensaje: 'Error al actualizar el producto', error: error.message
+      }
+    );
   }
 };
 

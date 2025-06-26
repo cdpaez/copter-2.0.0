@@ -54,10 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
       producto.modelo.toLowerCase().includes(termino) ||
       producto.precio.toString().includes(termino)
     );
-
+    paginaActual = 1;
     mostrarProductos(resultados);
   });
 
+  // paginacion
+  let paginaActual = 1;
+  const productosPorPagina = 10;
   // Función para mostrar productos (optimizada)
   const mostrarProductos = (productos) => {
     tablaProductos.innerHTML = ''; // Limpiar tabla
@@ -66,8 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
       tablaProductos.innerHTML = '<tr><td colspan="7">No se encontraron productos</td></tr>';
       return;
     }
-
-    productos.forEach(producto => {
+    // Calcular el rango de productos que se deben mostrar
+    const inicio = (paginaActual - 1) * productosPorPagina;
+    const fin = inicio + productosPorPagina;
+    const productosPagina = productos.slice(inicio, fin);
+    productosPagina.forEach(producto => {
       const fila = document.createElement('tr');
       fila.innerHTML = `
       <td>${producto.codigo_prd}</td>
@@ -94,6 +100,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reasignar eventos (importante después de filtrar)
     asignarEventosBotones();
+    mostrarPaginacion(productos);
+  };
+  // mostrar paginacion
+  const mostrarPaginacion = (productos) => {
+    const totalPaginas = Math.ceil(productos.length / productosPorPagina);
+    const contenedor = document.getElementById('paginacion');
+    contenedor.innerHTML = '';
+
+    for (let i = 1; i <= totalPaginas; i++) {
+      const btn = document.createElement('button');
+      btn.textContent = i;
+      if (i === paginaActual) {
+        btn.classList.add('activa');
+      }
+      btn.addEventListener('click', () => {
+        paginaActual = i;
+        mostrarProductos(productos);
+      });
+      contenedor.appendChild(btn);
+    }
   };
 
   // Función para asignar eventos a los botones (si no la tienes)
@@ -159,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (!respuesta.ok) {
-        throw new Error('Error al eliminar el producto');    
+        throw new Error('Error al eliminar el producto');
       }
 
       mostrarToast('✅ Producto eliminado correctamente', 'success');
@@ -288,12 +314,16 @@ document.addEventListener('DOMContentLoaded', () => {
       cargarProductos();
 
     } catch (error) {
+
       console.error('Error:', error);
       mostrarToast(`❌ ${error.message}`, 'error');
+    
     } finally {
+      
       loader.style.display = 'none';
       const btnGuardar = form.querySelector('button[type="submit"]');
       if (btnGuardar) btnGuardar.disabled = false;
+    
     }
   };
 

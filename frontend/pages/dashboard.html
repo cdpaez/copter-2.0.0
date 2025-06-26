@@ -64,6 +64,7 @@
             <button id="importar-datos">📦 Importar</button>
           </div>
           <div class="tabla-productos">
+
             <table>
               <thead>
                 <tr>
@@ -87,8 +88,9 @@
               <tbody>
               </tbody>
             </table>
-          </div>
 
+          </div>
+          <div id="paginacion" class="paginacion"></div>
           <!-- Modal para agregar/editar producto -->
           <div class="modal" id="modal-producto">
             <div class="modal-contenido">
@@ -141,7 +143,7 @@
           <div class="filtros-ventas">
             <input type="date" id="fecha-inicio" placeholder="Desde">
             <input type="date" id="fecha-fin" placeholder="Hasta">
-            <input type="text" id="buscador-ventas" placeholder="Buscar cliente, producto o vendedor">
+            <input type="text" id="buscador-ventas" placeholder="cliente, producto o vendedor">
             <!-- <button id="exportar-ventas">📁 Exportar</button> -->
           </div>
           <div class="tabla-actas">
@@ -152,7 +154,7 @@
                   <th>Fecha</th>
                   <th>Cliente</th>
                   <th>Equipo</th>
-                  <th>Usuario</th>
+                  <th>Vendedor</th>
                   <th>Forma de Pago</th>
                   <th>Precio</th>
                   <th>Acciones</th>

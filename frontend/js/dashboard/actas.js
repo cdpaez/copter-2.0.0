@@ -195,9 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (hastaDate && fechaActa > hastaDate) return false;
 
       // Filtro por texto (cliente, vendedor, producto)
-      const cliente = acta.Cliente?.nombre?.toLowerCase() || '';
-      const vendedor = acta.Usuario?.nombre?.toLowerCase() || '';
-      const producto = `${acta.Equipo?.marca || ''} ${acta.Equipo?.modelo || ''} ${acta.Equipo?.numero_serie || ''}`.toLowerCase();
+      const cliente = acta.cliente_nombre?.toLowerCase() || '';
+      const vendedor = acta.vendedor_nombre?.toLowerCase() || '';
+      const producto = `${acta.equipo_marca || ''} ${acta.equipo_modelo || ''} ${acta.equipo_numero_serie || ''}`.toLowerCase();
 
       if (
         !cliente.includes(busqueda) &&

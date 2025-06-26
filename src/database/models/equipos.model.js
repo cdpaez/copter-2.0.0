@@ -8,11 +8,14 @@ module.exports = (sequelize, DataTypes) => {
     codigo_prd: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'SIN-CODIGO'
+      unique: true
     },
     marca: DataTypes.STRING,
     modelo: DataTypes.STRING,
-    numero_serie: DataTypes.STRING,
+    numero_serie: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     procesador: DataTypes.STRING,
     tamano: DataTypes.STRING,
     disco: DataTypes.STRING,
