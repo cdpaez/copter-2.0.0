@@ -24,13 +24,15 @@ if (token) {
 
                 // Guardamos el motivo para mostrar en el login
                 sessionStorage.setItem('logout_reason', 'disabled');
-
                 // Limpiamos la sesión
                 sessionStorage.removeItem('token');
-                sessionStorage.clear();
+                sessionStorage.removeItem('rol');
+                sessionStorage.removeItem('usuarioId');
+                // sessionStorage.clear();
 
-                // Redireccionamos al login
-                window.location.href = '/index.html';
+                setTimeout(() => {
+                    window.location.href = '/index.html';
+                }, 100);
 
                 // Cerramos el socket manualmente
                 socket.close();
@@ -47,12 +49,15 @@ if (token) {
         // En caso de que sí funcione el código de cierre
         if (event.code === 4003) {
             sessionStorage.setItem('logout_reason', 'disabled');
+            // Limpiamos la sesión
             sessionStorage.removeItem('token');
-            sessionStorage.clear();
-            // Esperar unos milisegundos antes de redirigir
+            sessionStorage.removeItem('rol');
+            sessionStorage.removeItem('usuarioId');
+            // sessionStorage.clear();
+
             setTimeout(() => {
                 window.location.href = '/index.html';
-            }, 100); // 100ms es suficiente
+            }, 100);
         }
     };
 

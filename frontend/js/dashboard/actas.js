@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let detalle = `
       <p><strong>Fecha:</strong> ${new Date(acta.fecha_registro).toLocaleString()}</p>
-      <p><strong>Cliente:</strong> ${acta.cliente_nombre} - ${acta.cliente_cedula_ruc}</p>
+      <p><strong>Cliente:</strong> ${acta.cliente_nombre} - ${acta.cliente_cedula}</p>
       <p><strong>Equipo:</strong> ${acta.equipo_marca} ${acta.equipo_modelo} - Serie: ${acta.equipo_numero_serie}</p>
       <p><strong>Vendedor:</strong> ${acta.vendedor_nombre}</p>
       <p><strong>Forma de pago:</strong> ${acta.forma_pago}</p>

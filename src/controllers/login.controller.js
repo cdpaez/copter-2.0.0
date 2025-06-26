@@ -33,7 +33,7 @@ const login = async (req, res) => {
     // Compara la contraseña ingresada con el hash almacenado
     const match = await bcrypt.compare(password, usuario.password);
     if (!match) {
-      return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+      return res.status(401).json({ mensaje: 'Datos Incorrectos' });
     }
 
     // Comparamos la contraseña (esta parte la hacemos simple por ahora)

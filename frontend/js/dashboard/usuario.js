@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         mostrarToast(`Estado cambiado a ${nuevoEstado}`, 'warning');
       }
-      
+      console.log('data.usuario',data.usuario);
       return data.usuario;
 
     } catch (error) {

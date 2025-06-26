@@ -206,21 +206,6 @@ footer {
   background-color: #2980b9;
 }
 
-/* MODAL */
-#loader-modal {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #3498db;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
-}
-
 @keyframes spin {
   0% {
     transform: translate(-50%, -50%) rotate(0deg);
@@ -231,69 +216,6 @@ footer {
   }
 }
 
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  overflow-y: auto;
-}
-
-.modal-contenido {
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.modal-contenido h3 {
-  margin-bottom: 1rem;
-  color: #2c3e50;
-}
-
-.modal-contenido form input {
-  display: block;
-  width: 100%;
-  margin-bottom: 1rem;
-  padding: 0.5rem 0.8rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.acciones-modal {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-}
-
-.acciones-modal button {
-  padding: 0.5rem 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.acciones-modal button[type="submit"] {
-  background-color: #3498db;
-  color: white;
-}
-
-.acciones-modal .cerrar-modal {
-  background-color: #e74c3c;
-  color: white;
-}
 
 /* area ventas */
 .filtros-ventas {
@@ -360,6 +282,7 @@ footer {
   background-color: #d6eaf8;
   transition: background-color 0.3s ease;
 }
+
 .btn-editar,
 .btn-eliminar {
   border: none;
@@ -449,6 +372,7 @@ footer {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #ccc;
   text-align: left;
+  white-space: nowrap;
 }
 
 .tabla-usuarios tbody tr:hover {
@@ -485,93 +409,6 @@ footer {
 }
 
 /* area configuraciones */
-#configuracion form {
-  margin-top: 1rem;
-  background-color: #ecf0f1;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-#configuracion fieldset {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  background-color: #fff;
-}
-
-#configuracion legend {
-  font-weight: bold;
-  color: #2c3e50;
-  padding: 0 0.5rem;
-}
-
-#configuracion label {
-  display: block;
-  margin-top: 1rem;
-  font-weight: 500;
-  color: #2c3e50;
-}
-
-#configuracion input[type="text"],
-#configuracion input[type="password"],
-#configuracion input[type="number"],
-#configuracion select {
-  width: 100%;
-  padding: 0.6rem 0.8rem;
-  margin-top: 0.3rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  background-color: #fff;
-}
-
-#configuracion input[type="checkbox"] {
-  margin-right: 0.5rem;
-  transform: scale(1.2);
-}
-
-#configuracion button[type="submit"] {
-  background-color: #3498db;
-  color: white;
-  font-size: 1rem;
-  padding: 0.8rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-#configuracion button[type="submit"]:hover {
-  background-color: #2980b9;
-}
-
-#configuracion button[type="button"] {
-  background-color: #2c3e50;
-  color: white;
-  font-size: 0.9rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  margin-right: 0.5rem;
-  margin-top: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#configuracion button[type="button"]:hover {
-  background-color: #1a252f;
-}
-
-#configuracion button.reset {
-  background-color: #e74c3c;
-}
-
-#configuracion button.reset:hover {
-  background-color: #c0392b;
-}
 
 /* --- FOOTER --- */
 
@@ -696,20 +533,81 @@ footer {
   }
 }
 
-/* --- Responsive --- */
-/* @media (max-width: 768px) {
-  main {
-    flex-direction: column;
-  }
+/* gestion de modales */
+/* MODAL */
+#loader-modal {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  overflow-y: auto;
+}
 
-  .panel-lateral {
-    width: 100%;
-    flex-direction: row;
-    overflow-x: auto;
-  }
+.modal-contenido {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-height: 90vh;
+  overflow-y: auto;
+}
 
-  .panel-lateral button {
-    flex: 1;
-    text-align: center;
-  }
-} */
+.modal-contenido h3 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.modal-contenido form input {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.acciones-modal {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.acciones-modal button {
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.acciones-modal button[type="submit"] {
+  background-color: #3498db;
+  color: white;
+}
+
+.acciones-modal .cerrar-modal {
+  background-color: #e74c3c;
+  color: white;
+}

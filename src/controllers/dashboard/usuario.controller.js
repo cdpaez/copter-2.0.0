@@ -100,12 +100,14 @@ const cambiarEstado = async (req, res) => {
     }
 
     // 5. Respuesta exitosa
-    res.json({
-      success: true,
-      usuario,
-      mensaje: `Estado cambiado a ${estado}` +
-        (estado === 'inactivo' ? ' (usuario desconectado)' : '')
-    });
+    res.json(
+      {
+        success: true,
+        usuario,
+        mensaje: `Estado cambiado a ${estado}` +
+          (estado === 'inactivo' ? '(usuario desconectado)' : '')
+      }
+    );
 
   } catch (error) {
     console.error('Error al cambiar estado:', error);

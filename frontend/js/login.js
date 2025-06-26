@@ -41,39 +41,34 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("Hubo un problema al hacer la petición. Intenta de nuevo.");
     }
   });
-
-  const reason = localStorage.getItem('logout_reason');
+  // mensaje de desconexion
+  const reason = sessionStorage.getItem('logout_reason');
 
   if (reason === 'disabled') {
     const errorDiv = document.getElementById('error-message');
     if (errorDiv) {
-      errorDiv.textContent = '⚠️ Tu sesión fue cerrada porque tu cuenta fue desactivada.';
-      errorDiv.style.color = 'red';
-      errorDiv.style.textAlign = 'center';
+      errorDiv.textContent = '⚠️ cuenta desactivada.';
+      errorDiv.classList.add('mostrar'); // 👈 Aquí se activa la animación
 
       const form = document.querySelector('.login-form');
       if (form) {
         form.addEventListener('input', () => {
+          errorDiv.classList.remove('mostrar');
           errorDiv.textContent = '';
         }, { once: true });
       }
     }
 
-    // Limpiar el motivo una vez mostrado
-    localStorage.removeItem('logout_reason');
+    sessionStorage.removeItem('logout_reason');
   }
+  function mostrarError(mensaje) {
+    const errorDiv = document.getElementById('error-message');
+    errorDiv.textContent = mensaje;
+    errorDiv.classList.add('mostrar');
+
+    setTimeout(() => {
+      errorDiv.classList.remove('mostrar');
+    }, 3000); // 3 segundos visible
+  }
+
 });
-
-
-
-
-function mostrarError(mensaje) {
-  const errorDiv = document.getElementById('error-message');
-  errorDiv.textContent = mensaje;
-  errorDiv.classList.add('mostrar');
-
-  setTimeout(() => {
-    errorDiv.classList.remove('mostrar');
-  }, 3000); // 3 segundos visible
-}
-
