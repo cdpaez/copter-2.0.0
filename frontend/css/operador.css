@@ -13,7 +13,7 @@
 }
 
 header {
-  background: linear-gradient(to bottom right, #2563eb, #3730a3);
+  background: #2c3e50;
   color: white;
   padding: 1rem 2rem;
   font-size: clamp(1rem, 1.8vw, 3rem);
@@ -30,7 +30,7 @@ main {
 }
 
 footer {
-  background: linear-gradient(to bottom right, #2563eb, #3730a3);
+  background: #2c3e50;
   color: #f4f6f8;
   text-align: center;
   padding: 0.8rem;
@@ -40,7 +40,7 @@ footer {
 
 .panel-lateral {
   width: 240px;
-  background: linear-gradient(to bottom, #4F46E5 0%, #7C3AED 100%);
+  background: #2c3e50;
   color: white;
   padding: 1rem;
   display: flex;

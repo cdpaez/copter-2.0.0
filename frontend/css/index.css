@@ -27,7 +27,7 @@ body {
 }
 
 .info-face {
-  background: linear-gradient(to bottom right, #2563eb, #4f46e5);
+  background: #2c3e50;
   color: white;
   padding: 2rem;
   display: flex;
