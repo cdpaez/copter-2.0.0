@@ -1,5 +1,5 @@
+const e = require('cors');
 const { Cliente, Equipo, InspeccionHardware, InspeccionSoftware, Adicional, Acta, ActaHistorico, Usuario } = require('../../database/models');
-const actasHistorico = require('../../database/models/actasHistorico');
 const { generarPDFDesdeFormulario } = require('./pdf.controller')
 // funcion encargada de obtener los datos de la peticion http y enviar las respectivas respuestas
 const crearActaCompleta = async (req, res) => {
