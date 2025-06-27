@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.removeAttribute('data-id'); // Limpiar ID si existe
     document.getElementById('titulo-modal-producto').textContent = 'Agregar Nuevo Producto';
     document.getElementById('modal-producto').style.display = 'flex';
-    document.getElementById('stock').focus(); // Enfocar el primer campo
+    document.getElementById('codigo_prd').focus(); // Enfocar el primer campo
   };
   // 2. bloque encargado de obtener todos los productos de la base de datos
   let todosLosProductos = [];
@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const fila = document.createElement('tr');
       fila.innerHTML = `
       <td>${producto.codigo_prd}</td>
-      <td>${producto.stock}</td>
       <td>${producto.precio}</td>
       <td>${producto.marca}</td>
       <td>${producto.modelo}</td>
@@ -218,7 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 2. Poblar el formulario del modal
       document.getElementById('codigo_prd').value = producto.codigo_prd || 0;
-      document.getElementById('stock').value = producto.stock || 0;
       document.getElementById('precio').value = producto.precio || 0;
       document.getElementById('marca').value = producto.marca || '';
       document.getElementById('modelo').value = producto.modelo || '';
@@ -267,7 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Preparar datos
       const datos = {
         codigo_prd: form.codigo_prd.value,
-        stock: parseInt(form.stock.value),
         precio: parseFloat(form.precio.value),
         marca: form.marca.value.trim(),
         modelo: form.modelo.value.trim(),
@@ -282,8 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       // Validación adicional
-      if (datos.precio <= 0 || datos.stock < 0) {
-        throw new Error('Precio y stock deben ser valores positivos');
+      if (datos.precio <= 0) {
+        throw new Error('Precio debe ser un valor positivo');
       }
 
       // Configurar petición

@@ -69,7 +69,7 @@
               <thead>
                 <tr>
                   <th>codigo</th>
-                  <th>Stock</th>
+                  <!-- <th>Stock</th> -->
                   <th>Precio</th>
                   <th>Marca</th>
                   <th>Modelo</th>
@@ -80,8 +80,8 @@
                   <th>RAM</th>
                   <th>Tipo</th>
                   <th>Estado</th>
-                  <th>extras</th>
-                  <th>fecha</th>
+                  <th>Observaciones</th>
+                  <th>Fecha</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -101,7 +101,7 @@
 
               <form id="form-modal-producto" data-editando="false">
                 <input type="text" id="codigo_prd" name="codigo_prd" placeholder="codigo" min="0" max="50" required>
-                <input type="number" id="stock" name="stock" placeholder="stock" min="0" max="50" required>
+                <!-- <input type="number" id="stock" name="stock" placeholder="stock" min="0" max="50" required> -->
                 <input type="number" id="precio" name="precio" placeholder="precio" step="0.01" required>
                 <input type="text" id="marca" name="marca" placeholder="marca" required>
                 <input type="text" id="modelo" name="modelo" placeholder="modelo" required>
@@ -112,7 +112,7 @@
                 <input type="text" id="ram" name="ram" placeholder="ram" required>
                 <input type="text" id="tipo" name="tipo" placeholder="tipo" required>
                 <input type="text" id="estado" name="estado" placeholder="estado" required>
-                <input type="extras" id="extras" name="extras" placeholder="extras" required>
+                <input type="extras" id="extras" name="extras" placeholder="Observaciones" required>
 
                 <div class="acciones-modal">
                   <button type="submit">Guardar</button>

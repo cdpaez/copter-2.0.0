@@ -23,7 +23,10 @@ module.exports = (sequelize, DataTypes) => {
     tipo_equipo: DataTypes.STRING,
     estado: DataTypes.STRING,
     extras: DataTypes.STRING,
-    stock: DataTypes.INTEGER,
+    stock: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
+    },
     precio: DataTypes.DOUBLE,
     // Campo de fecha automática
     fecha: {
