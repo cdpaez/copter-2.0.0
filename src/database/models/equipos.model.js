@@ -24,8 +24,9 @@ module.exports = (sequelize, DataTypes) => {
     estado: DataTypes.STRING,
     extras: DataTypes.STRING,
     stock: {
-      type: DataTypes.INTEGER,
-      defaultValue: 1
+      type: DataTypes.ENUM('vendido', 'disponible'),
+      defaultValue: 'disponible',
+      allowNull: false
     },
     precio: DataTypes.DOUBLE,
     // Campo de fecha automática

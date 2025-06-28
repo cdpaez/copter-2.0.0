@@ -1,63 +1,103 @@
-const e = require('cors');
-const { Cliente, Equipo, InspeccionHardware, InspeccionSoftware, Adicional, Acta, ActaHistorico, Usuario } = require('../../database/models');
+const {
+  Cliente,
+  Equipo,
+  InspeccionHardware,
+  InspeccionSoftware,
+  Adicional,
+  Acta,
+  ActaHistorico,
+  Usuario } = require('../../database/models');
+
 const { generarPDFDesdeFormulario } = require('./pdf.controller')
 // funcion encargada de obtener los datos de la peticion http y enviar las respectivas respuestas
+// defino que la funcion crearActaCompleta pueda contener operaciones asincronas
 const crearActaCompleta = async (req, res) => {
-
-  console.log('FRONTEND ---> BACKEND', req.body);
 
   const t = await Cliente.sequelize.transaction();
 
   try {
-    const cliente = req.body.cliente;
-    const equipo = req.body.equipo;
-    const inspeccion_hw = req.body.inspeccion_hw;
-    const inspeccion_sw = req.body.inspeccion_sw;
-    const adicionales = req.body.adicionales;
-    const acta = req.body.acta;
-    const observaciones = req.body.observaciones;
+    // defininos los datos que llegan en la peticion desde el front
+    const {
+      cliente,
+      equipo,
+      equipo_detalle,
+      inspeccion_hw,
+      inspeccion_sw,
+      adicionales,
+      acta,
+      observaciones
+    } = req.body;
+
+    // bloque encargado de validar si ya existe un cliente o de crearlo en que caso de que no exista
+    let clienteExistente = await Cliente.findOne(
+      {
+        where: 
+        { 
+          cedula_ruc: cliente.cedula_ruc 
+        },
+        transaction: t
+      }
+    );
+
+    if (!clienteExistente) {
+
+      clienteExistente = await Cliente.create(
+        {
+          nombre: cliente.nombre,
+          cedula_ruc: cliente.cedula_ruc,
+          telefono: cliente.telefono,
+          correo: cliente.correo,
+          direccion: cliente.direccion
+        }, 
+        { 
+          transaction: t 
+        }
+      );
+    }
 
     if (!equipo || isNaN(equipo)) {
       throw new Error('ID de equipo inválido o no proporcionado');
     }
-
-    // bloque encargado de validar si ya existe un cliente o de crearlo en que caso de que no exista
-    let clienteExistente = await Cliente.findOne({
-      where: { cedula_ruc: cliente.cedula_ruc },
+    // Buscar y validar el equipo específico
+    const equipoExistente = await Equipo.findOne({
+      where: {
+        id: equipo,
+        marca: equipo_detalle.marca,
+        modelo: equipo_detalle.modelo,
+        numero_serie: equipo_detalle.numero_serie,
+        procesador: equipo_detalle.procesador,
+        tamano: equipo_detalle.tamano,
+        disco: equipo_detalle.disco,
+        memoria_ram: equipo_detalle.memoria_ram
+      },
       transaction: t
     });
 
-    if (!clienteExistente) {
-      clienteExistente = await Cliente.create({
-        nombre: cliente.nombre,
-        cedula_ruc: cliente.cedula_ruc,
-        telefono: cliente.telefono,
-        correo: cliente.correo,
-        direccion: cliente.direccion
-      }, { transaction: t });
-    }
-
-    // bloque encargado de validar si existe el equipo en la tabla equipos y tenga stock disponible
-    const equipoExistente = await Equipo.findByPk(equipo, { transaction: t });
-
     if (!equipoExistente) {
-      throw new Error('El equipo seleccionado no existe');
+      throw new Error('El equipo no existe o los detalles no coinciden');
     }
 
-    if (equipoExistente.stock == 0) {
-      await t.rollback();
-      return res.status(400).json({
-        error: `No hay stock disponible para el equipo "${equipoExistente.marca} - ${equipoExistente.numero_serie}".`
-      });
-    }
+    // Eliminar el equipo físicamente
+    await equipoExistente.destroy({ transaction: t });
 
-    equipoExistente.stock = equipoExistente.stock - 1;
-    await equipoExistente.save({ transaction: t });
+    // Contar equipos restantes similares para advertencia
+    const equiposRestantes = await Equipo.count({
+      where: {
+        marca: equipo_detalle.marca,
+        modelo: equipo_detalle.modelo,
+        procesador: equipo_detalle.procesador,
+        tamano: equipo_detalle.tamano,
+        disco: equipo_detalle.disco,
+        memoria_ram: equipo_detalle.memoria_ram
+      },
+      transaction: t
+    });
 
     let advertenciaStock = null;
-    if (equipoExistente.stock <= 5) {
-      advertenciaStock = `Solo quedan ${equipoExistente.stock} unidades del equipo ${equipoExistente.marca} - ${equipoExistente.numero_serie}.`;
+    if (equiposRestantes <= 5) {
+      advertenciaStock = `¡Atención! Solo quedan ${equiposRestantes} equipos ${equipo_detalle.marca} ${equipo_detalle.modelo} en inventario.`;
     }
+
     // bloque encargado de agregar el usuario operador a la transaccion
     const usuario = await Usuario.findByPk(acta.usuario_id, { transaction: t });
 

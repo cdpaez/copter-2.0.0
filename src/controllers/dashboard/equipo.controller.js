@@ -123,32 +123,36 @@ const actualizarEquipos = async (req, res) => {
 
 // Eliminar un producto
 const eliminarEquipos = async (req, res) => {
+  console.log('Iniciando proceso de eliminación de equipo');
 
   try {
-
     const { id } = req.params;
-    const eliminado = await Equipo.destroy(
-      {
-        where: { id }
-      });
+    console.log(`ID recibido para eliminar: ${id}`);
+
+    console.log('Ejecutando consulta de eliminación en la base de datos...');
+    const eliminado = await Equipo.destroy({
+      where: { id }
+    });
 
     if (eliminado) {
-      res.status(200).json(
-        {
-          mensaje: 'Producto eliminado correctamente'
-        });
+      console.log(`Equipo con ID ${id} eliminado correctamente`);
+      res.status(200).json({
+        mensaje: 'Producto eliminado correctamente'
+      });
     } else {
-      res.status(404).json(
-        {
-          mensaje: 'Producto no encontrado'
-        });
+      console.log(`No se encontró equipo con ID ${id}`);
+      res.status(404).json({
+        mensaje: 'Producto no encontrado'
+      });
     }
   } catch (error) {
-    console.log(`sucedio el siguiente error al intentar eliminar un usuario: ${error.message}`)
-    res.status(500).json(
-      {
-        mensaje: 'Error al eliminar el producto'
-      });
+    console.error(`Error al intentar eliminar un equipo: ${error.message}`);
+    console.error('Stack trace:', error.stack);
+    res.status(500).json({
+      mensaje: 'Error al eliminar el producto'
+    });
+  } finally {
+    console.log('Proceso de eliminación finalizado');
   }
 };
 
