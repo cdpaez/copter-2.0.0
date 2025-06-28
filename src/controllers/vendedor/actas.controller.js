@@ -31,9 +31,9 @@ const crearActaCompleta = async (req, res) => {
     // bloque encargado de validar si ya existe un cliente o de crearlo en que caso de que no exista
     let clienteExistente = await Cliente.findOne(
       {
-        where: 
-        { 
-          cedula_ruc: cliente.cedula_ruc 
+        where:
+        {
+          cedula_ruc: cliente.cedula_ruc
         },
         transaction: t
       }
@@ -48,16 +48,13 @@ const crearActaCompleta = async (req, res) => {
           telefono: cliente.telefono,
           correo: cliente.correo,
           direccion: cliente.direccion
-        }, 
-        { 
-          transaction: t 
+        },
+        {
+          transaction: t
         }
       );
     }
 
-    if (!equipo || isNaN(equipo)) {
-      throw new Error('ID de equipo inválido o no proporcionado');
-    }
     // Buscar y validar el equipo específico
     const equipoExistente = await Equipo.findOne({
       where: {
@@ -77,25 +74,30 @@ const crearActaCompleta = async (req, res) => {
       throw new Error('El equipo no existe o los detalles no coinciden');
     }
 
-    // Eliminar el equipo físicamente
-    await equipoExistente.destroy({ transaction: t });
+    if (equipoExistente.stock === 'vendido') {
+      throw new Error('Este equipo ya ha sido vendido y no puede ser registrado nuevamente.');
+    }
 
-    // Contar equipos restantes similares para advertencia
-    const equiposRestantes = await Equipo.count({
+    // Marcar como vendido
+    await equipoExistente.update({ stock: 'vendido' }, { transaction: t });
+
+    // Verificar stock restante con las mismas características
+    const stockDisponible = await Equipo.count({
       where: {
         marca: equipo_detalle.marca,
         modelo: equipo_detalle.modelo,
         procesador: equipo_detalle.procesador,
         tamano: equipo_detalle.tamano,
         disco: equipo_detalle.disco,
-        memoria_ram: equipo_detalle.memoria_ram
+        memoria_ram: equipo_detalle.memoria_ram,
+        stock: 'disponible'
       },
       transaction: t
     });
 
     let advertenciaStock = null;
-    if (equiposRestantes <= 5) {
-      advertenciaStock = `¡Atención! Solo quedan ${equiposRestantes} equipos ${equipo_detalle.marca} ${equipo_detalle.modelo} en inventario.`;
+    if (stockDisponible <= 5) {
+      advertenciaStock = `¡Atención! Solo quedan ${stockDisponible} equipos ${equipo_detalle.marca} ${equipo_detalle.modelo} en inventario.`;
     }
 
     // bloque encargado de agregar el usuario operador a la transaccion

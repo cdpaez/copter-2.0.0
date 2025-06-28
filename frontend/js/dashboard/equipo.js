@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. bloque encargado de búsqueda en tiempo real
   document.getElementById('buscador-productos').addEventListener('input', (e) => {
+    // Obtener valores de cada input y pasarlos a minúscula para hacer la búsqueda case insensitive
     const termino = e.target.value.toLowerCase().trim();
 
     if (!termino) {
@@ -50,14 +51,46 @@ document.addEventListener('DOMContentLoaded', () => {
     // Filtrar productos
     const resultados = todosLosProductos.filter(producto =>
       producto.codigo_prd.toLowerCase().includes(termino) ||
-      producto.marca.toLowerCase().includes(termino) ||
-      producto.modelo.toLowerCase().includes(termino) ||
+      // producto.marca.toLowerCase().includes(termino) ||
+      // producto.modelo.toLowerCase().includes(termino) ||
       producto.precio.toString().includes(termino)
     );
+
     paginaActual = 1;
     mostrarProductos(resultados);
   });
 
+  function filtrarProductos() {
+    // Obtener valores de cada input y pasarlos a minúscula para hacer la búsqueda case insensitive
+    const marca = document.getElementById('filtroMarca').value.toLowerCase();
+    const modelo = document.getElementById('filtroModelo').value.toLowerCase();
+    const procesador = document.getElementById('filtroProcesador').value.toLowerCase();
+    const tamano = document.getElementById('filtroTamano').value.toLowerCase();
+    const disco = document.getElementById('filtroDisco').value.toLowerCase();
+    const ram = document.getElementById('filtroRam').value.toLowerCase();
+
+    // Filtrar con todas las condiciones, ignorando filtros vacíos
+    const resultadosAvanzados = todosLosProductos.filter(producto => {
+      return (
+        (marca === '' || producto.marca.toLowerCase().includes(marca)) &&
+        (modelo === '' || producto.modelo.toLowerCase().includes(modelo)) &&
+        (procesador === '' || producto.procesador.toLowerCase().includes(procesador)) &&
+        (tamano === '' || producto.tamano.toString().includes(tamano)) &&
+        (disco === '' || producto.disco.toLowerCase().includes(disco)) &&
+        (ram === '' || producto.memoria_ram.toLowerCase().includes(ram))
+      );
+    });
+    paginaActual = 1;
+    mostrarProductos(resultadosAvanzados);
+    mostrarContador(resultadosAvanzados.length);
+  }
+  function mostrarContador(cantidad) {
+    const contador = document.getElementById('contadorResultados');
+    contador.textContent = `${cantidad} resultados encontrados`;
+  }
+  document.querySelectorAll('.busqueda-avanzada input').forEach(input => {
+    input.addEventListener('input', filtrarProductos);
+  });
   // paginacion
   let paginaActual = 1;
   const productosPorPagina = 10;
@@ -315,13 +348,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       console.error('Error:', error);
       mostrarToast(`❌ ${error.message}`, 'error');
-    
+
     } finally {
-      
+
       loader.style.display = 'none';
       const btnGuardar = form.querySelector('button[type="submit"]');
       if (btnGuardar) btnGuardar.disabled = false;
-    
+
     }
   };
 
@@ -430,4 +463,27 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   // Cargar productos al iniciar
   cargarProductos();
+
+  const dialogo = document.getElementById("dialogoBusqueda");
+  const abrir = document.getElementById("abrirDialogo");
+  const cerrar = document.getElementById("cerrarDialogo");
+
+  abrir.addEventListener("click", () => {
+    dialogo.showModal();
+  });
+
+  cerrar.addEventListener("click", () => {
+    dialogo.close();
+  });
+  // Cerrar al hacer clic fuera del contenido
+  dialogo.addEventListener("click", (e) => {
+    const rect = dialogo.getBoundingClientRect();
+    const clickedOutside =
+      e.clientX < rect.left || e.clientX > rect.right ||
+      e.clientY < rect.top || e.clientY > rect.bottom;
+
+    if (clickedOutside) {
+      dialogo.close();
+    }
+  });
 });

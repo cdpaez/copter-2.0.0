@@ -127,6 +127,7 @@ footer {
   flex: 1;
   border: 1px solid #ccc;
   border-radius: 6px;
+  width: 70%;
 }
 
 .barra-productos button {
@@ -141,6 +142,77 @@ footer {
 
 .barra-productos button:hover {
   background-color: #1a252f;
+}
+
+/* modal para busqueda avanzada */
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Fondo semitransparente */
+}
+
+dialog {
+  border: none;
+  border-radius: 8px;
+  padding: 1rem;
+  max-width: 700px;
+  width: 90%;
+  margin: 2% auto auto auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.busqueda-avanzada {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.busqueda-avanzada__inputs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+}
+
+.busqueda-avanzada__inputs input {
+  padding: .2rem .8rem;
+  width: 100px;
+}
+
+.busqueda-avanzada__interacciones {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+}
+
+#contadorResultados {
+  background-color: #e0f7fa;
+  color: #006064;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+#cerrarDialogo {
+  background-color: #ff5252;
+  color: white;
+  border: none;
+  padding: 0.2rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
+}
+
+#cerrarDialogo:hover {
+  background-color: #e53935;
 }
 
 .tabla-productos {
@@ -548,6 +620,7 @@ footer {
   height: 20px;
   animation: spin 1s linear infinite;
 }
+
 .modal {
   position: fixed;
   top: 0;

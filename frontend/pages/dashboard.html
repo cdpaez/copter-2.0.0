@@ -59,10 +59,33 @@
           <h2>📦 Equipos en Stock</h2>
           <!-- Filtros y botón agregar -->
           <div class="barra-productos">
-            <input type="text" id="buscador-productos" placeholder="Buscar producto...">
+            <input type="text" id="buscador-productos" placeholder="codigo o precio">
+            <button id="abrirDialogo">Abrir búsqueda avanzada</button>
             <button id="abrir-modal">➕ Agregar producto</button>
             <button id="importar-datos">📦 Importar</button>
           </div>
+          <dialog id="dialogoBusqueda">
+            <div class="busqueda-avanzada">
+              <div class="busqueda-avanzada__inputs">
+                <input type="text" placeholder="Marca" id="filtroMarca" />
+                <input type="text" placeholder="Modelo" id="filtroModelo" />
+                <input type="text" placeholder="Procesador" id="filtroProcesador" />
+                <input type="text" placeholder="Tamano" id="filtroTamano" />
+                <input type="text" placeholder="Disco" id="filtroDisco" />
+                <input type="text" placeholder="Ram" id="filtroRam" />
+              </div>
+              <div class="busqueda-avanzada__interacciones">
+                <p id="contadorResultados">0 resultados encontrados</p>
+
+                <button id="cerrarDialogo">Cerrar</button>
+              </div>
+
+
+
+
+            </div>
+          </dialog>
+
           <div class="tabla-productos">
 
             <table>
