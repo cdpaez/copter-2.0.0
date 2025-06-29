@@ -51,14 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Filtrar productos
     const resultados = todosLosProductos.filter(producto =>
       producto.codigo_prd.toLowerCase().includes(termino) ||
-      // producto.marca.toLowerCase().includes(termino) ||
-      // producto.modelo.toLowerCase().includes(termino) ||
       producto.precio.toString().includes(termino)
     );
 
     paginaActual = 1;
     mostrarProductos(resultados);
   });
+  // bandera para ejecutar la busqueda
+  let busquedaAvanzadaRealizada = false;
 
   function filtrarProductos() {
     // Obtener valores de cada input y pasarlos a minúscula para hacer la búsqueda case insensitive
@@ -80,17 +80,61 @@ document.addEventListener('DOMContentLoaded', () => {
         (ram === '' || producto.memoria_ram.toLowerCase().includes(ram))
       );
     });
+    // Contar disponibilidad
+    const disponibles = resultadosAvanzados.filter(p => p.stock === 'disponible').length;
+    const vendidos = resultadosAvanzados.filter(p => p.stock === 'vendido').length;
+    const total = resultadosAvanzados.length;
+
+    busquedaAvanzadaRealizada = true;
     paginaActual = 1;
     mostrarProductos(resultadosAvanzados);
-    mostrarContador(resultadosAvanzados.length);
+    mostrarContador(total, disponibles, vendidos);
   }
-  function mostrarContador(cantidad) {
-    const contador = document.getElementById('contadorResultados');
-    contador.textContent = `${cantidad} resultados encontrados`;
+  function mostrarContador(total, disponibles, vendidos) {
+    document.getElementById('contadorResultados').textContent = `${total} resultados encontrados`;
+    document.getElementById('contadorDisponibles').textContent = `${disponibles} Disponibles`;
+    document.getElementById('contadorVendidos').textContent = `${vendidos} Vendidos`;
   }
+
   document.querySelectorAll('.busqueda-avanzada input').forEach(input => {
     input.addEventListener('input', filtrarProductos);
   });
+
+  // Función para limpiar la búsqueda
+  function limpiarBusqueda() {
+
+    if (!busquedaAvanzadaRealizada) {
+      console.log('No se ha realizado una búsqueda avanzada, nada que limpiar.');
+      return;
+    }
+    console.log('Limpiando búsqueda...');
+
+    // Obtener todos los inputs de búsqueda
+    const inputs = document.querySelectorAll('.busqueda-avanzada input');
+
+    // Limpiar cada input
+    inputs.forEach(input => {
+      input.value = '';
+      console.log(`Input ${input.id} limpiado`);
+    });
+
+    // Mostrar todos los productos sin filtros
+    paginaActual = 1;
+    mostrarProductos(todosLosProductos);
+
+    // Actualizar contadores con todos los productos
+    const disponibles = todosLosProductos.filter(p => p.stock === 'disponible').length;
+    const vendidos = todosLosProductos.filter(p => p.stock === 'vendido').length;
+    const total = todosLosProductos.length;
+
+    mostrarContador(total, disponibles, vendidos);
+    busquedaAvanzadaRealizada = false;
+    console.log('Búsqueda limpiada, mostrando todos los productos');
+  }
+
+  // Asignar evento al botón Limpiar
+  document.getElementById('limpiarBusqueda').addEventListener('click', limpiarBusqueda);
+
   // paginacion
   let paginaActual = 1;
   const productosPorPagina = 10;
@@ -106,11 +150,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const inicio = (paginaActual - 1) * productosPorPagina;
     const fin = inicio + productosPorPagina;
     const productosPagina = productos.slice(inicio, fin);
+
     productosPagina.forEach(producto => {
       const fila = document.createElement('tr');
+      // Determinar la clase según el valor del stock
+      const claseStock = producto.stock.toLowerCase() === 'disponible' ? 'stock-disponible' : 'stock-vendido';
       fila.innerHTML = `
       <td>${producto.codigo_prd}</td>
-      <td>${producto.stock}</td>
+      <td class="${claseStock}">${producto.stock}</td>
       <td>${producto.precio}</td>
       <td>${producto.marca}</td>
       <td>${producto.modelo}</td>

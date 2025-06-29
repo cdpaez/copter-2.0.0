@@ -144,6 +144,24 @@ footer {
   background-color: #1a252f;
 }
 
+/* Estilo para stock disponible */
+.stock-disponible {
+  background-color: #d4edda;
+  /* Verde claro */
+  color: #155724;
+  /* Verde oscuro */
+  font-weight: bold;
+}
+
+/* Estilo para stock vendido */
+.stock-vendido {
+  background-color: #f8d7da;
+  /* Rojo claro */
+  color: #721c24;
+  /* Rojo oscuro */
+  font-weight: bold;
+}
+
 /* modal para busqueda avanzada */
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.4);
@@ -187,7 +205,7 @@ dialog {
   gap: .5rem;
 }
 
-#contadorResultados {
+#contadorResultados, #contadorDisponibles, #contadorVendidos {
   background-color: #e0f7fa;
   color: #006064;
   font-weight: bold;
@@ -200,7 +218,7 @@ dialog {
 }
 
 #cerrarDialogo {
-  background-color: #ff5252;
+  background-color: #d37474;
   color: white;
   border: none;
   padding: 0.2rem 1rem;
@@ -212,7 +230,22 @@ dialog {
 }
 
 #cerrarDialogo:hover {
-  background-color: #e53935;
+  background-color: #cf2825;
+}
+#limpiarBusqueda {
+  background-color: #6d91bb;
+  color: white;
+  border: none;
+  padding: 0.2rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
+}
+
+#limpiarBusqueda:hover {
+  background-color: #134772;
 }
 
 .tabla-productos {
