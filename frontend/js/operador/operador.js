@@ -77,7 +77,3 @@ function cerrarSesion() {
 const comentariosBtn = document.getElementById('comentariosBtn');
 const comentariosModal = document.getElementById('comentariosModal');
 const cerrarModal = document.getElementById('cerrarModal');
-
-// Aquí puedes seguir escribiendo el JS de tu página de operador
-
-console.log('Bienvenido Vendedor');

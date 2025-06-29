@@ -8,7 +8,7 @@ if (token) {
     const socket = new WebSocket(`${wsBaseURL}/ws?token=${token}`);
 
     socket.onopen = () => {
-        console.log('🟢 WebSocket conectado');
+        
     };
 
     socket.onmessage = (event) => {

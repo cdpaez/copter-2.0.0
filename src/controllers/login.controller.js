@@ -27,8 +27,6 @@ const login = async (req, res) => {
     if (usuario.estado === 'inactivo') {
       return res.status(403).json({ mensaje: 'Tu cuenta está desactivada.' });
     }
-    
-    console.log(usuario.get({ plain: true }));
 
     // Compara la contraseña ingresada con el hash almacenado
     const match = await bcrypt.compare(password, usuario.password);
@@ -36,17 +34,7 @@ const login = async (req, res) => {
       return res.status(401).json({ mensaje: 'Datos Incorrectos' });
     }
 
-    // Comparamos la contraseña (esta parte la hacemos simple por ahora)
-    // if (usuario.password !== password) {
-
-    //   return res.status(401).json(
-    //     {
-    //       mensaje: 'Contraseña incorrecta'
-    //     });
-    // }
-    // si pasa esas dos validaciones quiere decir que el usuario existe y que la contrasena es correcta
     // aqui es cuando se mapea el como se obtiene los datos de la peticion GET
-
     const userMapped = mapperUserLogin(usuario);
 
     // Generamos el token JWT (podemos incluir el id y rol si es necesario)

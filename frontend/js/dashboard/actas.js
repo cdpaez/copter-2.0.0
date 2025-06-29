@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const actas = await res.json();
-      console.log('actas backend ---> frontend', actas);
       if (!Array.isArray(actas)) {
         console.error('Respuesta inválida:', actas);
         alert('❌ La respuesta del servidor no es válida');

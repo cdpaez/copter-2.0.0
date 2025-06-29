@@ -40,9 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(url);
       const data = await res.json();
 
-      // debug
-      console.log('chart1 backend ---> frontend',data);
-
       if (!data.ok) throw new Error(data.error || 'No se pudo cargar la información');
 
       if (data.datos.length === 0) {

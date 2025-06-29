@@ -21,12 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const respuesta = await fetch('/equipos/obtener');
-      console.log('respuesta cruda', respuesta);
       if (!respuesta.ok) throw new Error('Error al obtener productos');
 
 
       todosLosProductos = await respuesta.json(); // Guardamos todos los productos
-      console.log('respuesta en JSON', todosLosProductos)
 
       mostrarProductos(todosLosProductos); // Mostramos todos inicialmente
 

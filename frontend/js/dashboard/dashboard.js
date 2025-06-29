@@ -74,6 +74,3 @@ function cerrarSesion() {
     }
   });
 }
-
-// Aquí puedes seguir escribiendo el JS de tu dashboard
-console.log('Bienvenido al Dashboard');
