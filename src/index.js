@@ -12,7 +12,7 @@ const { setupWebSocket } = require('./services/websocket');
     await sequelize.authenticate();
     console.log('✅ Conexión a la base de datos exitosa');
 
-    await sequelize.sync({ force: false });
+    await sequelize.sync();
     console.log('📦 Tablas sincronizadas');
 
     const server = app.listen(PORT, () => {
