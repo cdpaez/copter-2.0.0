@@ -154,7 +154,7 @@ const generarPDFDesdeFormulario = async (datos) => {
     } else {
       const notaY_sw = startY_sw - 3 * lineHeight_sw - 2;
 
-      page.drawText(`Nota: no se agrego ninguna nota este producto}`, {
+      page.drawText(`Nota: no se agrego ninguna nota este producto`, {
         x: col1X_sw,
         y: notaY_sw,
         size: fontSize_sw,
