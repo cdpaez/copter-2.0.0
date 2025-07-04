@@ -176,6 +176,7 @@ const crearActaCompleta = async (req, res) => {
       cliente_direccion: clienteExistente.direccion,
 
       // Equipo
+      equipo_codigo_prd: equipoExistente.codigo_prd,
       equipo_marca: equipoExistente.marca,
       equipo_modelo: equipoExistente.modelo,
       equipo_numero_serie: equipoExistente.numero_serie,

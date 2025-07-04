@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // paginacion
   let paginaActual = 1;
-  const productosPorPagina = 10;
+  const productosPorPagina = 20;
   // Función para mostrar productos (optimizada)
   const mostrarProductos = (productos) => {
     tablaProductos.innerHTML = ''; // Limpiar tabla

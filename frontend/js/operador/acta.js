@@ -137,6 +137,7 @@ function obtenerAdicionales(form) {
   };
 }
 
+// bloque encargado de capturar y enviar la informacion del acta
 document.getElementById('actaForm').addEventListener('submit', async (e) => {
 
   e.preventDefault();
@@ -159,6 +160,7 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
     },
     equipo: parseInt(form.equipo_id.value),
     equipo_detalle: { // ← solo para generar el PDF
+      codigo_prd: form.codigo_prd.value,
       marca: form.marca.value,
       modelo: form.modelo.value,
       numero_serie: form.numero_serie.value,
@@ -232,6 +234,7 @@ document.getElementById('actaForm').addEventListener('submit', async (e) => {
 const buscarInput = document.getElementById('buscar-equipo');
 const resultados = document.getElementById('resultados');
 const inputEquipoId = document.getElementById('equipo_id');
+const inputCodigoPrd = document.getElementById('codigo_prd');
 
 let timeout;
 
@@ -275,8 +278,10 @@ buscarInput.addEventListener('input', () => {
           document.querySelector('[name="estado"]').value = item.estado;
           document.querySelector('[name="extras"]').value = item.extras;
 
-          inputEquipoId.value = item.id;
 
+          inputEquipoId.value = item.id;
+          inputCodigoPrd.value = item.codigo_prd;
+          
           resultados.innerHTML = '';
           buscarInput.value = `${item.marca} - ${item.codigo_prd}`;
         });

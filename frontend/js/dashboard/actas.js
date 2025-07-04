@@ -76,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
       <tr>
         <td>${acta.id}</td>
         <td>${new Date(acta.fecha_registro).toLocaleDateString()}</td>
-        <td>${acta.cliente_nombre || 'Sin cliente'}</td>
-        <td>${acta.equipo_marca || ''} ${acta.equipo_modelo || ''} - ${acta.equipo_numero_serie || ''}</td>
+        <td>${acta.cliente_nombre || 'Sin cliente'} - ${acta.cliente_cedula || 'Sin cedula'}</td>
+        <td>${acta.equipo_marca || ''} ${acta.equipo_modelo || ''} - ${acta.equipo_codigo_prd || 'sin codigo'}</td>
         <td>${acta.vendedor_nombre || ''}</td>
         <td>${acta.forma_pago}</td>
         <td>$${Number(acta.precio).toFixed(2)}</td>
@@ -118,14 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       <h3>Inspección de Hardware</h3>
       <ul>
-        <li>Teclado: ${booleanToCheckIcon(hw.teclado_estado)} — ${hw.teclado_observacion || 'Ninguna'}</li>
-        <li>Mouse: ${booleanToCheckIcon(hw.mouse_estado)} — ${hw.mouse_observacion || 'Ninguna'}</li>
-        <li>Cámara: ${booleanToCheckIcon(hw.camara_estado)} — ${hw.camara_observacion || 'Ninguna'}</li>
-        <li>Pantalla: ${booleanToCheckIcon(hw.pantalla_estado)} — ${hw.pantalla_observacion || 'Ninguna'}</li>
-        <li>Parlantes: ${booleanToCheckIcon(hw.parlantes_estado)} — ${hw.parlantes_observacion || 'Ninguna'}</li>
-        <li>Batería: ${booleanToCheckIcon(hw.bateria_estado)} — ${hw.bateria_observacion || 'Ninguna'}</li>
-        <li>Carcasa: ${booleanToCheckIcon(hw.carcasa_estado)} — ${hw.carcasa_observacion || 'Ninguna'}</li>
-        <li>Cargador: ${booleanToCheckIcon(hw.cargador_estado)} — ${hw.cargador_observacion || 'Ninguna'}</li>
+        <li>Teclado: ${booleanToCheckIcon(hw.teclado_estado)} — ${hw.teclado_observacion || 'aprobado'}</li>
+        <li>Mouse: ${booleanToCheckIcon(hw.mouse_estado)} — ${hw.mouse_observacion || 'aprobado'}</li>
+        <li>Cámara: ${booleanToCheckIcon(hw.camara_estado)} — ${hw.camara_observacion || 'aprobado'}</li>
+        <li>Pantalla: ${booleanToCheckIcon(hw.pantalla_estado)} — ${hw.pantalla_observacion || 'aprobado'}</li>
+        <li>Parlantes: ${booleanToCheckIcon(hw.parlantes_estado)} — ${hw.parlantes_observacion || 'aprobado'}</li>
+        <li>Batería: ${booleanToCheckIcon(hw.bateria_estado)} — ${hw.bateria_observacion || 'aprobado'}</li>
+        <li>Carcasa: ${booleanToCheckIcon(hw.carcasa_estado)} — ${hw.carcasa_observacion || 'aprobado'}</li>
+        <li>Cargador: ${booleanToCheckIcon(hw.cargador_estado)} — ${hw.cargador_observacion || 'aprobado'}</li>
       </ul>
 
       <h3>Inspección de Software</h3>
@@ -141,12 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       <h3>Adicionales</h3>
       <ul>
-        <li>Mouse: ${booleanToCheckIcon(ad.mouse_estado)} — ${ad.mouse_observacion || 'Ninguna'}</li>
-        <li>Mochila: ${booleanToCheckIcon(ad.mochila_estado)} — ${ad.mochila_observacion || 'Ninguna'}</li>
-        <li>Estuche: ${booleanToCheckIcon(ad.estuche_estado)} — ${ad.estuche_observacion || 'Ninguna'}</li>
-        <li>Software 1: ${booleanToCheckIcon(ad.software1_estado)} — ${ad.software1_observacion || 'Ninguna'}</li>
-        <li>Software 2: ${booleanToCheckIcon(ad.software2_estado)} — ${ad.software2_observacion || 'Ninguna'}</li>
-        <li>Software 3: ${booleanToCheckIcon(ad.software3_estado)} — ${ad.software3_observacion || 'Ninguna'}</li>
+        <li>Mouse: ${booleanToCheckIcon(ad.mouse_estado)} — ${ad.mouse_observacion || 'No aplica'}</li>
+        <li>Mochila: ${booleanToCheckIcon(ad.mochila_estado)} — ${ad.mochila_observacion || 'No aplica'}</li>
+        <li>Estuche: ${booleanToCheckIcon(ad.estuche_estado)} — ${ad.estuche_observacion || 'No aplica'}</li>
+        <li>Software 1: ${booleanToCheckIcon(ad.software1_estado)} — ${ad.software1_observacion || 'No aplica'}</li>
+        <li>Software 2: ${booleanToCheckIcon(ad.software2_estado)} — ${ad.software2_observacion || 'No aplica'}</li>
+        <li>Software 3: ${booleanToCheckIcon(ad.software3_estado)} — ${ad.software3_observacion || 'No aplica'}</li>
       </ul>
       <button id="descargarActaPDF" style="margin-top: 1rem;">Descargar PDF generado</button>
       `;
@@ -194,9 +194,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (hastaDate && fechaActa > hastaDate) return false;
 
       // Filtro por texto (cliente, vendedor, producto)
-      const cliente = acta.cliente_nombre?.toLowerCase() || '';
+      const cliente = acta.cliente_cedula || '';
       const vendedor = acta.vendedor_nombre?.toLowerCase() || '';
-      const producto = `${acta.equipo_marca || ''} ${acta.equipo_modelo || ''} ${acta.equipo_numero_serie || ''}`.toLowerCase();
+      const producto = `${acta.equipo_marca || ''} ${acta.equipo_modelo || ''} ${acta.equipo_codigo_prd || ''}`.toLowerCase();
 
       if (
         !cliente.includes(busqueda) &&

@@ -21,7 +21,7 @@ const { setupWebSocket } = require('./services/websocket');
 
     setupWebSocket(server); // Integra WS con tu servidor HTTP
 
-    
+
   } catch (error) {
     console.error('❌ Error al conectar a la base de datos:', error);
   }

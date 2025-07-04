@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
     cliente_direccion: DataTypes.STRING,
 
     // Equipo
+    // Equipo
+    equipo_codigo_prd: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     equipo_marca: DataTypes.STRING,
     equipo_modelo: DataTypes.STRING,
     equipo_numero_serie: DataTypes.STRING,

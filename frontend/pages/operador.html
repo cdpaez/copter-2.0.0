@@ -34,8 +34,6 @@
         <div class="pestanas">
           <h2>Menú</h2>
           <button onclick="mostrarSeccion('ventas')">🧾 Registrar Acta</button>
-          <!-- <button onclick="mostrarSeccion('mis-estadisticas')">📈 Mis Estadísticas</button> -->
-          <!-- <button onclick="mostrarSeccion('perfil')">👤 Perfil</button> -->
           <button onclick="cerrarSesion()">Cerrar sesión</button>
         </div>
 
@@ -76,6 +74,7 @@
                   </div>
                   <div class="actas__equipos">
                     <input type="hidden" name="equipo_id" id="equipo_id">
+                    <input type="hidden" name="codigo_prd" id="codigo_prd">
                     <label>Marca: <input type="text" name="marca" required></label>
                     <label>Modelo: <input type="text" name="modelo" required></label>
                     <label>N° de Serie: <input type="text" name="numero_serie" required></label>
@@ -270,122 +269,6 @@
               </form>
             </div>
         </div>
-
-        <!-- area para dibujar el acta en pdf -->
-        <!-- <div id="plantilla-acta">
-          <h2 style="text-align: center;">ACTA DE ENTREGA DE EQUIPO</h2>
-
-          <p><strong>Cliente:</strong> <span id="cliente-nombre"></span></p>
-          <p><strong>Cédula/RUC:</strong> <span id="cliente-cedula"></span></p>
-          <p><strong>Teléfono:</strong> <span id="cliente-telefono"></span></p>
-          <p><strong>Dirección:</strong> <span id="cliente-direccion"></span></p>
-
-          <hr>
-
-          <p><strong>Equipo:</strong> <span id="equipo-descripcion"></span></p>
-          <p><strong>Serie:</strong> <span id="equipo-serie"></span></p>
-
-          <h3>Inspección de Hardware</h3>
-          <ul>
-            <li>Disco: <span id="hw-disco"></span></li>
-            <li>RAM: <span id="hw-ram"></span></li>
-            <li>Procesador: <span id="hw-procesador"></span></li>
-            <li>Estado General: <span id="hw-estado"></span></li>
-          </ul>
-
-          <h3>Inspección de Software</h3>
-          <ul>
-            <li>Sistema Operativo: <span id="sw-sistema"></span></li>
-            <li>Antivirus: <span id="sw-antivirus"></span></li>
-            <li>Licencias: <span id="sw-licencias"></span></li>
-          </ul>
-
-          <h3>Adicionales</h3>
-          <p><span id="adicionales"></span></p>
-
-          <h3>Forma de Pago</h3>
-          <p><strong>Forma de pago:</strong> <span id="forma-pago"></span></p>
-          <p><strong>Precio:</strong> $<span id="precio"></span></p>
-
-          <br><br>
-
-          <div>
-            <div>
-              _______________________<br>
-              <strong>Cliente</strong>
-            </div>
-            <div>
-              _______________________<br>
-              <strong>Técnico</strong>
-            </div>
-          </div>
-        </div> -->
-
-        <!-- <div id="mis-estadisticas" class="seccion">
-          <h2>📈 Mis Estadísticas</h2> -->
-
-        <!-- <div class="filtros-estadisticas">
-            <input type="date" id="mi-fecha-inicio">
-            <input type="date" id="mi-fecha-fin">
-            <button id="filtrar-estadisticas">🔍 Filtrar</button>
-          </div> -->
-
-        <!-- <div class="graficas">
-            <div class="grafica-card">
-              <canvas id="grafica-mis-ventas"></canvas>
-            </div>
-
-            <div class="grafica-card">
-              <canvas id="grafica-mis-productos"></canvas>
-            </div>
-
-            <div class="grafica-card">
-              <canvas id="totalGeneradoPorUsuario"></canvas>
-            </div>
-          </div>
-        </div> -->
-
-        <!-- <div id="perfil" class="seccion">
-          <h2>👤 Mi Perfil</h2>
-
-          <form id="form-perfil">
-            <fieldset>
-              <legend>Datos personales</legend>
-              <label>Nombre:</label>
-              <input type="text" name="nombre" value="Juan Pérez" disabled>
-
-              <label>Correo electrónico:</label>
-              <input type="email" name="correo" value="juan@empresa.com" disabled>
-
-              <label>Rol:</label>
-              <input type="text" value="Operador" disabled>
-            </fieldset>
-
-            <fieldset>
-              <legend>Cambiar contraseña</legend>
-              <label>Nueva contraseña:</label>
-              <input type="password" name="nueva_contrasena">
-
-              <label>Confirmar contraseña:</label>
-              <input type="password" name="confirmar_contrasena">
-            </fieldset>
-
-            <fieldset>
-              <legend>Preferencias</legend>
-              <label>
-                <input type="checkbox" name="modo_oscuro"> Activar modo oscuro
-              </label>
-              <label>
-                <input type="checkbox" name="letra_grande"> Letra grande
-              </label>
-            </fieldset>
-
-            <div class="acciones-perfil">
-              <button type="submit">💾 Guardar cambios</button>
-              <button type="button" id="cerrar-sesion">🚪 Cerrar sesión</button>
-            </div>
-          </form>
-        </div> -->
 
       </section>
 
