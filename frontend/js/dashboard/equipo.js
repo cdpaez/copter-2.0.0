@@ -507,7 +507,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   // Cargar productos al iniciar
-  cargarProductos();
+  // Cargar productos al inicio y renderizar
+  cargarProductos().then(() => {
+
+    mostrarContador(
+      todosLosProductos.length,
+      todosLosProductos.filter(p => p.stock === 'disponible').length,
+      todosLosProductos.filter(p => p.stock === 'vendido').length
+    );
+  });
 
   const dialogo = document.getElementById("dialogoBusqueda");
   const abrir = document.getElementById("abrirDialogo");

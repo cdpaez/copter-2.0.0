@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="../css/components/menuContextual.css">
   <link rel="stylesheet" href="../css/components/registrarActa.css">
   <link rel="stylesheet" href="../css/operador.css">
-  <link rel="stylesheet" href="../css/media/movil.css">
+  <link rel="stylesheet" href="../css/media/adaptable.css">
   <title>Panel del Operador</title>
 </head>
 
@@ -40,6 +40,48 @@
       </nav>
 
       <section class="area-contenido">
+        <!-- Botón flotante -->
+        <button class="floating-btn">Stock</button>
+        <dialog id="dialogoBusqueda">
+          <div class="busqueda-avanzada">
+            <div class="busqueda-avanzada__inputs">
+              <input type="text" placeholder="Marca" id="filtroMarca" />
+              <input type="text" placeholder="Modelo" id="filtroModelo" />
+              <input type="text" placeholder="Procesador" id="filtroProcesador" />
+              <input type="text" placeholder="Tamano" id="filtroTamano" />
+              <input type="text" placeholder="Disco" id="filtroDisco" />
+              <input type="text" placeholder="Ram" id="filtroRam" />
+            </div>
+            <div class="busqueda-avanzada__interacciones">
+              <p id="contadorResultados">0 resultados encontrados</p>
+              <p id="contadorDisponibles">0 Disponibles</p>
+              <p id="contadorVendidos">0 Vendidos</p>
+
+              <button id="cerrarDialogo">Cerrar</button>
+              <button id="limpiarBusqueda">Limpiar</button>
+            </div>
+          </div>
+          <div class="listaProductos">
+            <table id="tablaProductos">
+              <thead>
+                <tr>
+                  <th>Codigo</th>
+                  <th>Precio</th>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Procesador</th>
+                  <th>Tamaño</th>
+                  <th>Disco</th>
+                  <th>RAM</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Se llenará dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </dialog>
 
         <div id="ventas" class="seccion activa">
           <section class="container">
@@ -283,13 +325,13 @@
   </div>
 
   <script src="../js/nav.js"></script>
-
+  <script src="../js/operador/filtroAvanzado.js"></script>
   <script src="../js/operador/acta.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <!-- En tu dashboard.html -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="../js/operador/operador.js"></script>
-  
+
   <script type="module" src="../js/websocket.js"></script>
 </body>
 

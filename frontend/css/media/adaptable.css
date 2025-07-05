@@ -26,7 +26,7 @@
 }
 
 /* --- Responsive --- */
-@media (max-width: 768px) {
+@media (width < 768px) {
 
     /* Panel lateral */
     .panel-lateral {
@@ -113,7 +113,29 @@
         width: 100%;
         border-radius: 1px;
     }
-    /* bloque encargado dee los estilos en operador */
+
+    /* bloque encargado de los estilos en operador */
+    .floating-btn {
+        bottom: 10%;
+        right: 3%;
+        width: 20%;
+        height: 5%;
+        font-size: 1rem;
+        padding: 0;
+    }
+
+    .busqueda-avanzada__inputs {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+
+    .busqueda-avanzada__interacciones {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+
     .area-contenido {
         flex: 1;
         padding: 0;
@@ -148,5 +170,26 @@
         flex-direction: column;
         justify-content: center;
         align-content: center;
+    }
+}
+
+@media (1024px <=width <=1440px) {
+    .floating-btn {
+        bottom: 10%;
+        right: 3%;
+        width: 10%;
+        height: 5%;
+        font-size: 12px;
+        padding: 0;
+    }
+
+    dialog {
+        border: none;
+        border-radius: 8px;
+        padding: 1rem;
+        max-width: 700px;
+        width: 90%;
+        margin: auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 }
