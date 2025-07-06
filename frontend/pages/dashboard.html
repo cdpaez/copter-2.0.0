@@ -60,9 +60,11 @@
           <!-- Filtros y botón agregar -->
           <div class="barra-productos">
             <input type="text" id="buscador-productos" placeholder="codigo o precio">
-            <button id="abrirDialogo">Aplicar Filtros</button>
-            <button id="abrir-modal">➕ Agregar producto</button>
-            <button id="importar-datos">📦 Importar</button>
+            <div class="barra-productos__contenedor-botones">
+              <button id="abrirDialogo">Aplicar Filtros</button>
+              <button id="abrir-modal">+ Agregar producto</button>
+              <button id="importar-datos">📦 Importar</button>
+            </div>
           </div>
           <dialog id="dialogoBusqueda">
             <div class="busqueda-avanzada">
@@ -253,12 +255,15 @@
 
           <div class="barra-usuarios">
             <input type="text" id="buscador-usuarios" placeholder="nombre o correo">
-            <select id="filtro-estado">
-              <option value="">Todos</option>
-              <option value="activo">Activos</option>
-              <option value="inactivo">Inactivos</option>
-            </select>
-            <button id="abrir-modal-usuario">➕ Nuevo Usuario</button>
+            <div class="barra-usuarios__contenedor-acciones">
+              <select id="filtro-estado">
+                <option value="">Todos</option>
+                <option value="activo">Activos</option>
+                <option value="inactivo">Inactivos</option>
+              </select>
+              <button id="abrir-modal-usuario">+ Nuevo Usuario</button>
+            </div>
+
           </div>
 
           <div class="tabla-usuarios">

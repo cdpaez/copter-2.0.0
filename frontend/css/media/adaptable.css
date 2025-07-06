@@ -26,7 +26,7 @@
 }
 
 /* --- Responsive --- */
-@media (width <= 768px) {
+@media (width <=768px) {
 
     /* Panel lateral */
     .panel-lateral {
@@ -112,6 +112,68 @@
     .panel-estadisticas {
         width: 100%;
         border-radius: 1px;
+    }
+
+    /* area productos */
+    .barra-productos {
+        display: flex;
+        flex-direction: column;
+        padding: .5rem;
+        margin: 0;
+    }
+
+    .barra-productos input[type="text"] {
+        width: 100%;
+    }
+
+    .barra-productos__contenedor-botones {
+        display: flex;
+        flex-direction: row;
+        font-size: clamp(.2rem, 1vw, 2rem);
+        gap: 8px;
+    }
+
+    .seccion.activa {
+        text-align: center;
+    }
+
+    .filtros-estadisticas {
+        padding: .5rem;
+    }
+
+    .barra-usuarios input[type="text"],
+    .barra-usuarios select {
+        width: 100%;
+    }
+
+    .panel-estadisticas button {   
+        font-size: .8rem;
+    }
+
+    .filtros-estadisticas input,
+    .filtros-estadisticas button {
+        width: 100%;
+    }
+
+    .barra-usuarios {
+        padding: .5rem;
+    }
+
+    .barra-usuarios__contenedor-acciones {
+        display: flex;
+        flex-direction: row;
+        gap: .5rem;
+    }
+
+    #rol-usuario {
+        margin: 0 1rem 1rem 1rem;
+    }
+
+    .acciones-modal {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
     }
 
     /* bloque encargado de los estilos en operador */
