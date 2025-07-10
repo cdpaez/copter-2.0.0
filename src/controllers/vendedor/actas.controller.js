@@ -176,6 +176,7 @@ const crearActaCompleta = async (req, res) => {
       cliente_direccion: clienteExistente.direccion,
 
       // Equipo
+      equipo_codigo_prd: equipoExistente.codigo_prd,
       equipo_marca: equipoExistente.marca,
       equipo_modelo: equipoExistente.modelo,
       equipo_numero_serie: equipoExistente.numero_serie,
@@ -250,6 +251,7 @@ const getPDFActaPorId = async (req, res) => {
         direccion: acta.Cliente.direccion
       },
       equipo_detalle: {
+        codigo_prd: acta.Equipo.codigo_prd,
         marca: acta.Equipo.marca,
         modelo: acta.Equipo.modelo,
         numero_serie: acta.Equipo.numero_serie,
@@ -318,8 +320,13 @@ const getPDFActaPorId = async (req, res) => {
     console.log('📦 Datos completos que se enviarán al generador de PDF:', datos);
     const pdfBytes = await generarPDFDesdeFormulario(datos);
 
+    let nombreArchivo = `${acta.Cliente.nombre}_${acta.Cliente.cedula_ruc}_${acta.Equipo.codigo_prd}`;
+
+    // Reemplaza espacios por guiones bajos y quita caracteres no válidos
+    nombreArchivo = nombreArchivo.replace(/\s+/g, '_').replace(/[^\w\-\.]/g, '');
+
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=acta.pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=acta_${nombreArchivo}.pdf`);
     res.send(pdfBytes);
 
   } catch (error) {

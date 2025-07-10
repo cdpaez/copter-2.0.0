@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="../css/components/nav-estadisticas.css">
   <link rel="stylesheet" href="../css/components/stat-graficos.css">
   <link rel="stylesheet" href="../css/dashboard.css">
-  <link rel="stylesheet" href="../css/media/movil.css">
+  <link rel="stylesheet" href="../css/media/adaptable.css">
 
   <title>Inventario - Panel</title>
 
@@ -56,13 +56,15 @@
       <section class="area-contenido">
 
         <div id="productos" class="seccion activa">
-          <h2>📦 Equipos en Stock</h2>
+          <h2>📦 Gestión de Equipos</h2>
           <!-- Filtros y botón agregar -->
           <div class="barra-productos">
             <input type="text" id="buscador-productos" placeholder="codigo o precio">
-            <button id="abrirDialogo">Abrir búsqueda avanzada</button>
-            <button id="abrir-modal">➕ Agregar producto</button>
-            <button id="importar-datos">📦 Importar</button>
+            <div class="barra-productos__contenedor-botones">
+              <button id="abrirDialogo">Aplicar Filtros</button>
+              <button id="abrir-modal">+ Agregar producto</button>
+              <button id="importar-datos">📦 Importar</button>
+            </div>
           </div>
           <dialog id="dialogoBusqueda">
             <div class="busqueda-avanzada">
@@ -169,7 +171,7 @@
           <div class="filtros-ventas">
             <input type="date" id="fecha-inicio" placeholder="Desde">
             <input type="date" id="fecha-fin" placeholder="Hasta">
-            <input type="text" id="buscador-ventas" placeholder="cliente, producto o vendedor">
+            <input type="text" id="buscador-ventas" placeholder="cedula, codigo o vendedor">
             <!-- <button id="exportar-ventas">📁 Exportar</button> -->
           </div>
           <div class="tabla-actas">
@@ -209,8 +211,8 @@
           <nav class="panel-estadisticas">
             <div class="pestanas-estadisticas">
 
-              <button onclick="mostrarSeccionStats('ventas-x-usuario')">👤 Usuarios</button>
-              <button onclick="mostrarSeccionStats('ventas-x-producto')">📦 Productos</button>
+              <button onclick="mostrarSeccionStats('ventas-x-usuario')">👤 Actas</button>
+              <button onclick="mostrarSeccionStats('ventas-x-producto')">📦 Ventas</button>
               <button onclick="mostrarSeccionStats('ventas-x-total')">💰 Ingresos</button>
 
             </div>
@@ -229,8 +231,8 @@
             <div id="mensaje-vacio-totales" class="mensaje-alerta" style="display: none;">
               ⚠️ No se registraron ingresos en este período.
             </div>
-            <!-- <button id="exportar-estadisticas">📁 Exportar</button> -->
           </div>
+
           <!-- Contenedor de gráficos -->
           <div class="graficas">
             <div id="ventas-x-usuario" class="grafica-card activa">
@@ -253,12 +255,15 @@
 
           <div class="barra-usuarios">
             <input type="text" id="buscador-usuarios" placeholder="nombre o correo">
-            <select id="filtro-estado">
-              <option value="">Todos</option>
-              <option value="activo">Activos</option>
-              <option value="inactivo">Inactivos</option>
-            </select>
-            <button id="abrir-modal-usuario">➕ Nuevo Usuario</button>
+            <div class="barra-usuarios__contenedor-acciones">
+              <select id="filtro-estado">
+                <option value="">Todos</option>
+                <option value="activo">Activos</option>
+                <option value="inactivo">Inactivos</option>
+              </select>
+              <button id="abrir-modal-usuario">+ Nuevo Usuario</button>
+            </div>
+
           </div>
 
           <div class="tabla-usuarios">
@@ -306,54 +311,6 @@
 
         </div>
 
-        <!-- <div id="configuracion" class="seccion">
-          <h2>⚙️ Configuración del Sistema</h2>
-
-          <form id="form-configuracion">
-            <fieldset>
-              <legend>Preferencias del usuario</legend>
-              <label>Nombre de usuario:</label>
-              <input type="text" name="nombre_usuario" placeholder="Tu nombre visible">
-
-              <label>Cambiar contraseña:</label>
-              <input type="password" name="nueva_contraseña" placeholder="Nueva contraseña">
-            </fieldset>
-
-            <fieldset>
-              <legend>Parámetros del sistema</legend>
-              <label>Moneda predeterminada:</label>
-              <select name="moneda">
-                <option value="usd">$ USD</option>
-                <option value="eur">€ EUR</option>
-                <option value="mxn">$ MXN</option>
-              </select>
-
-              <label>Stock mínimo para alertas:</label>
-              <input type="number" name="stock_min" placeholder="Ej: 10" min="1">
-            </fieldset>
-
-            <fieldset>
-              <legend>Opciones visuales</legend>
-              <label>
-                <input type="checkbox" name="tema_oscuro"> Activar modo oscuro
-              </label>
-
-              <label>
-                <input type="checkbox" name="animaciones"> Activar animaciones
-              </label>
-            </fieldset>
-
-            <fieldset>
-              <legend>Respaldo y sistema</legend>
-              <button type="button">💾 Exportar datos</button>
-              <button type="button">🧪 Restaurar datos de prueba</button>
-              <button type="button" class="reset">🔄 Restablecer configuración</button>
-            </fieldset>
-
-            <button type="submit">💡 Guardar configuración</button>
-          </form>
-        </div> -->
-
       </section>
     </main>
 
@@ -374,7 +331,6 @@
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <!-- En tu dashboard.html -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <div id="loader-modal" class="loader"></div>
   <!-- Toast Notification Container -->

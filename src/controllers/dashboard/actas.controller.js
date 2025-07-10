@@ -11,6 +11,8 @@ const obtenerActasResumen = async (req, res) => {
         'precio',
         'vendedor_nombre',
         'cliente_nombre',
+        'cliente_cedula',
+        'equipo_codigo_prd',
         'equipo_marca',
         'equipo_modelo',
         'equipo_numero_serie'
