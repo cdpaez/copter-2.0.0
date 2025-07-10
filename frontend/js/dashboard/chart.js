@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ticks: { color: '#ffffff' },
               title: {
                 display: true,
-                text: 'Usuarios',
+                text: '',
                 color: '#ffffff'
               },
               grid: { color: '#ffffff' }
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ticks: { color: '#ffffff', precision: 0 },
               title: {
                 display: true,
-                text: 'Cantidad de Actas',
+                text: '',
                 color: '#ffffff'
               },
               grid: { color: '#ffffff' }
@@ -193,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
               color: '#ffffff'
             },
             legend: {
+              display: window.innerWidth > 768,
               labels: { color: '#ffffff' }
             },
             tooltip: {
@@ -206,10 +207,14 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           scales: {
             x: {
-              ticks: { color: '#ffffff' },
+              ticks: {
+                color: '#ffffff',
+                maxRotation: 0,
+                minRotation: 0
+              },
               title: {
                 display: true,
-                text: 'Mes',
+                text: '',
                 color: '#ffffff'
               },
               grid: { color: '#ffffff' }
@@ -219,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ticks: { color: '#ffffff', precision: 0 },
               title: {
                 display: true,
-                text: 'Cantidad Entregada',
+                text: '',
                 color: '#ffffff'
               },
               grid: { color: '#ffffff' }
@@ -232,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error en gráfico de equipos:', err);
     }
   }
+  // bloque encargado de crear el grafico para el total de ingresos
   let chartTotales = null;
 
   async function cargarGraficoTotales(fechaDesde = '', fechaHasta = '') {
@@ -305,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ticks: { color: '#ffffff' },
               title: {
                 display: true,
-                text: 'Mes',
+                text: '',
                 color: '#ffffff'
               },
               grid: { color: '#ffffff' }
@@ -318,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
               },
               title: {
                 display: true,
-                text: 'Total en USD',
+                text: '',
                 color: '#ffffff'
               },
               grid: { color: '#ffffff' }
