@@ -26,17 +26,23 @@ module.exports = {
         references: { model: 'equipos', key: 'id' },
         onDelete: 'CASCADE'
       },
+      vendedor_nombre: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      observaciones: DataTypes.TEXT,
+      forma_pago: DataTypes.STRING,
+      precio: DataTypes.DECIMAL(10, 2),
+      fecha_registro: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      },
       // otros campos específicos de actas aquí...
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
       },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
-      }
     });
   },
 

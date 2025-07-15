@@ -31,7 +31,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'actas',
     createdAt: true,
-    updatedAt: false
   });
 
   return Acta;

@@ -1,76 +1,89 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const floatingBtn = document.querySelector('.floating-btn');
-    const dialog = document.getElementById('dialogoBusqueda');
-    const closeBtn = document.getElementById('cerrarDialogo');
-
-    floatingBtn.addEventListener('click', function () {
-        dialog.showModal();
-    });
-
-    closeBtn.addEventListener('click', function () {
-        dialog.close();
-    });
-
-    dialog.addEventListener('click', function (e) {
-        const rect = dialog.getBoundingClientRect();
-        if (
-            e.clientX < rect.left ||
-            e.clientX > rect.right ||
-            e.clientY < rect.top ||
-            e.clientY > rect.bottom
-        ) {
-            dialog.close();
-        }
-    });
-
+// js/operador/filtroAvanzado.js
+const FiltroAvanzadoModule = (function () {
     let todosLosProductos = [];
+    let busquedaAvanzadaRealizada = false;
 
-    const cargarProductos = async () => {
+    async function init() {
+        manejarDialogo();
+        manejarEventosInputs();
+        await cargarProductos();
+        renderizarTabla(todosLosProductos);
+        mostrarContadorTotal();
+    }
+
+    function manejarDialogo() {
+        const floatingBtn = document.querySelector('.floating-btn');
+        const dialog = document.getElementById('dialogoBusqueda');
+        const closeBtn = document.getElementById('cerrarDialogo');
+
+        if (floatingBtn && dialog && closeBtn) {
+            floatingBtn.addEventListener('click', () => dialog.showModal());
+
+            closeBtn.addEventListener('click', () => dialog.close());
+
+            dialog.addEventListener('click', (e) => {
+                const rect = dialog.getBoundingClientRect();
+                if (
+                    e.clientX < rect.left ||
+                    e.clientX > rect.right ||
+                    e.clientY < rect.top ||
+                    e.clientY > rect.bottom
+                ) {
+                    dialog.close();
+                }
+            });
+        }
+    }
+
+    function manejarEventosInputs() {
+        document.querySelectorAll('.busqueda-avanzada input').forEach(input => {
+            input.addEventListener('input', filtrarProductos);
+        });
+
+        const btnLimpiar = document.getElementById('limpiarBusqueda');
+        if (btnLimpiar) {
+            btnLimpiar.addEventListener('click', limpiarBusqueda);
+        }
+    }
+
+    async function cargarProductos() {
         try {
-            const respuesta = await fetch('/equipos/obtener');
-            if (!respuesta.ok) throw new Error('Error al obtener productos');
-            todosLosProductos = await respuesta.json();
+            const res = await fetch('/equipos/obtener');
+            if (!res.ok) throw new Error('Error al obtener productos');
+            todosLosProductos = await res.json();
         } catch (error) {
-            console.error('Error:', error);
+            console.error('❌ Error al cargar productos:', error);
             const tabla = document.querySelector('#tablaProductos tbody');
             tabla.innerHTML = `<tr><td colspan="8">Error al cargar productos: ${error.message}</td></tr>`;
         }
-    };
-
-    let busquedaAvanzadaRealizada = false;
-
-    function filtrarProductos() {
-        const marca = document.getElementById('filtroMarca').value.toLowerCase();
-        const modelo = document.getElementById('filtroModelo').value.toLowerCase();
-        const procesador = document.getElementById('filtroProcesador').value.toLowerCase();
-        const tamano = document.getElementById('filtroTamano').value.toLowerCase();
-        const disco = document.getElementById('filtroDisco').value.toLowerCase();
-        const ram = document.getElementById('filtroRam').value.toLowerCase();
-
-        const resultadosAvanzados = todosLosProductos.filter(producto => {
-            return (
-                (marca === '' || producto.marca.toLowerCase().includes(marca)) &&
-                (modelo === '' || producto.modelo.toLowerCase().includes(modelo)) &&
-                (procesador === '' || producto.procesador.toLowerCase().includes(procesador)) &&
-                (tamano === '' || producto.tamano.toString().includes(tamano)) &&
-                (disco === '' || producto.disco.toLowerCase().includes(disco)) &&
-                (ram === '' || producto.memoria_ram.toLowerCase().includes(ram))
-            );
-        });
-
-        const disponibles = resultadosAvanzados.filter(p => p.stock === 'disponible').length;
-        const vendidos = resultadosAvanzados.filter(p => p.stock === 'vendido').length;
-        const total = resultadosAvanzados.length;
-
-        busquedaAvanzadaRealizada = true;
-        mostrarContador(total, disponibles, vendidos);
-        renderizarTabla(resultadosAvanzados);
     }
 
-    function mostrarContador(total, disponibles, vendidos) {
-        document.getElementById('contadorResultados').textContent = `${total} resultados encontrados`;
-        document.getElementById('contadorDisponibles').textContent = `${disponibles} Disponibles`;
-        document.getElementById('contadorVendidos').textContent = `${vendidos} Vendidos`;
+    function filtrarProductos() {
+        const marca = getValueLower('filtroMarca');
+        const modelo = getValueLower('filtroModelo');
+        const procesador = getValueLower('filtroProcesador');
+        const tamano = getValueLower('filtroTamano');
+        const disco = getValueLower('filtroDisco');
+        const ram = getValueLower('filtroRam');
+
+        const resultados = todosLosProductos.filter(p =>
+            (!marca || p.marca.toLowerCase().includes(marca)) &&
+            (!modelo || p.modelo.toLowerCase().includes(modelo)) &&
+            (!procesador || p.procesador.toLowerCase().includes(procesador)) &&
+            (!tamano || p.tamano.toString().includes(tamano)) &&
+            (!disco || p.disco.toLowerCase().includes(disco)) &&
+            (!ram || p.memoria_ram.toLowerCase().includes(ram))
+        );
+
+        busquedaAvanzadaRealizada = true;
+
+        mostrarContador(
+            resultados.length,
+            resultados.filter(p => p.stock === 'disponible').length,
+            resultados.filter(p => p.stock === 'vendido').length
+        );
+
+        renderizarTabla(resultados);
     }
 
     function limpiarBusqueda() {
@@ -78,13 +91,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.querySelectorAll('.busqueda-avanzada input').forEach(input => input.value = '');
 
-        const disponibles = todosLosProductos.filter(p => p.stock === 'disponible').length;
-        const vendidos = todosLosProductos.filter(p => p.stock === 'vendido').length;
-        const total = todosLosProductos.length;
-
-        mostrarContador(total, disponibles, vendidos);
         renderizarTabla(todosLosProductos);
-
+        mostrarContadorTotal();
         busquedaAvanzadaRealizada = false;
     }
 
@@ -114,20 +122,36 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    document.querySelectorAll('.busqueda-avanzada input').forEach(input => {
-        input.addEventListener('input', filtrarProductos);
-    });
+    function mostrarContador(total, disponibles, vendidos) {
+        document.getElementById('contadorResultados').textContent = `${total} resultados encontrados`;
+        document.getElementById('contadorDisponibles').textContent = `${disponibles} Disponibles`;
+        document.getElementById('contadorVendidos').textContent = `${vendidos} Vendidos`;
+    }
 
-    document.getElementById('limpiarBusqueda').addEventListener('click', limpiarBusqueda);
-
-    // Cargar productos al inicio y renderizar
-    cargarProductos().then(() => {
-        renderizarTabla(todosLosProductos);
-
+    function mostrarContadorTotal() {
         mostrarContador(
             todosLosProductos.length,
-            todosLosProductos.filter(p => p.stock === 'disponible').length,
-            todosLosProductos.filter(p => p.stock === 'vendido').length
+            contarPorStock('disponible'),
+            contarPorStock('vendido')
         );
-    });
+    }
+
+    function contarPorStock(tipo) {
+        return todosLosProductos.filter(p => p.stock === tipo).length;
+    }
+
+    function getValueLower(id) {
+        const el = document.getElementById(id);
+        return el ? el.value.trim().toLowerCase() : '';
+    }
+
+    // 🚪 API pública
+    return {
+        init
+    };
+})();
+
+// 🧨 Lanzar módulo
+document.addEventListener('DOMContentLoaded', () => {
+    FiltroAvanzadoModule.init();
 });
