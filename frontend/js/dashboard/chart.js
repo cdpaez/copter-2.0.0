@@ -192,7 +192,7 @@ const GraficosModule = (function () {
                     },
                     scales: {
                         x: {
-                            ticks: { color: '#ffffff', maxRotation: 0, minRotation: 0 },
+                            ticks: { color: '#ffffff', maxRotation: 45, minRotation: 30 },
                             title: { display: false },
                             grid: { color: '#ffffff' }
                         },
