@@ -38,6 +38,17 @@ function setupWebSocket(server) {
   });
 }
 
+// 🔌 Emitir evento global a todos los clientes conectados
+function emitEventoGlobal(type, data) {
+  activeConnections.forEach((sockets) => {
+    sockets.forEach((ws) => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type, payload: data }));
+      }
+    });
+  });
+}
+
 function forceDisconnect(userId) {
   if (activeConnections.has(userId)) {
     activeConnections.get(userId).forEach(ws => {
@@ -56,4 +67,4 @@ function forceDisconnect(userId) {
   }
 }
 
-module.exports = { setupWebSocket, forceDisconnect };
+module.exports = { setupWebSocket, forceDisconnect, emitEventoGlobal };

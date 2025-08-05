@@ -26,6 +26,7 @@ const GestorEquipos = (() => {
                 todosLosProductos.filter(p => p.stock === 'vendido').length
             );
         });
+        conectarWebSocket();
         manejarDialogoBusqueda();
     };
 
@@ -352,6 +353,40 @@ const GestorEquipos = (() => {
         });
     };
 
+    const conectarWebSocket = () => {
+        const token = sessionStorage.getItem('token');
+        if (!token) return;
+
+        const ws = new WebSocket(`ws://${location.host}/ws?token=${token}`);
+
+        ws.addEventListener('open', () => {
+            console.log('[WS] Conexión establecida');
+        });
+
+        ws.addEventListener('message', (event) => {
+            try {
+                const mensaje = JSON.parse(event.data);
+
+                if (mensaje.type === 'venta_realizada') {
+                    console.log('[WS] Venta realizada - actualizando productos...');
+                    // ⚡️ Llamar a cargarProductos para refrescar tabla
+                    cargarProductos();
+                    mostrarToast('📦 Venta realizada - tabla actualizada', 'success');
+                }
+
+            } catch (e) {
+                console.error('[WS] Error procesando mensaje:', e);
+            }
+        });
+
+        ws.addEventListener('close', (e) => {
+            console.warn(`[WS] Conexión cerrada (${e.code}): ${e.reason}`);
+        });
+
+        ws.addEventListener('error', (e) => {
+            console.error('[WS] Error en WebSocket:', e);
+        });
+    };
     return { init };
 })();
 

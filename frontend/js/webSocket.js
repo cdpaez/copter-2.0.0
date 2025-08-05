@@ -35,6 +35,7 @@ const WebSocketModule = (function () {
                 console.warn('⛔ Usuario deshabilitado por el servidor');
                 cerrarSesionConMotivo();
             }
+            
 
         } catch (err) {
             console.error('❌ Error al parsear mensaje WebSocket:', err);

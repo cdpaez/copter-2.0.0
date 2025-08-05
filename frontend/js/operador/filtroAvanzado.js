@@ -151,7 +151,42 @@ const FiltroAvanzadoModule = (function () {
     };
 })();
 
+function conectarWebSocket() {
+    const token = sessionStorage.getItem('token');
+    if (!token) return;
+
+    const ws = new WebSocket(`ws://${location.host}/ws?token=${token}`);
+
+    ws.addEventListener('open', () => {
+        console.log('[WS Operador] Conexión establecida');
+    });
+
+    ws.addEventListener('message', (event) => {
+        try {
+            const mensaje = JSON.parse(event.data);
+
+            if (mensaje.type === 'venta_realizada') {
+                console.log('[WS Operador] Venta detectada - recargando productos...');
+                FiltroAvanzadoModule.init(); // Reinicia todo para que se actualice
+                mostrarToast('📦 Nuevo producto vendido - tabla actualizada', 'success');
+            }
+
+        } catch (e) {
+            console.error('[WS Operador] Error al procesar mensaje:', e);
+        }
+    });
+
+    ws.addEventListener('close', (e) => {
+        console.warn(`[WS Operador] Conexión cerrada (${e.code}): ${e.reason}`);
+    });
+
+    ws.addEventListener('error', (e) => {
+        console.error('[WS Operador] Error en WebSocket:', e);
+    });
+}
+
 // 🧨 Lanzar módulo
 document.addEventListener('DOMContentLoaded', () => {
     FiltroAvanzadoModule.init();
+    conectarWebSocket();
 });

@@ -7,7 +7,7 @@ const {
   Acta,
   ActaHistorico,
   Usuario } = require('../../database/models');
-
+const { emitEventoGlobal } = require('../../services/websocket');
 const { generarPDFDesdeFormulario } = require('./pdf.controller')
 // funcion encargada de obtener los datos de la peticion http y enviar las respectivas respuestas
 // defino que la funcion crearActaCompleta pueda contener operaciones asincronas
@@ -205,6 +205,13 @@ const crearActaCompleta = async (req, res) => {
       fecha_registro: new Date()
     }, { transaction: t });
 
+    // después de registrar la venta
+    emitEventoGlobal('venta_realizada', {
+      productoId: equipoExistente.id,
+      stock: 'vendido',
+      advertencia: advertenciaStock
+    });
+    
     await t.commit();
 
     res.status(201).json({
